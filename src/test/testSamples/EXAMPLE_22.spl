@@ -1,0 +1,5 @@
+{
+    //////////////////// EXAMPLE 22 ////////////////////
+    bool a = true;
+    int q = (a + 4) + (a + 5); // errore, sto facenso la somma di interi e boolenani
+}

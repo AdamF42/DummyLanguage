@@ -1,0 +1,8 @@
+{
+    //////////////////// EXAMPLE 17 ////////////////////
+     f(int f){ // errore, parametro chiamato come la funzione
+        int x = 5 ;
+        int a = 4 ;
+        f(a);
+     }
+}

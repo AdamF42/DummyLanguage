@@ -1,0 +1,12 @@
+{
+    //////////////////// EXAMPLE 12 ////////////////////
+    g(var int x, var int y){
+        delete x ;
+        delete y ;
+    }
+    f(var int z){
+        g(z,z) ; // errore perchè g cancella due volte z
+    }
+    int a = 1;
+    f(a);
+}

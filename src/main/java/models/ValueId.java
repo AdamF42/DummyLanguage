@@ -5,14 +5,22 @@ import util.Strings;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ValueId extends ElementBase {
+public class ValueId extends Value {
+    private String line;
+    private String charPos;
 
-    private String id;
+    public ValueId(String val, String line, String charPos) {
+        super(val);
+        this.line = line;
+        this.charPos = charPos;
+    }
+
+    public String getId() {
+        return this.getVal();
+    }
+
     private Type type;
 
-    public ValueId(String id){
-        this.id = id;
-    }
 
     @Override
     public Type typeCheck() {
@@ -20,14 +28,17 @@ public class ValueId extends ElementBase {
     }
 
     @Override
-    List<SemanticError> checkSemantics(Environment e) {
+    public List<SemanticError> checkSemantics(Environment e) {
 
-        ArrayList<SemanticError> res = new ArrayList<SemanticError>();
+        ArrayList<SemanticError> res = new ArrayList<>();
 
-        if(!e.containsVariable(id)){
-            res.add(new SemanticError(Strings.ERROR_VARIABLE_DOESNT_EXIST + id));
+        if(!e.containsVariable(this.getVal())){
+            res.add(new SemanticError(Strings.ERROR_VARIABLE_DOESNT_EXIST + this.getVal()));
+        } else if (e.getVariableValue(this.getVal()).getType().isDeleted()){
+            res.add(new SemanticError(Strings.ERROR_VARIABLE_HAS_BEEN_DELETED + this.getVal()));
         } else {
-            type = e.getVariableValue(id).getType();
+            type = e.getVariableValue(this.getVal()).getType();
+            this.addrwAccess(e.getVariableValue(this.getVal()));
         }
 
         return res;

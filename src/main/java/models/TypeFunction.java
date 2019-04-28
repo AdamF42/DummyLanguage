@@ -1,13 +1,14 @@
 package models;
 
-import java.util.List;
+import java.util.*;
 
 public class TypeFunction extends Type {
+    private final List<TypeReferenceable> paramTypes;
+    private final StmtBlock body;
 
-    private final List<Type> paramTypes;
-
-    public TypeFunction(List<Type> paramTypes) {
+    public TypeFunction(List<TypeReferenceable> paramTypes, StmtBlock body) {
         this.paramTypes = paramTypes;
+        this.body = body;
     }
 
     @Override
@@ -20,7 +21,15 @@ public class TypeFunction extends Type {
         return null;
     }
 
-    public List<Type> getParamTypes() {
+    public List<TypeReferenceable> getParamTypes() {
         return paramTypes;
+    }
+
+    public Set<STentry> getDeletions() {
+        return body.getDeletions();
+    }
+
+    public Set<STentry> getRwAccesses() {
+        return body.getRwAccesses();
     }
 }

@@ -30,7 +30,7 @@ public class Parameter extends ElementBase {
         if (e.containsVariableLocal(id)) {
             res.add(new SemanticError(Strings.ERROR_ALREADY_DECLARED_IDENTIFIER + id));
         } else {
-            e.addVariable(id, new STentry(e.getNestingLevel(), type));
+            e.addVariable(id, new STentry(e.getNestingLevel(), type, id));
         }
 
         return res;

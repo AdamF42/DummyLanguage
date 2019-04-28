@@ -1,27 +1,39 @@
 package models;
 
+import util.Strings;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class StmtIfThenElse extends Stmt {
-    private ElementBase condition;
-    private ElementBase ifBranch;
-    private ElementBase thenBranch;
-
-    private Type condType ;
-    private Type ifBranchType;
-    private Type thenBranchType;
+    private Exp condition;
+    private StmtBlock thenBranch;
+    private StmtBlock elseBranch;
 
 
-    public StmtIfThenElse(ElementBase condition, ElementBase ifBranch, ElementBase thenBranch) {
+    public StmtIfThenElse(Exp condition, StmtBlock ifBranch, StmtBlock thenBranch) {
         this.condition = condition;
-        this.ifBranch = ifBranch;
-        this.thenBranch = thenBranch;
+        this.thenBranch = ifBranch;
+        this.elseBranch = thenBranch;
     }
 
 
     @Override
     public Type typeCheck() throws TypeCheckError {
+
+        // check the condType
+        Type conditionType = condition.typeCheck();
+        if (!(conditionType instanceof TypeBool))
+            throw new TypeCheckError("Not boolean condition, got " + conditionType);
+
+        // check if the two Branches have the same behavioural type
+        thenBranch.typeCheck();
+
+        elseBranch.typeCheck();
+
+        if (!thenBranch.getRwAccesses().containsAll(elseBranch.getRwAccesses()) || !thenBranch.getDeletions().containsAll(elseBranch.getDeletions()))
+            throw new TypeCheckError(Strings.ERROR_BEHAVIUOR_MISMATCH);
+
         return null;
     }
 
@@ -32,16 +44,20 @@ public class StmtIfThenElse extends Stmt {
 
         if (condition != null){
             result.addAll(condition.checkSemantics(e));
+            this.addAllrwAccesses(condition.getRwAccesses());
         }
 
-        if (ifBranch!=null){
-            result.addAll(ifBranch.checkSemantics(e));
-        }
-
-        if (thenBranch!=null){
+        if (thenBranch != null){
             result.addAll(thenBranch.checkSemantics(e));
+            this.addAllDeletions(thenBranch.getDeletions());
+            this.addAllrwAccesses(thenBranch.getRwAccesses());
         }
 
+        if (elseBranch != null){
+            result.addAll(elseBranch.checkSemantics(e));
+            this.addAllDeletions(elseBranch.getDeletions());
+            this.addAllrwAccesses(elseBranch.getRwAccesses());
+        }
         return result;
     }
 }

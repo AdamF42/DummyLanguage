@@ -4,15 +4,9 @@ import java.util.ArrayList;
 
 public class ValueBool extends Value {
 
-    private String val;
 
-    /**
-     * Constructor for ValueBool.
-     *
-     * @param val -> boolean value
-     */
     public ValueBool(String val) {
-        this.val=val;
+        super(val);
     }
 
     /**
@@ -22,7 +16,7 @@ public class ValueBool extends Value {
      * @return Empty ArrayList of semantic errors
      */
     public ArrayList<SemanticError> checkSemantics(Environment env) {
-        return new ArrayList<SemanticError>();
+        return new ArrayList<>();
     }
 
     /**
@@ -30,6 +24,7 @@ public class ValueBool extends Value {
      *
      * @return instance of TypeBool()
      */
+    @Override
     public Type typeCheck() {
         return new TypeBool();
     }

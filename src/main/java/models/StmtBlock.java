@@ -45,10 +45,14 @@ public class StmtBlock extends Stmt {
 
 		//check children semantics
 		if(children!=null)
-			for(Stmt el:children)
-				result.addAll(el.checkSemantics(e));
+			for(Stmt child:children) {
+				result.addAll(child.checkSemantics(e));
+				this.addAllDeletions(child.getDeletions());
+				this.addAllrwAccesses(child.getRwAccesses());
+			}
 
 		return result;
 	}
+
 
 }

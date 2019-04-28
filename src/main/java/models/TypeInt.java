@@ -17,16 +17,9 @@ public class TypeInt extends TypeReferenceable {
      */
     @Override
 	public ArrayList<SemanticError> checkSemantics(Environment env) {
-        return new ArrayList<SemanticError>();
+        return new ArrayList<>();
 	}
 
-	/**
-     *
-     * @return int type
-     */
-    public String getType(){
-        return "int";
-    }
 
     /**
      * Type check is empty because it's a terminal node.

@@ -28,16 +28,28 @@ public class StmtDelete extends Stmt {
 	 */
 	@Override
 	public ArrayList<SemanticError> checkSemantics(Environment e) {
-		ArrayList<SemanticError> result = new ArrayList<SemanticError>();
+		ArrayList<SemanticError> result = new ArrayList<>();
 		
-		//check for the variable
-		if(!e.containsVariable(id))
+		// check for the variable in all scopes
+		if(!e.containsVariable(id)) {
 			result.add(new SemanticError(Strings.ERROR_VARIABLE_DOESNT_EXIST + id));
-		
-		//if the variable does exist then delete it from the environment
-		else
-			e.deleteVariable(id);
-		
+		} else if (e.getVariableValue(id).getType().isDeleted()){
+			result.add(new SemanticError(Strings.ERROR_VARIABLE_HAS_BEEN_DELETED + id));
+		} else {
+			STentry identifierEntry = e.getVariableValue(id);
+			if (e.isInCurrentScope(identifierEntry.getNestinglevel())){
+					identifierEntry.getType().setDeleted(true);
+			} else {
+				// check if I'm inside a scope but I'm trying to delete something out
+				// Need to distinguish if i'm in a function or not
+				if(e.isInsideFunctionDeclaration()){
+					e.setToBeDeletedOnFunCall(identifierEntry);
+				} else {
+					identifierEntry.getType().setDeleted(true);
+				}
+			}
+			this.addDeletion(identifierEntry);
+		}
 		return result;
 	}
 

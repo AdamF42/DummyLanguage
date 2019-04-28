@@ -1,0 +1,12 @@
+{
+    //////////////////// EXAMPLE 9 ////////////////////
+    int x = 1;
+    f( var int a) {
+        delete a;
+    }
+    {
+        int x = 2;
+        f(x);
+    }
+    f(x); // nessun errore
+}
