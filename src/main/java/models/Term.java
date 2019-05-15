@@ -3,28 +3,10 @@ package models;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Term extends BinaryOp {
+public class Term extends Exp {
 
-    private ElementBase leftTerm;
-    private ElementBase rightExp;
-
-    public Term(ElementBase left, ElementBase right) {
+    public Term(Exp left, Exp right) {
         super(left, right);
     }
 
-
-//    @Override
-//    ElementBase typeCheck() {
-//        return null;
-//    }
-//
-//    @Override
-//    List<SemanticError> checkSemantics(Environment e) {
-//
-//        List<SemanticError> result = new ArrayList<SemanticError>(leftTerm.checkSemantics(e));
-//
-//        if (rightExp != null) result.addAll(rightExp.checkSemantics(e));
-//
-//        return result;
-//    }
 }

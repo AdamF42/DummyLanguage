@@ -1,0 +1,10 @@
+{
+    //////////////////// EXAMPLE 14 ////////////////////
+    int x = 1;
+    f (var int a, var int b){
+        b = a + 1;
+        delete a;
+        b = b + 1;
+    }
+    f(x,x); // errore perchè a e b sono uguali
+}

@@ -1,6 +1,6 @@
 {
+    //////////////////// EXAMPLE 25 ////////////////////
     int x = 3;
-
     foo(var int a) {
         if (x == 0) then {
             delete a;

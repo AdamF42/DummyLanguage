@@ -1,0 +1,8 @@
+{
+    //////////////////// EXAMPLE 21 ////////////////////
+    f(var int a){
+        a = 7;
+    }
+    bool a = true;
+    f(a); // errore, sto chiamando una funzione che accetta int con bool
+}

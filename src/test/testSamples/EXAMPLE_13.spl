@@ -1,0 +1,11 @@
+{
+    //////////////////// EXAMPLE 13 ////////////////////
+    int x = 3;
+    f( var int a ){
+        a = x+1;
+        delete a;
+        x = 3;
+    }
+    int y = 3;
+    f(x); // errore, provo ad accedere ad una variabile eliminata
+}

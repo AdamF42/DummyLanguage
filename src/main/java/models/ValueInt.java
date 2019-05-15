@@ -4,15 +4,9 @@ import java.util.ArrayList;
 
 public class ValueInt extends Value {
 
-    private Integer val;
 
-    /**
-     * Constructor for ValueInt.
-     *
-     * @param val -> integer value
-     */
-    public ValueInt(Integer val) {
-        this.val=val;
+    public ValueInt(String val) {
+        super(val);
     }
 
     /**
@@ -22,7 +16,7 @@ public class ValueInt extends Value {
      * @return Empty ArrayList of semantic errors
      */
     public ArrayList<SemanticError> checkSemantics(Environment env) {
-        return new ArrayList<SemanticError>();
+        return new ArrayList<>();
     }
 
     /**

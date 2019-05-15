@@ -1,0 +1,17 @@
+{
+    //////////////////// EXAMPLE 1 ////////////////////
+    int z = 5;
+    f(var int a, var int b){
+        {
+            delete a;
+            delete b;
+            delete z;
+        }
+    }
+    {
+        int x = 3 ;
+        f(x,x) ; // errore perchè la copia del parametro avviene dopo l'eliminazione della prima x
+        z = 1; // errore perchè z viene cancellato all'invocazione
+    }
+
+}

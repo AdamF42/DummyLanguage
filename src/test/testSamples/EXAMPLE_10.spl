@@ -1,0 +1,10 @@
+{
+    //////////////////// EXAMPLE 10 ////////////////////
+    bool x = true;
+    int y = 2;
+    if (x) then {
+        delete x;
+    } else {
+        delete y;
+    } // errore perchè i due rami eliminano varibili diverse
+}

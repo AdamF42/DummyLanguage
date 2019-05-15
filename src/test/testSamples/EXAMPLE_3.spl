@@ -1,0 +1,13 @@
+{
+    //////////////////// EXAMPLE 3 ////////////////////
+    int z = 5;
+    f( int a ){
+        delete z;
+    }
+    delete f;
+    {
+        int x = 3 ;
+        f(x) ; // errore perchè f è stata rimossa
+    }
+
+}

@@ -3,6 +3,7 @@ package models;
 import util.Strings;
 import util.TypeUtils;
 
+import java.io.CharArrayReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,17 +31,31 @@ public class StmtAssignment extends Stmt{
     public List<SemanticError> checkSemantics(Environment e) {
 
         //initialize result variable
-        List<SemanticError> result = new ArrayList<SemanticError>();
+        List<SemanticError> result = new ArrayList<>();
 
-        if (!e.containsVariable(id)) {
-            result.add(new SemanticError(Strings.ERROR_VARIABLE_DOESNT_EXIST + id));
-        } else {
-            this.idType = e.getVariableValue(id).getType();
-        }
+        //check id semantics
+        result.addAll(checkIdSemantics(e));
 
+        // check exp semantics
         result.addAll(exp.checkSemantics(e));
+        this.addAllrwAccesses(exp.getRwAccesses());
 
         return result;
 
+    }
+
+    private List<SemanticError>  checkIdSemantics(Environment e) {
+        List<SemanticError> result = new ArrayList<>();
+
+        if (!e.containsVariable(id)) {
+            result.add(new SemanticError(Strings.ERROR_VARIABLE_DOESNT_EXIST + id));
+        } else if (e.getVariableValue(id).isDeleted()) {
+            result.add(new SemanticError(Strings.ERROR_VARIABLE_HAS_BEEN_DELETED + id));
+        }else {
+            this.idType = e.getVariableValue(id).getType();
+            this.addrwAccess(e.getVariableValue(id));
+        }
+
+        return result;
     }
 }

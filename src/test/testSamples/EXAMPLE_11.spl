@@ -1,0 +1,13 @@
+{
+    //////////////////// EXAMPLE 11 ////////////////////
+    f(var int x, var int y){
+        int z = x ; // z è una copia di x => nessun errore
+        delete x ;
+        y = y + z ;
+    }
+    {
+        int x = 3 ;
+        int y = 4 ;
+        f(x,y) ;
+    }
+}

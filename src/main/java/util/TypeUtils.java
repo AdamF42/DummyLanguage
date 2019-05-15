@@ -6,18 +6,19 @@ public class TypeUtils {
 
     public static void functionParamTypeCheck(Type expectedType, ElementBase actualElement) throws TypeCheckError {
 
-        if (expectedType instanceof TypeReferenceable) {
+        if (expectedType instanceof TypeReferenceable && ((TypeReferenceable) expectedType).isReference()) {
             ElementBase temp = actualElement;
-            while (temp instanceof BinaryOp) {
-                BinaryOp binaryOp = (BinaryOp) temp;
-                if (binaryOp.getRight() != null) {
+            ElementBase tmp = null;
+            while (temp instanceof Exp) {
+                if (((Exp) temp).getRight() != null) {
                     throw new TypeCheckError("ExpectedType: var " + expectedType + ", got: right term " + actualElement);
                 } else {
-                    temp = binaryOp.getLeft();
+                    tmp = temp;
+                    temp = ((Exp) temp).getLeft();
                 }
             }
-            if (!(temp instanceof ValueId)) {
-                throw new TypeCheckError("ExpectedType: var " + expectedType + ", got value " + temp);
+            if (tmp instanceof Value && !(tmp instanceof ValueId)) {
+                throw new TypeCheckError("ExpectedType: var " + expectedType + ", got value " + ((Value) tmp).getVal());
             }
         }
         typeCheck(expectedType, actualElement);
@@ -28,4 +29,5 @@ public class TypeUtils {
             throw new TypeCheckError("ExpectedType " + (expectedType instanceof TypeReferenceable ? "var " : "") + expectedType + ", got " + actualElement.typeCheck());
         }
     }
+
 }

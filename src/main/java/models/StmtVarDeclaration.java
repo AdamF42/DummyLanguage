@@ -10,10 +10,10 @@ public class StmtVarDeclaration extends Stmt {
 
     private String id;
     private Type type;
-    private ElementBase exp;
+    private Exp exp;
 
 
-    public StmtVarDeclaration(Type type, String id, ElementBase exp){
+    public StmtVarDeclaration(Type type, String id, Exp exp){
         this.type = type;
         this.id = id;
         this.exp = exp;
@@ -23,9 +23,6 @@ public class StmtVarDeclaration extends Stmt {
     public Type typeCheck() throws TypeCheckError {
         if (exp != null){
             TypeUtils.typeCheck(type, exp);
-/*            if(!this.type.getClass().equals(this.exp.typeCheck().getClass())){
-                throw new TypeCheckError("StmtVarDeclaration| "+this.type.getClass()+" and "+this.exp.typeCheck().getClass());
-            }*/
         }
         return this.type.typeCheck();
     }
@@ -33,17 +30,18 @@ public class StmtVarDeclaration extends Stmt {
     @Override
     List<SemanticError> checkSemantics(Environment e) {
         //initialize result variable
-        List<SemanticError> result = new ArrayList<SemanticError>();
+        List<SemanticError> result = new ArrayList<>();
 
-        if (e.containsVariable(id)) {
+        if (e.containsVariableLocal(id) && !e.getVariableValueLocal(id).isDeleted()) {
             result.add(new SemanticError(Strings.ERROR_ALREADY_DECLARED_IDENTIFIER + id));
         } else {
-            e.addVariable(id, new STentry(e.getNestingLevel(), type));
+            e.addVariable(id, new STentry(e.getNestingLevel(), type, id));
+            this.addrwAccess(e.getVariableValueLocal(id));
         }
 
         // check exp semantic
         result.addAll(exp.checkSemantics(e));
-
+        this.addAllrwAccesses(exp.getRwAccesses());
         return result;
     }
 }

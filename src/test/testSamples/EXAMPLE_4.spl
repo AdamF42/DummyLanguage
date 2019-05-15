@@ -1,0 +1,13 @@
+{
+    //////////////////// EXAMPLE 4 ////////////////////
+    f( int a ){
+        delete f;
+        a = 2;
+    }
+    {
+        int x = 3 ;
+        f(x) ;
+        f(x) ; // errore perchè la chiamata ad f elimina il suo identificatore
+    }
+
+}

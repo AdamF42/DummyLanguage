@@ -1,0 +1,20 @@
+{
+    //////////////////// EXAMPLE 15 ////////////////////
+    int x = 1;
+    f(var int a){
+        if (x == 0) then {
+            a = 1;
+            delete a ;
+        } else {
+            a = x +1;
+            delete a;
+            x = 3;
+            {
+                int b = 1;
+                f(b);
+            }
+        } // errore perchè i due rami hanno tipo comportamentale differente
+    }
+    int test = 1;
+    f(test);
+}

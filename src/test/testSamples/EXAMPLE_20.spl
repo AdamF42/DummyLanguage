@@ -1,0 +1,5 @@
+{
+    //////////////////// EXAMPLE 20 ////////////////////
+    int a = 5;
+    a = false; // errore, sto assegnando bool a un intero
+}

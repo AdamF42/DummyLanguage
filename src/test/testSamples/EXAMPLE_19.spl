@@ -1,0 +1,4 @@
+{
+    //////////////////// EXAMPLE 19 ////////////////////
+    int a = 5 >= 3 + 4; // errore, sto assegnando un booleano ad un intero
+}

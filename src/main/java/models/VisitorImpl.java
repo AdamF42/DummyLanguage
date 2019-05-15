@@ -11,7 +11,7 @@ import java.util.List;
 public class VisitorImpl extends ComplexStaticAnalysisBaseVisitor<ElementBase> {
 
     @Override
-    public ElementBase visitBlock(ComplexStaticAnalysisParser.BlockContext ctx) {
+    public StmtBlock visitBlock(ComplexStaticAnalysisParser.BlockContext ctx) {
         //list for saving children statements
         List<Stmt> children = new ArrayList<Stmt>();
 
@@ -32,7 +32,7 @@ public class VisitorImpl extends ComplexStaticAnalysisBaseVisitor<ElementBase> {
     }
 
     @Override
-    public ElementBase visitAssignment(ComplexStaticAnalysisParser.AssignmentContext ctx) {
+    public StmtAssignment visitAssignment(ComplexStaticAnalysisParser.AssignmentContext ctx) {
 
         //get id of variable
         String id = ctx.ID().getText();
@@ -41,35 +41,18 @@ public class VisitorImpl extends ComplexStaticAnalysisBaseVisitor<ElementBase> {
         Exp exp = (Exp) visit(ctx.exp());
 
         //construct assignment expression
-        StmtAssignment assign = new StmtAssignment(exp, id);
-        return assign;
+        return new StmtAssignment(exp, id);
     }
 
     @Override
-    public ElementBase visitDeletion(ComplexStaticAnalysisParser.DeletionContext ctx) {
+    public StmtDelete visitDeletion(ComplexStaticAnalysisParser.DeletionContext ctx) {
         //construct delete expression with variable id
-        StmtDelete delete = new StmtDelete(ctx.ID().getText());
-        return delete;
+        return new StmtDelete(ctx.ID().getText());
     }
-
-//    @Override
-//    public T visitPrint(ComplexStaticAnalysisParser.PrintContext ctx) {
-//        return visitChildren(ctx);
-//    }
-
-//    @Override
-//    public T visitFunctioncall(ComplexStaticAnalysisParser.FunctioncallContext ctx) {
-//        return visitChildren(ctx);
-//    }
-//
-//    @Override
-//    public T visitIfthenelse(ComplexStaticAnalysisParser.IfthenelseContext ctx) {
-//        return visitChildren(ctx);
-//    }
 
 
     @Override
-    public ElementBase visitVarDec(ComplexStaticAnalysisParser.VarDecContext ctx) {
+    public StmtVarDeclaration visitVarDec(ComplexStaticAnalysisParser.VarDecContext ctx) {
         // get the type
         Type type = visitType(ctx.type());
 
@@ -77,11 +60,10 @@ public class VisitorImpl extends ComplexStaticAnalysisBaseVisitor<ElementBase> {
         String id = ctx.ID().getText();
 
         // visit the expression
-        ElementBase exp = visit(ctx.exp());
+        Exp exp = visitExp(ctx.exp());
 
         //construct assignment expression
-        StmtVarDeclaration vardec = new StmtVarDeclaration(type, id, exp);
-        return vardec;
+        return new StmtVarDeclaration(type, id, exp);
 
     }
 
@@ -110,42 +92,38 @@ public class VisitorImpl extends ComplexStaticAnalysisBaseVisitor<ElementBase> {
     }
 
     @Override
-    public ElementBase visitExp(ComplexStaticAnalysisParser.ExpContext ctx) {
+    public Exp visitExp(ComplexStaticAnalysisParser.ExpContext ctx) {
 
         Term leftTerm = (Term) visit(ctx.left);
 
         Exp righExp = ctx.right != null ? (Exp) visit(ctx.right) : null;
 
-        Exp result = new Exp(leftTerm, righExp);
-
-        return result;
+        return new Exp(leftTerm, righExp);
     }
 
+
     @Override
-    public ElementBase visitTerm(ComplexStaticAnalysisParser.TermContext ctx) {
+    public Term visitTerm(ComplexStaticAnalysisParser.TermContext ctx) {
 
-        Factor leftTerm = (Factor) visit(ctx.left);
+        Factor leftTerm = visitFactor(ctx.left);
 
-        Term righExp = ctx.right != null ? (Term) visit(ctx.right) : null;
+        Term righExp = ctx.right != null ? visitTerm(ctx.right) : null;
 
-        Term result = new Term(leftTerm, righExp);
-
-        return result;
+        return new Term(leftTerm, righExp);
     }
     @Override
-    public ElementBase visitFactor(ComplexStaticAnalysisParser.FactorContext ctx) {
+    public Factor visitFactor(ComplexStaticAnalysisParser.FactorContext ctx) {
 
-        ElementBase leftTerm = visit(ctx.left);
+        Exp leftTerm =  (Exp) visit(ctx.left);
 
-        ElementBase righExp = ctx.right != null ? visit(ctx.right) : null;
-
-        Factor result = new Factor(leftTerm, righExp);
-
-        return result;
+        Exp righExp = ctx.right != null ? (Exp) visit(ctx.right) : null;
+        String op = ctx.op != null ? ctx.op.getText() : null;
+        return new Factor(leftTerm, righExp, op);
     }
 
+
     @Override
-    public ElementBase visitFunDec(ComplexStaticAnalysisParser.FunDecContext ctx) {
+    public StmtFunDeclaration visitFunDec(ComplexStaticAnalysisParser.FunDecContext ctx) {
 
         String funId = ctx.ID().getText();
 
@@ -154,58 +132,65 @@ public class VisitorImpl extends ComplexStaticAnalysisBaseVisitor<ElementBase> {
             params.add(visitParameter(pc));
         }
 
-        ElementBase body = visit(ctx.block());
+        StmtBlock body = visitBlock(ctx.block());
 
         return new StmtFunDeclaration(funId,params,body);
 
     }
 
     @Override
-    public ElementBase visitIntValue(ComplexStaticAnalysisParser.IntValueContext ctx) {
-        return new ValueInt(Integer.parseInt(ctx.INTEGER().getText()));
+    public Value visitIntValue(ComplexStaticAnalysisParser.IntValueContext ctx) {
+        return new ValueInt(ctx.INTEGER().getText());
     }
 
     @Override
-    public ElementBase visitIdValue(ComplexStaticAnalysisParser.IdValueContext ctx) {
-        return new ValueId(ctx.ID().getText());
+    public Value visitIdValue(ComplexStaticAnalysisParser.IdValueContext ctx) {
+        String line = String.valueOf(ctx.ID().getSymbol().getLine());
+        String charPos = String.valueOf(ctx.ID().getSymbol().getCharPositionInLine());
+        return new ValueId(ctx.ID().getText(), line, charPos);
     }
 
     @Override
-    public ElementBase visitBoolValue(ComplexStaticAnalysisParser.BoolValueContext ctx) {
+    public Value visitBoolValue(ComplexStaticAnalysisParser.BoolValueContext ctx) {
+
         return new ValueBool(ctx.getChild(0).getText());
     }
 
     @Override
-    public ElementBase visitFunctioncall(ComplexStaticAnalysisParser.FunctioncallContext ctx) {
+    public StmtFunctionCall visitFunctioncall(ComplexStaticAnalysisParser.FunctioncallContext ctx) {
 
         String funId = ctx.ID().getText();
 
-        List<ElementBase> params = new ArrayList<ElementBase>();
+        List<Exp> params = new ArrayList<>();
         if(ctx.exp() != null){
             for (ComplexStaticAnalysisParser.ExpContext param: ctx.exp()){
-                params.add(visit(param));
+                params.add(visitExp(param));
             }
         }
-
-
 
         return new StmtFunctionCall(funId, params);
     }
 
     @Override
-    public ElementBase visitExpValue(ComplexStaticAnalysisParser.ExpValueContext ctx) {
+    public Exp visitExpValue(ComplexStaticAnalysisParser.ExpValueContext ctx) {
         return visitExp(ctx.exp());
     }
 
     @Override
-    public ElementBase visitIfthenelse(ComplexStaticAnalysisParser.IfthenelseContext ctx) {
+    public StmtIfThenElse visitIfthenelse(ComplexStaticAnalysisParser.IfthenelseContext ctx) {
 
-        ElementBase condition = visit(ctx.exp());
+        Exp condition = visitExp(ctx.exp());
 
-        ElementBase ifBranch = visit(ctx.block(0));
+        StmtBlock ifBranch = visitBlock(ctx.block(0));
 
-        ElementBase thenBranch = visit(ctx.block(1));
+        StmtBlock thenBranch = visitBlock(ctx.block(1));
 
         return new StmtIfThenElse(condition,ifBranch,thenBranch);
+    }
+
+    @Override
+    public StmtPrint visitPrint(ComplexStaticAnalysisParser.PrintContext ctx) {
+        Exp exp = visitExp(ctx.exp());
+        return new StmtPrint(exp);
     }
 }

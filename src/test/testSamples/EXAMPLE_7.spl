@@ -1,0 +1,12 @@
+{
+    //////////////////// EXAMPLE 7 ////////////////////
+    f(var int x, int y){
+        if (y == 0) then {
+            x=x+y ;
+        } else {
+            delete x;
+        }
+    } // errore perchè i due rami dell'ifThenElse hanno tipo "comportamentale" diverso
+    int x = 1;
+    f(x,1);
+}

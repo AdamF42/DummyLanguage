@@ -1,0 +1,10 @@
+{
+    //////////////////// EXAMPLE 8 ////////////////////
+    int x =1;
+    f(int a) {
+        delete x;
+    }
+    f(6);
+    int x = 8;
+    f(1); // errore perchè la x cui fa riferimento la delete è già stata cancellata.
+}

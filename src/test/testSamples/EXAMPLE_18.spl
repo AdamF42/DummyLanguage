@@ -1,0 +1,6 @@
+{
+    //////////////////// EXAMPLE 18 ////////////////////
+    bool g = true;
+    g = false;
+    g(5); // errore, g non è una funzione
+}
