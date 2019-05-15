@@ -34,7 +34,7 @@ public class ValueId extends Value {
 
         if(!e.containsVariable(this.getVal())){
             res.add(new SemanticError(Strings.ERROR_VARIABLE_DOESNT_EXIST + this.getVal()));
-        } else if (e.getVariableValue(this.getVal()).getType().isDeleted()){
+        } else if (e.getVariableValue(this.getVal()).isDeleted()){
             res.add(new SemanticError(Strings.ERROR_VARIABLE_HAS_BEEN_DELETED + this.getVal()));
         } else {
             type = e.getVariableValue(this.getVal()).getType();

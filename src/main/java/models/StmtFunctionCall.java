@@ -3,7 +3,6 @@ package models;
 import util.Strings;
 import util.TypeUtils;
 
-import javax.print.DocFlavor;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +10,7 @@ public class StmtFunctionCall extends Stmt {
 
     private String id;
     private List<Exp> actualParams;
-    private List<TypeReferenceable> formalParams;
+    private List<STentry> formalParams;
     private TypeFunction envFunType;
 
 
@@ -25,12 +24,12 @@ public class StmtFunctionCall extends Stmt {
 
         if (envFunType != null) {
 
-            if (envFunType.getParamTypes().size() != actualParams.size()) {
+            if (envFunType.getParam().size() != actualParams.size()) {
                 throw new TypeCheckError(Strings.ERROR_PARAMETER_MISMATCH +
-                        envFunType.getParamTypes().size() + " got " + actualParams.size());
+                        envFunType.getParam().size() + " got " + actualParams.size());
             }
-            for (int i = 0; i < envFunType.getParamTypes().size(); i++) {
-                Type expectedType = envFunType.getParamTypes().get(i);
+            for (int i = 0; i < envFunType.getParam().size(); i++) {
+                Type expectedType = envFunType.getParam().get(i).getType();
                 ElementBase actualType = actualParams.get(i);
                 TypeUtils.functionParamTypeCheck(expectedType, actualType);
 
@@ -44,7 +43,7 @@ public class StmtFunctionCall extends Stmt {
         //initialize result variable
         List<SemanticError> result = new ArrayList<>();
         STentry sTentry = e.getVariableValue(id);
-        if (sTentry == null || sTentry.getType().isDeleted() || !(sTentry.getType() instanceof TypeFunction)) {
+        if (sTentry == null || sTentry.isDeleted() || !(sTentry.getType() instanceof TypeFunction)) {
             result.add(new SemanticError(Strings.ERROR_FUNCTION_DOESNT_EXIST + id));
         } else {
             // retrieve function and parameters type
@@ -64,7 +63,7 @@ public class StmtFunctionCall extends Stmt {
 
             for (int i = 0; i < formalParams.size(); i++) {
                 Exp actualParam = actualParams.get(i);
-                TypeReferenceable formalParam = formalParams.get(i);
+                STentry formalParam = formalParams.get(i);
                 result.addAll(checkParamSemantics(e, actualParam, formalParam));
             }
 
@@ -77,7 +76,7 @@ public class StmtFunctionCall extends Stmt {
         Type actualFunctionType = e.getVariableValue(id).getType();
         if (actualFunctionType instanceof TypeFunction) {
             this.envFunType = (TypeFunction) actualFunctionType;
-            this.formalParams = envFunType.getParamTypes();
+            this.formalParams = envFunType.getParam();
 
         } else {
             result.add(new SemanticError(Strings.ERROR_NOT_CALLABLE + id +
@@ -89,27 +88,27 @@ public class StmtFunctionCall extends Stmt {
     private List<SemanticError> checkFunDeletionsSemantics(Environment e) {
         List<SemanticError> result = new ArrayList<>();
         for (STentry entry : envFunType.getDeletions()) {
-            if (entry.getType().isToBeDeletedOnFunCall() && !(entry.getType() instanceof TypeReferenceable &&
+            if (entry.isToBeDeletedOnFunCall() && !(entry.getType() instanceof TypeReferenceable &&
                     ((TypeReferenceable) entry.getType()).isReference())) {
-                if(entry.getType().isDeleted()) {
+                if(entry.isDeleted()) {
                     result.add(new SemanticError(Strings.ERROR_VARIABLE_HAS_BEEN_DELETED + entry.getId()));
                 } else {
-                    entry.getType().setDeleted(true);
+                    entry.setDeleted(true);
                 }
             }
         }
         return result;
     }
 
-    private List<SemanticError> checkParamSemantics(Environment e, Exp actualParam, TypeReferenceable formalParam) {
+    private List<SemanticError> checkParamSemantics(Environment e, Exp actualParam, STentry formalParam) {
         String actualParamId = actualParam.getIdFromExp();
         List<SemanticError> result = new ArrayList<>(actualParam.checkSemantics(e));
         // Handle EXAMPLE 1
-        if (formalParam.isReference() &&
+        if (((TypeReferenceable)formalParam.getType()).isReference() &&
                 actualParam.isValueId() &&
                 e.containsVariable(actualParamId) &&
                 (formalParam.isDeleted() || formalParam.isToBeDeletedOnFunCall())) {
-            e.getVariableValue(actualParamId).getType().setDeleted(true);
+            e.getVariableValue(actualParamId).setDeleted(true);
         }
 
         if (!this.envFunType.getDeletions().isEmpty()) {

@@ -49,7 +49,7 @@ public class StmtAssignment extends Stmt{
 
         if (!e.containsVariable(id)) {
             result.add(new SemanticError(Strings.ERROR_VARIABLE_DOESNT_EXIST + id));
-        } else if (e.getVariableValue(id).getType().isDeleted()) {
+        } else if (e.getVariableValue(id).isDeleted()) {
             result.add(new SemanticError(Strings.ERROR_VARIABLE_HAS_BEEN_DELETED + id));
         }else {
             this.idType = e.getVariableValue(id).getType();

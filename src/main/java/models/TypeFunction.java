@@ -3,11 +3,11 @@ package models;
 import java.util.*;
 
 public class TypeFunction extends Type {
-    private final List<TypeReferenceable> paramTypes;
+    private final List<STentry> param;
     private final StmtBlock body;
 
-    public TypeFunction(List<TypeReferenceable> paramTypes, StmtBlock body) {
-        this.paramTypes = paramTypes;
+    public TypeFunction(List<STentry> param, StmtBlock body) {
+        this.param = param;
         this.body = body;
     }
 
@@ -21,8 +21,8 @@ public class TypeFunction extends Type {
         return null;
     }
 
-    public List<TypeReferenceable> getParamTypes() {
-        return paramTypes;
+    public List<STentry> getParam() {
+        return param;
     }
 
     public Set<STentry> getDeletions() {
@@ -31,5 +31,9 @@ public class TypeFunction extends Type {
 
     public Set<STentry> getRwAccesses() {
         return body.getRwAccesses();
+    }
+
+    public void addParam(STentry paramEntry){
+        this.param.add(paramEntry);
     }
 }

@@ -112,7 +112,7 @@ public class Environment {
 
 
 	public void setToBeDeletedOnFunCall(STentry entry) {
-		entry.getType().setToBeDeleted(true);
+		entry.setToBeDeleted(true);
 	}
 
 	public boolean isInCurrentScope(int identifierNL){

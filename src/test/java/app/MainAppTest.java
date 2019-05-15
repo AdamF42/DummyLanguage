@@ -274,4 +274,36 @@ class MainAppTest {
         assertEquals("ExpectedType var TypeBool, got TypeInt", exception.getMessage());
     }
 
+    @Test
+    void example_23() {
+        StmtBlock mainBlock = getAST(baseTestsRoot + "EXAMPLE_23.spl");
+        Environment e = new Environment();
+        assertNotNull(mainBlock);
+        List<SemanticError> errors =  mainBlock.checkSemantics(e);
+        assertEquals(0, errors.size());
+        Throwable exception = assertThrows(TypeCheckError.class, mainBlock::typeCheck);
+        assertEquals(Strings.ERROR_BEHAVIUOR_MISMATCH, exception.getMessage());
+    }
+
+    @Test
+    void example_24() {
+        StmtBlock mainBlock = getAST(baseTestsRoot + "EXAMPLE_24.spl");
+        Environment e = new Environment();
+        assertNotNull(mainBlock);
+        List<SemanticError> errors =  mainBlock.checkSemantics(e);
+        assertEquals(1, errors.size());
+        assertEquals(Strings.ERROR_VARIABLE_HAS_BEEN_DELETED + "x", errors.get(0).toString());
+    }
+
+    @Test
+    void example_25() {
+        StmtBlock mainBlock = getAST(baseTestsRoot + "EXAMPLE_25.spl");
+        Environment e = new Environment();
+        assertNotNull(mainBlock);
+        List<SemanticError> errors =  mainBlock.checkSemantics(e);
+        assertEquals(0, errors.size());
+        Throwable exception = assertThrows(TypeCheckError.class, mainBlock::typeCheck);
+        assertEquals(Strings.ERROR_BEHAVIUOR_MISMATCH, exception.getMessage());
+    }
+
 }

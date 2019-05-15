@@ -8,12 +8,27 @@ public class STentry {
     private final int nl;
     private final Type type;
     private final String id;
+    private boolean deleted = false;
+    private boolean toBeDeleted = false;
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
+    public boolean isToBeDeletedOnFunCall() {
+        return toBeDeleted;
+    }
+    public void setToBeDeleted(boolean toBeDeleted) {
+        this.toBeDeleted = toBeDeleted;
+    }
 
     /**
      * Constructor for STentry with type.
      *  @param nl --> entry nesting level
      * @param t  --> entry type
-     * @param id
+     * @param id --> entry id
      */
     public STentry(int nl, Type t, String id) {
         this.nl = nl;
@@ -45,6 +60,6 @@ public class STentry {
 
     @Override
     public int hashCode() {
-        return Objects.hash(nl, id);
+        return Objects.hash(nl, id, type);
     }
 }

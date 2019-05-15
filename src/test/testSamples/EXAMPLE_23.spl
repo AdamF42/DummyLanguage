@@ -1,0 +1,14 @@
+{
+    //////////////////// EXAMPLE 23 ////////////////////
+    int a = 2;
+    int b = 3;
+    int x = 0;
+
+    foo(var int a){
+        if (x == 0) then {
+            a = 5;
+        } else {
+            b = 3;
+        }
+    } // errore perchè i due rami hanno comportamento diverso
+}
