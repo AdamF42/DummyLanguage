@@ -11,6 +11,9 @@ public class STentry {
     private boolean deleted = false;
     private boolean toBeDeleted = false;
 
+    public boolean isReference(){
+        return (this.type != null && this.type instanceof TypeReferenceable) && ((TypeReferenceable) this.type).isReference();
+    }
     public boolean isDeleted() {
         return deleted;
     }
