@@ -281,8 +281,7 @@ class MainAppTest {
         assertNotNull(mainBlock);
         List<SemanticError> errors =  mainBlock.checkSemantics(e);
         assertEquals(0, errors.size());
-        Throwable exception = assertThrows(TypeCheckError.class, mainBlock::typeCheck);
-        assertEquals(Strings.ERROR_BEHAVIUOR_MISMATCH, exception.getMessage());
+        assertDoesNotThrow((Executable) mainBlock::typeCheck);
     }
 
     @Test
