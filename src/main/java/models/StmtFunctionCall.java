@@ -88,8 +88,7 @@ public class StmtFunctionCall extends Stmt {
     private List<SemanticError> checkFunDeletionsSemantics(Environment e) {
         List<SemanticError> result = new ArrayList<>();
         for (STentry entry : envFunType.getDeletions()) {
-            if (entry.isToBeDeletedOnFunCall() && !(entry.getType() instanceof TypeReferenceable &&
-                    ((TypeReferenceable) entry.getType()).isReference())) {
+            if (entry.isToBeDeletedOnFunCall() && !entry.isReference()) {
                 if(entry.isDeleted()) {
                     result.add(new SemanticError(Strings.ERROR_VARIABLE_HAS_BEEN_DELETED + entry.getId()));
                 } else {
@@ -104,7 +103,7 @@ public class StmtFunctionCall extends Stmt {
         String actualParamId = actualParam.getIdFromExp();
         List<SemanticError> result = new ArrayList<>(actualParam.checkSemantics(e));
         // Handle EXAMPLE 1
-        if (((TypeReferenceable)formalParam.getType()).isReference() &&
+        if (formalParam.isReference() &&
                 actualParam.isValueId() &&
                 e.containsVariable(actualParamId) &&
                 (formalParam.isDeleted() || formalParam.isToBeDeletedOnFunCall())) {
