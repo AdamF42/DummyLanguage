@@ -305,4 +305,25 @@ class MainAppTest {
         assertEquals(Strings.ERROR_BEHAVIUOR_MISMATCH, exception.getMessage());
     }
 
+    @Test
+    void example_26() {
+        StmtBlock mainBlock = getAST(baseTestsRoot + "EXAMPLE_26.spl");
+        Environment e = new Environment();
+        assertNotNull(mainBlock);
+        List<SemanticError> errors =  mainBlock.checkSemantics(e);
+        assertEquals(0, errors.size());
+        assertDoesNotThrow((Executable) mainBlock::typeCheck);
+    }
+
+    @Test
+    void example_27() {
+        StmtBlock mainBlock = getAST(baseTestsRoot + "EXAMPLE_27.spl");
+        Environment e = new Environment();
+        assertNotNull(mainBlock);
+        List<SemanticError> errors =  mainBlock.checkSemantics(e);
+        assertEquals(0, errors.size());
+        Throwable exception = assertThrows(TypeCheckError.class, mainBlock::typeCheck);
+        assertEquals("ExpectedType: var TypeInt, got: right term Exp", exception.getMessage()); //TODO: improve error message -> no Exp but Values
+    }
+
 }
