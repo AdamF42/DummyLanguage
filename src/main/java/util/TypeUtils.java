@@ -11,7 +11,7 @@ public class TypeUtils {
             ElementBase tmp = null;
             while (temp instanceof Exp) {
                 if (((Exp) temp).getRight() != null) {
-                    throw new TypeCheckError("ExpectedType: var " + expectedType + ", got: right term " + actualElement);
+                    throw new TypeCheckError("ExpectedType: var " + expectedType + ", got: right term " + actualElement.typeCheck());
                 } else {
                     tmp = temp;
                     temp = ((Exp) temp).getLeft();
