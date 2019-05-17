@@ -323,7 +323,7 @@ class MainAppTest {
         List<SemanticError> errors =  mainBlock.checkSemantics(e);
         assertEquals(0, errors.size());
         Throwable exception = assertThrows(TypeCheckError.class, mainBlock::typeCheck);
-        assertEquals("ExpectedType: var TypeInt, got: right term Exp", exception.getMessage()); //TODO: improve error message -> no Exp but Values
+        assertEquals("ExpectedType: var TypeInt, got: right term TypeInt", exception.getMessage());
     }
 
 }
