@@ -326,4 +326,14 @@ class MainAppTest {
         assertEquals("ExpectedType: var TypeInt, got: right term TypeInt", exception.getMessage());
     }
 
+    @Test
+    void example_28() {
+        StmtBlock mainBlock = getAST(baseTestsRoot + "EXAMPLE_28.spl");
+        Environment e = new Environment();
+        assertNotNull(mainBlock);
+        List<SemanticError> errors =  mainBlock.checkSemantics(e);
+        assertEquals(0, errors.size());
+        assertDoesNotThrow((Executable) mainBlock::typeCheck);
+    }
+
 }
