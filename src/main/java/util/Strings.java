@@ -1,10 +1,6 @@
 package util;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class Strings {
 
@@ -14,9 +10,9 @@ public class Strings {
 	public static final String ERROR_VARIABLE_HAS_BEEN_DELETED = "Variable has been deleted. Variable name: ";
 	public static final String ERROR_FUNCTION_DOESNT_EXIST = "No function found. Function either doesn't exist or has been deleted. Function name: ";
 	public static final String ERROR_ALREADY_DECLARED_IDENTIFIER = "Identifier already declared. Identifier name: ";
-	public static final String ERROR_PARAMETER_MISMATCH = "Paramenters count doesn't match. Expected ";
+	public static final String ERROR_PARAMETER_MISMATCH = "Parameters count doesn't match. Expected ";
 	public static final String ERROR_DANGEROUS_USE_OF_PARAMETER = "Potentially deleted parameter inside function. Name: ";
-	public static final String ERROR_BEHAVIUOR_MISMATCH = "Mismatching behavioural types between If-Then-Else statement branches";
+	public static final String ERROR_BEHAVIOR_MISMATCH = "Mismatching behavioural types between If-Then-Else statement branches";
 
 
 	public static final String LEXICAL_CHECK = "Check Lexical Errors";

@@ -1,8 +1,6 @@
 package models;
 
-import util.Strings;
 import util.TypeUtils;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -28,14 +26,11 @@ public class Exp extends ElementBase {
 
     public boolean isValueId(){
 
-        Exp term = (Exp) getLeft();
+        Exp term = getLeft();
         Factor factor = (Factor) term.getLeft();
 
-        if(getRight() == null && term.getRight()==null &&
-                factor.getRight()==null && factor.getLeft() instanceof ValueId)
-            return true;
-
-        return false;
+        return getRight() == null && term.getRight() == null &&
+                factor.getRight() == null && factor.getLeft() instanceof ValueId;
     }
 
     public String getIdFromExp(){
