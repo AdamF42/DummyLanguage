@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class StmtDelete extends Stmt {
 
 	private String id;
-	private STentry idEntry;
+
 	/**
 	 * Creates a delete statement
 	 * @param id the variable we want to delete
@@ -27,7 +27,7 @@ public class StmtDelete extends Stmt {
 
 		ArrayList<SemanticError> result = new ArrayList<>();
 		STentry variable = e.getVariableValue(id);
-		idEntry = variable == null ? e.getFunctionValue(id) : variable;
+		STentry idEntry = variable == null ? e.getFunctionValue(id) : variable;
 
 		if(idEntry == null) {
 			result.add(new SemanticError(Strings.ERROR_VARIABLE_DOESNT_EXIST + id));

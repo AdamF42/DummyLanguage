@@ -115,7 +115,7 @@ class MainAppTest {
         List<SemanticError> errors =  mainBlock.checkSemantics(e);
         assertEquals(0, errors.size());
         Throwable exception = assertThrows(TypeCheckError.class, mainBlock::typeCheck);
-        assertEquals(Strings.ERROR_BEHAVIUOR_MISMATCH, exception.getMessage());
+        assertEquals(Strings.ERROR_BEHAVIOR_MISMATCH, exception.getMessage());
     }
 
     @Test
@@ -146,7 +146,7 @@ class MainAppTest {
         List<SemanticError> errors =  mainBlock.checkSemantics(e);
         assertEquals(0, errors.size());
         Throwable exception = assertThrows(TypeCheckError.class, mainBlock::typeCheck);
-        assertEquals(Strings.ERROR_BEHAVIUOR_MISMATCH, exception.getMessage());
+        assertEquals(Strings.ERROR_BEHAVIOR_MISMATCH, exception.getMessage());
     }
 
     @Test
@@ -197,7 +197,7 @@ class MainAppTest {
         List<SemanticError> errors =  mainBlock.checkSemantics(e);
         assertEquals(0, errors.size());
         Throwable exception = assertThrows(TypeCheckError.class, mainBlock::typeCheck);
-        assertEquals(Strings.ERROR_BEHAVIUOR_MISMATCH, exception.getMessage());
+        assertEquals(Strings.ERROR_BEHAVIOR_MISMATCH, exception.getMessage());
     }
 
     @Test
@@ -303,7 +303,7 @@ class MainAppTest {
         List<SemanticError> errors =  mainBlock.checkSemantics(e);
         assertEquals(0, errors.size());
         Throwable exception = assertThrows(TypeCheckError.class, mainBlock::typeCheck);
-        assertEquals(Strings.ERROR_BEHAVIUOR_MISMATCH, exception.getMessage());
+        assertEquals(Strings.ERROR_BEHAVIOR_MISMATCH, exception.getMessage());
     }
 
     @Test

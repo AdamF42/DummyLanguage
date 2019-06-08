@@ -32,7 +32,7 @@ public class StmtIfThenElse extends Stmt {
         elseBranch.typeCheck();
         if (!thenBranch.getDeletions().isEmpty() || !elseBranch.getDeletions().isEmpty()) {
             if (!thenBranch.getRwAccesses().containsAll(elseBranch.getRwAccesses()) || !thenBranch.getDeletions().containsAll(elseBranch.getDeletions()))
-                throw new TypeCheckError(Strings.ERROR_BEHAVIUOR_MISMATCH);
+                throw new TypeCheckError(Strings.ERROR_BEHAVIOR_MISMATCH);
         }
         return null;
     }
