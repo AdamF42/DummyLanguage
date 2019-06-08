@@ -60,4 +60,4 @@ LINECOMMENTS 	: '//' (~('\n'|'\r'))* -> skip;
 BLOCKCOMMENTS   : '/*'( ~('/'|'*')|'/'~'*'|'*'~'/'|BLOCKCOMMENTS)* '*/' -> skip;
 
 //LEXER ERRORS
-ERR             : . ;
+ERR             : . -> channel(HIDDEN); 

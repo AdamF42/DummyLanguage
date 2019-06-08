@@ -26,8 +26,7 @@ public class Parameter extends ElementBase {
         //declare result list
         ArrayList<SemanticError> res = new ArrayList<SemanticError>();
 
-
-        if (e.containsVariableLocal(id)) {
+        if (e.containsVariableLocal(id)||e.containsFunction(id)) {
             res.add(new SemanticError(Strings.ERROR_ALREADY_DECLARED_IDENTIFIER + id));
         } else {
             e.addVariable(id, new STentry(e.getNestingLevel(), type, id));

@@ -31,7 +31,6 @@ public class StmtFunDeclaration extends Stmt {
         if(result.isEmpty()) {
             e.openScope();
             e.setInsideFunctionDeclaration(true);
-            e.setFunctionNestingLevel(e.getNestingLevel());
 
             //check params semantics
             result.addAll(checkParamsSemantics(e));
@@ -49,26 +48,20 @@ public class StmtFunDeclaration extends Stmt {
     private List<SemanticError> checkFunIdSemantics(Environment e) {
 
         List<SemanticError> result = new ArrayList<>();
-        if (e.containsVariable(funId) && !e.getVariableValue(funId).isDeleted()) {
+        if ((e.containsFunction(funId) && !e.getFunctionValue(funId).isDeleted()) || (e.containsVariable(funId) && !e.getVariableValue(funId).isDeleted())) {
             result.add(new SemanticError(Strings.ERROR_ALREADY_DECLARED_IDENTIFIER + funId));
             return result;
-        } else {
-
-            for (Parameter param: params) {
-                if (param.getId().equals(funId)){
-                    result.add(new SemanticError(Strings.ERROR_PARAMETER_CALLDED_AS_FUNCTION + funId));
-                }
-            }
-            TypeFunction type = new TypeFunction(new ArrayList<>(), body);
-            e.addVariable(funId, new STentry(e.getNestingLevel(), type, funId));
         }
+        TypeFunction type = new TypeFunction(new ArrayList<>(), body);
+        e.addFunction(funId, new STentry(e.getNestingLevel(), type, funId));
         return result;
+
     }
 
     private List<SemanticError> checkParamsSemantics(Environment e) {
 
         List<SemanticError> result = new ArrayList<>();
-        STentry funEntry = e.getVariableValue(funId);
+        STentry funEntry = e.getFunctionValue(funId);
         TypeFunction funType = (TypeFunction) funEntry.getType();
         if(params!=null) {
             for (Parameter param : params) {
@@ -76,7 +69,6 @@ public class StmtFunDeclaration extends Stmt {
                 funType.addParam(e.getVariableValueLocal(param.getId()));
             }
         }
-
         return result;
     }
 

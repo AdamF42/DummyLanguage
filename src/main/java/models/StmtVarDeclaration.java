@@ -32,7 +32,8 @@ public class StmtVarDeclaration extends Stmt {
         //initialize result variable
         List<SemanticError> result = new ArrayList<>();
 
-        if (e.containsVariableLocal(id) && !e.getVariableValueLocal(id).isDeleted()) {
+        if ((e.containsVariableLocal(id) && !e.getVariableValueLocal(id).isDeleted())||
+                (e.containsFunction(id) && !e.getFunctionValue(id).isDeleted())) {
             result.add(new SemanticError(Strings.ERROR_ALREADY_DECLARED_IDENTIFIER + id));
         } else {
             e.addVariable(id, new STentry(e.getNestingLevel(), type, id));
