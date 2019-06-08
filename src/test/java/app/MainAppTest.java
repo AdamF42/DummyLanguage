@@ -217,7 +217,8 @@ class MainAppTest {
         assertNotNull(mainBlock);
         List<SemanticError> errors =  mainBlock.checkSemantics(e);
         assertEquals(1, errors.size());
-        assertEquals(Strings.ERROR_PARAMETER_CALLDED_AS_FUNCTION + "f", errors.get(0).toString());
+        assertEquals(Strings.ERROR_ALREADY_DECLARED_IDENTIFIER + "f", errors.get(0).toString());
+
     }
 
     @Test
@@ -329,6 +330,16 @@ class MainAppTest {
     @Test
     void example_28() {
         StmtBlock mainBlock = getAST(baseTestsRoot + "EXAMPLE_28.spl");
+        Environment e = new Environment();
+        assertNotNull(mainBlock);
+        List<SemanticError> errors =  mainBlock.checkSemantics(e);
+        assertEquals(0, errors.size());
+        assertDoesNotThrow((Executable) mainBlock::typeCheck);
+    }
+
+    @Test
+    void example_29() {
+        StmtBlock mainBlock = getAST(baseTestsRoot + "EXAMPLE_29.spl");
         Environment e = new Environment();
         assertNotNull(mainBlock);
         List<SemanticError> errors =  mainBlock.checkSemantics(e);

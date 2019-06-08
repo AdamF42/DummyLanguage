@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class StmtDelete extends Stmt {
 
 	private String id;
-
+	private STentry idEntry;
 	/**
 	 * Creates a delete statement
 	 * @param id the variable we want to delete
@@ -17,38 +17,38 @@ public class StmtDelete extends Stmt {
 	}
 
 	@Override
-    public Type typeCheck() {
+	public Type typeCheck() {
 		return null;
 	}
 
-	/*
-	 * Checks if the variable in use exists. if it doesn't then add an error, 
-	 * if it does then remove it from the current scope
-	 * @see models.SimpleElementBase#CheckSemantics(models.Environment)
-	 */
+	// TODO: refactor this horrible code...too many if
 	@Override
 	public ArrayList<SemanticError> checkSemantics(Environment e) {
+
 		ArrayList<SemanticError> result = new ArrayList<>();
-		
-		// check for the variable in all scopes
-		if(!e.containsVariable(id)) {
+		STentry variable = e.getVariableValue(id);
+		idEntry = variable == null ? e.getFunctionValue(id) : variable;
+
+		if(idEntry == null) {
 			result.add(new SemanticError(Strings.ERROR_VARIABLE_DOESNT_EXIST + id));
-		} else if (e.getVariableValue(id).isDeleted()){
+		}
+		else if (idEntry.isDeleted()){
 			result.add(new SemanticError(Strings.ERROR_VARIABLE_HAS_BEEN_DELETED + id));
-		} else {
-			STentry identifierEntry = e.getVariableValue(id);
-			if (e.isInCurrentScope(identifierEntry.getNestinglevel())){
-					identifierEntry.setDeleted(true);
-			} else {
+		}
+		else {
+			if (e.isInCurrentScope(idEntry.getNestinglevel())){
+				idEntry.setDeleted(true);
+			}
+			else {
 				// check if I'm inside a scope but I'm trying to delete something out
 				// Need to distinguish if i'm in a function or not
 				if(e.isInsideFunctionDeclaration()){
-					e.setToBeDeletedOnFunCall(identifierEntry);
+					e.setToBeDeletedOnFunCall(idEntry);
 				} else {
-					identifierEntry.setDeleted(true);
+					idEntry.setDeleted(true);
 				}
 			}
-			this.addDeletion(identifierEntry);
+			this.addDeletion(idEntry);
 		}
 		return result;
 	}

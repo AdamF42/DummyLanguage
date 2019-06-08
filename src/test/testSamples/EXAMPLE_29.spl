@@ -1,0 +1,11 @@
+{
+    //////////////////// EXAMPLE 29 ////////////////////
+    int x = 1;
+    int y = 1;
+    f(int a, int b, int c){
+       print a;
+    }
+
+    f(-x + y, x, y);
+
+}
