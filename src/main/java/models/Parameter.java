@@ -23,7 +23,6 @@ public class Parameter extends ElementBase {
     @Override
     List<SemanticError> checkSemantics(Environment e) {
 
-        //declare result list
         ArrayList<SemanticError> res = new ArrayList<SemanticError>();
 
         if (e.containsVariableLocal(id)||e.containsFunction(id)) {

@@ -21,7 +21,7 @@ public class StmtDelete extends Stmt {
 		return null;
 	}
 
-	// TODO: refactor this horrible code...too many if
+	// TODO: refactor this horrible code...
 	@Override
 	public ArrayList<SemanticError> checkSemantics(Environment e) {
 

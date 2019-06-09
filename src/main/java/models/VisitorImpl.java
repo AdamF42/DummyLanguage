@@ -83,7 +83,7 @@ public class VisitorImpl extends ComplexStaticAnalysisBaseVisitor<ElementBase> {
     public Parameter visitParameter(ComplexStaticAnalysisParser.ParameterContext ctx) {
 
         TypeReferenceable paramType = visitType(ctx.type());
-
+        // TODO: do not use contains var because it do not allow to call a variable with varExample
         if ( ctx.children.toString().contains("var")) {
             paramType.setReference(true);
         }
@@ -98,7 +98,9 @@ public class VisitorImpl extends ComplexStaticAnalysisBaseVisitor<ElementBase> {
 
         Exp righExp = ctx.right != null ? (Exp) visit(ctx.right) : null;
 
-        return new Exp(leftTerm, righExp);
+        String op = ctx.getText().contains("+") ? "+" : (ctx.getText().contains("-")?"-":null);
+
+        return new Exp(leftTerm, righExp, op);
     }
 
 
@@ -109,7 +111,9 @@ public class VisitorImpl extends ComplexStaticAnalysisBaseVisitor<ElementBase> {
 
         Term righExp = ctx.right != null ? visitTerm(ctx.right) : null;
 
-        return new Term(leftTerm, righExp);
+        String op = ctx.getText().contains("*") ? "*" : (ctx.getText().contains("/")?"/":null);
+
+        return new Term(leftTerm, righExp, op);
     }
     @Override
     public Factor visitFactor(ComplexStaticAnalysisParser.FactorContext ctx) {
@@ -117,7 +121,9 @@ public class VisitorImpl extends ComplexStaticAnalysisBaseVisitor<ElementBase> {
         Exp leftTerm =  (Exp) visit(ctx.left);
 
         Exp righExp = ctx.right != null ? (Exp) visit(ctx.right) : null;
+
         String op = ctx.op != null ? ctx.op.getText() : null;
+
         return new Factor(leftTerm, righExp, op);
     }
 

@@ -6,23 +6,20 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-/**
- * Represents a Simple Expression
- * Some child classes of this one will be SimpleExpSum, SimpleExpDiff,
- * SimpleExpDiv, SimpleExpMult and SimpleExpNeg
- *
- * @author Abel
- */
+
 public class Exp extends ElementBase {
 
-    private Exp left;
-    private Exp right;
+    private final Exp left;
+    private final Exp right;
+    private final String op;
 
     private final Set<STentry> rwAccesses = new HashSet<>();
 
-    public Exp(Exp left, Exp right) {
+    public Exp(Exp left, Exp right, String op) {
         this.left = left;
-        this.right = right;    }
+        this.right = right;
+        this.op = op;
+    }
 
     public boolean isValueId(){
 
@@ -84,5 +81,9 @@ public class Exp extends ElementBase {
 
     public Set<STentry> getRwAccesses() {
         return rwAccesses;
+    }
+
+    public String getOp() {
+        return op;
     }
 }
