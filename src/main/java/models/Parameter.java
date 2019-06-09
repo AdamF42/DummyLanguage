@@ -1,5 +1,8 @@
 package models;
 
+import models.types.Type;
+import models.types.TypeReferenceable;
+import util.SemanticError;
 import util.Strings;
 
 import java.util.ArrayList;
@@ -21,7 +24,7 @@ public class Parameter extends ElementBase {
     }
 
     @Override
-    List<SemanticError> checkSemantics(Environment e) {
+    public List<SemanticError> checkSemantics(Environment e) {
 
         ArrayList<SemanticError> res = new ArrayList<SemanticError>();
 
@@ -32,6 +35,11 @@ public class Parameter extends ElementBase {
         }
 
         return res;
+    }
+
+    @Override
+    public String codeGeneration() {
+        return null;
     }
 
     public String getId() {

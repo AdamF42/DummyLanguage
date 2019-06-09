@@ -1,5 +1,10 @@
-package models;
+package models.expressions;
 
+import models.*;
+import models.types.Type;
+import models.values.ValueId;
+import util.SemanticError;
+import util.TypeCheckError;
 import util.TypeUtils;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -61,6 +66,11 @@ public class Exp extends ElementBase {
         }
 
         return res;
+    }
+
+    @Override
+    public String codeGeneration() {
+        return null;
     }
 
     public Exp getLeft() {

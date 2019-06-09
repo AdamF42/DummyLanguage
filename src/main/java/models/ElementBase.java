@@ -1,5 +1,9 @@
 package models;
 
+import models.types.Type;
+import util.SemanticError;
+import util.TypeCheckError;
+
 import java.util.List;
 
 public abstract class ElementBase {
@@ -18,7 +22,9 @@ public abstract class ElementBase {
      * @param e -> Environment that holds previously parsed information
      * @return updated ArrayList of semantic errors
      */
-    abstract List<SemanticError> checkSemantics(Environment e);
+    public abstract List<SemanticError> checkSemantics(Environment e);
+
+    public abstract String codeGeneration();
 
 
     @Override

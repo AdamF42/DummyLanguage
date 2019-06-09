@@ -1,5 +1,7 @@
-package models;
+package models.values;
 
+
+import models.expressions.Factor;
 
 public abstract class Value extends Factor {
 

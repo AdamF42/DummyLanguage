@@ -1,6 +1,11 @@
-package models;
+package models.statements;
 
+import models.*;
+import models.types.Type;
+import models.types.TypeFunction;
+import util.SemanticError;
 import util.Strings;
+import util.TypeCheckError;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +30,7 @@ public class StmtFunDeclaration extends Stmt {
     }
 
     @Override
-    List<SemanticError> checkSemantics(Environment e) {
+    public List<SemanticError> checkSemantics(Environment e) {
         //check function id semantics
         List<SemanticError> result = new ArrayList<>(checkFunIdSemantics(e));
         if(result.isEmpty()) {
@@ -43,6 +48,11 @@ public class StmtFunDeclaration extends Stmt {
         }
 
         return result;
+    }
+
+    @Override
+    public String codeGeneration() {
+        return null;
     }
 
     private List<SemanticError> checkFunIdSemantics(Environment e) {

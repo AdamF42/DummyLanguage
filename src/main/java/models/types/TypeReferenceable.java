@@ -1,4 +1,4 @@
-package models;
+package models.types;
 
 public abstract class TypeReferenceable extends Type {
 

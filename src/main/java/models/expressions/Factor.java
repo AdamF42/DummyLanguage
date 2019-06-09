@@ -1,5 +1,9 @@
-package models;
+package models.expressions;
 
+
+import models.types.Type;
+import models.types.TypeBool;
+import util.TypeCheckError;
 
 public class Factor extends Term {
 

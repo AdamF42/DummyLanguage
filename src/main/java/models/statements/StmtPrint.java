@@ -1,5 +1,11 @@
-package models;
+package models.statements;
 
+
+import models.*;
+import models.expressions.Exp;
+import models.types.Type;
+import util.SemanticError;
+import util.TypeCheckError;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,10 +24,15 @@ public class StmtPrint extends Stmt{
     }
 
     @Override
-    List<SemanticError> checkSemantics(Environment e) {
+    public List<SemanticError> checkSemantics(Environment e) {
 
         List<SemanticError> result = new ArrayList<>(exp.checkSemantics(e));
         this.addAllrwAccesses(exp.getRwAccesses());
         return result;
+    }
+
+    @Override
+    public String codeGeneration() {
+        return null;
     }
 }

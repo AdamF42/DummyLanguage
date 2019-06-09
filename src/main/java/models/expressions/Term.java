@@ -1,4 +1,4 @@
-package models;
+package models.expressions;
 
 
 public class Term extends Exp {

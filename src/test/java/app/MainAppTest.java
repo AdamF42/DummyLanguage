@@ -1,6 +1,8 @@
 package app;
 
 import models.*;
+import models.statements.StmtBlock;
+import models.values.VisitorImpl;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -10,7 +12,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 import parser.ComplexStaticAnalysisLexer;
 import parser.ComplexStaticAnalysisParser;
+import util.SemanticError;
 import util.Strings;
+import util.TypeCheckError;
 
 import java.io.IOException;
 import java.util.List;
@@ -340,6 +344,36 @@ class MainAppTest {
     @Test
     void example_29() {
         StmtBlock mainBlock = getAST(baseTestsRoot + "EXAMPLE_29.spl");
+        Environment e = new Environment();
+        assertNotNull(mainBlock);
+        List<SemanticError> errors =  mainBlock.checkSemantics(e);
+        assertEquals(0, errors.size());
+        assertDoesNotThrow((Executable) mainBlock::typeCheck);
+    }
+
+    @Test
+    void code_generation_1() {
+        StmtBlock mainBlock = getAST(baseTestsRoot + "code_generation_1.spl");
+        Environment e = new Environment();
+        assertNotNull(mainBlock);
+        List<SemanticError> errors =  mainBlock.checkSemantics(e);
+        assertEquals(0, errors.size());
+        assertDoesNotThrow((Executable) mainBlock::typeCheck);
+    }
+
+    @Test
+    void code_generation_2() {
+        StmtBlock mainBlock = getAST(baseTestsRoot + "code_generation_2.spl");
+        Environment e = new Environment();
+        assertNotNull(mainBlock);
+        List<SemanticError> errors =  mainBlock.checkSemantics(e);
+        assertEquals(0, errors.size());
+        assertDoesNotThrow((Executable) mainBlock::typeCheck);
+    }
+
+    @Test
+    void code_generation_3() {
+        StmtBlock mainBlock = getAST(baseTestsRoot + "code_generation_3.spl");
         Environment e = new Environment();
         assertNotNull(mainBlock);
         List<SemanticError> errors =  mainBlock.checkSemantics(e);
