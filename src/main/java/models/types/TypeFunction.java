@@ -1,4 +1,9 @@
-package models;
+package models.types;
+
+import models.Environment;
+import models.STentry;
+import util.SemanticError;
+import models.statements.StmtBlock;
 
 import java.util.*;
 
@@ -17,7 +22,12 @@ public class TypeFunction extends Type {
     }
 
     @Override
-    List<SemanticError> checkSemantics(Environment e) {
+    public List<SemanticError> checkSemantics(Environment e) {
+        return null;
+    }
+
+    @Override
+    public String codeGeneration() {
         return null;
     }
 

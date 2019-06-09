@@ -1,6 +1,12 @@
-package models;
+package models.statements;
 
+import models.*;
+import models.expressions.Exp;
+import models.types.Type;
+import models.types.TypeFunction;
+import util.SemanticError;
 import util.Strings;
+import util.TypeCheckError;
 import util.TypeUtils;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +44,7 @@ public class StmtFunctionCall extends Stmt {
     }
 
     @Override
-    List<SemanticError> checkSemantics(Environment e) {
+    public List<SemanticError> checkSemantics(Environment e) {
         //initialize result variable
         List<SemanticError> result = new ArrayList<>();
         STentry sTentry = e.getFunctionValue(id);
@@ -55,6 +61,11 @@ public class StmtFunctionCall extends Stmt {
         result.addAll(checkFunDeletionsSemantics(e));
 
         return result;
+    }
+
+    @Override
+    public String codeGeneration() {
+        return null;
     }
 
     private List<SemanticError> checkParametersSemantics(Environment e) {

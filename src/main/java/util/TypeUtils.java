@@ -1,6 +1,11 @@
 package util;
 
 import models.*;
+import models.expressions.Exp;
+import models.types.Type;
+import models.types.TypeReferenceable;
+import models.values.Value;
+import models.values.ValueId;
 
 public class TypeUtils {
 

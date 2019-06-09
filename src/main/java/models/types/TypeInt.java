@@ -1,4 +1,7 @@
-package models;
+package models.types;
+
+import models.Environment;
+import util.SemanticError;
 
 import java.util.ArrayList;
 
@@ -19,6 +22,11 @@ public class TypeInt extends TypeReferenceable {
 	public ArrayList<SemanticError> checkSemantics(Environment env) {
         return new ArrayList<>();
 	}
+
+    @Override
+    public String codeGeneration() {
+        return null;
+    }
 
 
     /**

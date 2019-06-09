@@ -1,6 +1,12 @@
-package models;
+package models.statements;
 
+import models.*;
+import models.expressions.Exp;
+import models.types.Type;
+import models.types.TypeBool;
+import util.SemanticError;
 import util.Strings;
+import util.TypeCheckError;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +44,7 @@ public class StmtIfThenElse extends Stmt {
     }
 
     @Override
-    List<SemanticError> checkSemantics(Environment e) {
+    public List<SemanticError> checkSemantics(Environment e) {
         //initialize result variable
         List<SemanticError> result = new ArrayList<SemanticError>();
 
@@ -59,5 +65,10 @@ public class StmtIfThenElse extends Stmt {
             this.addAllrwAccesses(elseBranch.getRwAccesses());
         }
         return result;
+    }
+
+    @Override
+    public String codeGeneration() {
+        return null;
     }
 }

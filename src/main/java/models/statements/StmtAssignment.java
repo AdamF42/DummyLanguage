@@ -1,9 +1,13 @@
-package models;
+package models.statements;
 
+import models.*;
+import models.expressions.Exp;
+import models.types.Type;
+import util.SemanticError;
 import util.Strings;
+import util.TypeCheckError;
 import util.TypeUtils;
 
-import java.io.CharArrayReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,6 +46,11 @@ public class StmtAssignment extends Stmt{
 
         return result;
 
+    }
+
+    @Override
+    public String codeGeneration() {
+        return null;
     }
 
     private List<SemanticError>  checkIdSemantics(Environment e) {

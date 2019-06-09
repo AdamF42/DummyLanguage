@@ -7,11 +7,15 @@ import java.util.List;
 import models.*;
 
 
+import models.statements.StmtBlock;
+import models.values.VisitorImpl;
 import org.antlr.v4.runtime.*;
 
 import parser.ComplexStaticAnalysisLexer;
 import parser.ComplexStaticAnalysisParser;
+import util.SemanticError;
 import util.Strings;
+import util.TypeCheckError;
 
 
 public class MainApp {

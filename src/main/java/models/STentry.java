@@ -1,6 +1,9 @@
 package models;
 
 
+import models.types.Type;
+import models.types.TypeReferenceable;
+
 import java.util.Objects;
 
 public class STentry {

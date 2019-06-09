@@ -1,4 +1,7 @@
-package models;
+package models.statements;
+
+import models.ElementBase;
+import models.STentry;
 
 import java.util.*;
 

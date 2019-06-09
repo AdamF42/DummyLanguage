@@ -1,4 +1,9 @@
-package models;
+package models.statements;
+
+import models.Environment;
+import util.SemanticError;
+import models.types.Type;
+import util.TypeCheckError;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +41,11 @@ public class StmtBlock extends Stmt {
 		e.closeScope();
 
 		return result;
+	}
+
+	@Override
+	public String codeGeneration() {
+		return null;
 	}
 
 	public ArrayList<SemanticError> checkSemanticsWithNoOpenScope(Environment e) {

@@ -1,5 +1,9 @@
-package models;
+package models.statements;
 
+import models.Environment;
+import models.STentry;
+import util.SemanticError;
+import models.types.Type;
 import util.Strings;
 
 import java.util.ArrayList;
@@ -51,6 +55,11 @@ public class StmtDelete extends Stmt {
 			this.addDeletion(idEntry);
 		}
 		return result;
+	}
+
+	@Override
+	public String codeGeneration() {
+		return null;
 	}
 
 }

@@ -1,4 +1,9 @@
-package models;
+package models.values;
+
+import models.Environment;
+import util.SemanticError;
+import models.types.Type;
+import models.types.TypeInt;
 
 import java.util.ArrayList;
 
