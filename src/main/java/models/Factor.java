@@ -3,21 +3,16 @@ package models;
 
 public class Factor extends Term {
 
-    private final String op;
 
     public Factor(Exp left, Exp right, String op) {
-        super(left, right);
-        this.op = op;
+        super(left, right, op);
     }
 
-    public String getOp() {
-        return op;
-    }
 
     @Override
     public Type typeCheck() throws TypeCheckError {
         Type result = super.typeCheck();
-        if (op != null) {
+        if (super.getOp() != null) {
             result = new TypeBool();
         }
         return result;
