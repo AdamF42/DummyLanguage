@@ -3,6 +3,7 @@ package models.statements;
 import models.Environment;
 import util.SemanticError;
 import models.types.Type;
+import util.Strings;
 import util.TypeCheckError;
 
 import java.util.ArrayList;
@@ -45,7 +46,13 @@ public class StmtBlock extends Stmt {
 
 	@Override
 	public String codeGeneration() {
-		return null;
+		String result = Strings.EMPTY;
+		if(children!=null){
+			for(Stmt child:children) {
+				result += child.codeGeneration();
+			}
+		}
+		return result;
 	}
 
 	public ArrayList<SemanticError> checkSemanticsWithNoOpenScope(Environment e) {

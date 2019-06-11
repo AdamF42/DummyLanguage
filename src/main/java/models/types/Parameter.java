@@ -1,5 +1,7 @@
-package models;
+package models.types;
 
+import models.Environment;
+import models.STentry;
 import models.types.Type;
 import models.types.TypeReferenceable;
 import util.SemanticError;
@@ -8,7 +10,7 @@ import util.Strings;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Parameter extends ElementBase {
+public class Parameter extends Type {
 
     private final TypeReferenceable type;
     private final String id;
@@ -31,7 +33,7 @@ public class Parameter extends ElementBase {
         if (e.containsVariableLocal(id)||e.containsFunction(id)) {
             res.add(new SemanticError(Strings.ERROR_ALREADY_DECLARED_IDENTIFIER + id));
         } else {
-            e.addVariable(id, new STentry(e.getNestingLevel(), type, id));
+            e.addVariable(id, new STentry(e.getNestingLevel(), e.getOffset(), type, id));
         }
 
         return res;

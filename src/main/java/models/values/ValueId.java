@@ -8,9 +8,12 @@ import util.Strings;
 import java.util.ArrayList;
 import java.util.List;
 
+import static util.Strings.*;
+
 public class ValueId extends Value {
     private String line;
     private String charPos;
+    private int offset;
 
     public ValueId(String val, String line, String charPos) {
         super(val);
@@ -42,8 +45,14 @@ public class ValueId extends Value {
         } else {
             type = e.getVariableValue(this.getVal()).getType();
             this.addrwAccess(e.getVariableValue(this.getVal()));
+            this.offset=e.getVariableValue(this.getVal()).getOffset();
         }
 
         return res;
+    }
+
+    @Override
+    public String codeGeneration() {
+        return loadW(ACC,Integer.toString(offset),FP);
     }
 }

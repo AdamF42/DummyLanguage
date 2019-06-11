@@ -1,6 +1,7 @@
 package models.statements;
 
 import models.*;
+import models.types.Parameter;
 import models.types.Type;
 import models.types.TypeFunction;
 import util.SemanticError;
@@ -63,7 +64,7 @@ public class StmtFunDeclaration extends Stmt {
             return result;
         }
         TypeFunction type = new TypeFunction(new ArrayList<>(), body);
-        e.addFunction(funId, new STentry(e.getNestingLevel(), type, funId));
+        e.addFunction(funId, new STentry(e.getNestingLevel(), e.getOffset(), type, funId));
         return result;
 
     }
