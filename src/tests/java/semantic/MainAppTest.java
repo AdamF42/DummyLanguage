@@ -1,8 +1,8 @@
-package app;
+package semantic;
 
 import models.*;
 import models.statements.StmtBlock;
-import models.values.VisitorImpl;
+import models.VisitorImpl;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class MainAppTest {
 
-    private String baseTestsRoot = "src/test/testSamples/";
+    private String baseTestsRoot = "src/tests/samples/";
 
     private StmtBlock getAST(String fileName){
         try {

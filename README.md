@@ -44,5 +44,50 @@ int x = 5 ;
     * g(var int x, var int y){ delete x ; delete y ;} f(var int z){ g(z,z) ; }
 
 
+## Code Generation
 
+### Memory layout 
 
+- Global variables are assigned a fixed address once variables with fixed address are “statically allocated” [WE DO NOT HAVE GV].
+- References to a variable declared in an outer scope should point to a variable stored in another activation record. Use access links...
+
+| Code          |          
+| :------------ |     
+| Static Data   |  
+|       . . .   |
+|   Stack       |      
+
+### How is made an activation record (frame)
+
+| control link  |          
+| :------------ |     
+| access link   |  
+|       . . .   |
+|   vars       | 
+
+- control link: pointer to the caller frame
+- access link: pointer to the frame of the enclosing syntactical block
+
+#### How o calculate access link?
+- an inner block is entered or a function declared in the
+  current scope is called:
+  
+  ACCESS_LINK = address of ACCESS_LINK in current AR
+- a function calls itself recursively or calls another function
+  declared in the enclosing syntactical block:
+  
+  ACCESS_LINK = value of ACCESS_LINK of the current AR
+- in general, call to a function outside the current scope:
+  
+  ACCESS LINK = follow the chain of ACCESS_LINKs for
+   the difference between current
+   nesting level and that of function
+   declaration   
+
+### Simple Blocks Var Declaration 
+
+```
+{
+    int x = 3;
+}
+```

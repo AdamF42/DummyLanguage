@@ -2,8 +2,12 @@ package models.statements;
 
 import models.*;
 import models.expressions.Exp;
+import models.stentry.FunSTentry;
+import models.stentry.STentry;
 import models.types.Type;
 import models.types.TypeFunction;
+import models.values.Value;
+import models.values.ValueId;
 import util.SemanticError;
 import util.Strings;
 import util.TypeCheckError;
@@ -11,12 +15,17 @@ import util.TypeUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+import static util.Strings.*;
+import static util.TypeUtils.getIdFromExp;
+import static util.TypeUtils.isExpValueId;
+
 public class StmtFunctionCall extends Stmt {
 
     private String id;
     private List<Exp> actualParams;
     private List<STentry> formalParams;
     private TypeFunction envFunType;
+    private String label;
 
 
     public StmtFunctionCall(String funId, List<Exp> actualParams) {
@@ -45,19 +54,16 @@ public class StmtFunctionCall extends Stmt {
 
     @Override
     public List<SemanticError> checkSemantics(Environment e) {
-        //initialize result variable
+
         List<SemanticError> result = new ArrayList<>();
-        STentry sTentry = e.getFunctionValue(id);
+        FunSTentry sTentry = e.getFunctionValue(id);
         if (sTentry == null || sTentry.isDeleted()) {
             result.add(new SemanticError(Strings.ERROR_FUNCTION_DOESNT_EXIST + id));
             return result;
         }
-        // retrieve function and parameters type
+        this.label = sTentry.GetLabel();
         result.addAll(setFunctionWithParams(e));
-
         result.addAll(checkParametersSemantics(e));
-
-        // check for deletions of external variables
         result.addAll(checkFunDeletionsSemantics(e));
 
         return result;
@@ -65,7 +71,16 @@ public class StmtFunctionCall extends Stmt {
 
     @Override
     public String codeGeneration() {
-        return null;
+
+        StringBuilder result = new StringBuilder();
+        result.append(push(FP));
+        for(Exp child:actualParams) {
+            result.append(child.codeGeneration());
+            result.append(push(ACC));
+        }
+        result.append(jal(label));
+
+        return result.toString();
     }
 
     private List<SemanticError> checkParametersSemantics(Environment e) {
@@ -103,13 +118,13 @@ public class StmtFunctionCall extends Stmt {
     }
 
     private List<SemanticError> checkParamSemantics(Environment e, Exp actualParam, STentry formalParam) {
-        String actualParamId = actualParam.getIdFromExp();
+        String actualParamId = getIdFromExp(actualParam);
         List<SemanticError> result = new ArrayList<>(actualParam.checkSemantics(e));
         if (formalParam == null) return result;
         // Handle EXAMPLE 1
         if (formalParam.isReference() &&
-                actualParam.isValueId() &&
                 e.containsVariable(actualParamId) &&
+                isExpValueId(actualParam) &&
                 (formalParam.isDeleted() || formalParam.isToBeDeletedOnFunCall())) {
             e.getVariableValue(actualParamId).setDeleted(true);
         }

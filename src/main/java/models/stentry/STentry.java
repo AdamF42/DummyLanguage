@@ -1,4 +1,4 @@
-package models;
+package models.stentry;
 
 
 import models.types.Type;
@@ -6,7 +6,7 @@ import models.types.TypeReferenceable;
 
 import java.util.Objects;
 
-public class STentry {
+public abstract class STentry {
 
     private final int nl;
     private final Type type;
@@ -14,32 +14,30 @@ public class STentry {
     private boolean deleted = false;
     private boolean toBeDeleted = false;
 
-    public boolean isReference(){
-        return (this.type != null && this.type instanceof TypeReferenceable) && ((TypeReferenceable) this.type).isReference();
-    }
-    public boolean isDeleted() {
-        return deleted;
-    }
-    public void setDeleted(boolean deleted) {
-        this.deleted = deleted;
-    }
-    public boolean isToBeDeletedOnFunCall() {
-        return toBeDeleted;
-    }
-    public void setToBeDeleted(boolean toBeDeleted) {
-        this.toBeDeleted = toBeDeleted;
-    }
-
-    /**
-     * Constructor for STentry with type.
-     *  @param nl --> entry nesting level
-     * @param t  --> entry type
-     * @param id --> entry id
-     */
     public STentry(int nl, Type t, String id) {
         this.nl = nl;
         this.type = t;
         this.id = id;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
+
+    public boolean isToBeDeletedOnFunCall() {
+        return toBeDeleted;
+    }
+
+    public void setToBeDeleted(boolean toBeDeleted) {
+        this.toBeDeleted = toBeDeleted;
+    }
+
+    public boolean isReference(){
+        return (this.type != null && this.type instanceof TypeReferenceable) && ((TypeReferenceable) this.type).isReference();
     }
 
     public Type getType() {
@@ -49,7 +47,6 @@ public class STentry {
     public int getNestinglevel() {
         return this.nl;
     }
-
 
     public String getId() {
         return id;
@@ -68,4 +65,5 @@ public class STentry {
     public int hashCode() {
         return Objects.hash(nl, id, type);
     }
+
 }

@@ -10,7 +10,6 @@
 
     <dependencies>
 
-        <!-- https://mvnrepository.com/artifact/org.antlr/antlr4-runtime -->
         <dependency>
             <groupId>org.antlr</groupId>
             <artifactId>antlr4-runtime</artifactId>
@@ -28,6 +27,14 @@
             <version>5.5.0-M1</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>org.jmockit</groupId>
+            <artifactId>jmockit</artifactId>
+            <version>1.24</version>
+            <scope>test</scope>
+        </dependency>
+
+
 
 
     </dependencies>

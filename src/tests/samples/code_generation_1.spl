@@ -1,7 +1,5 @@
 {
-
     int x = 1;
-
     f(int y){
         if (y == 0) then {
             print(x);
@@ -9,7 +7,5 @@
             f(y-1) ;
         }
     }
-
     f(54) ;
-
 }
