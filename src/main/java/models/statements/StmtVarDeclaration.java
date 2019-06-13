@@ -11,11 +11,15 @@ import util.TypeUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+import static util.Strings.ACC;
+import static util.Strings.FP;
+
 public class StmtVarDeclaration extends Stmt {
 
-    private String id;
-    private Type type;
-    private Exp exp;
+    private final String id;
+    private final Type type;
+    private final Exp exp;
+    private int offset;
 
 
     public StmtVarDeclaration(Type type, String id, Exp exp){
@@ -41,7 +45,8 @@ public class StmtVarDeclaration extends Stmt {
                 (e.containsFunction(id) && !e.getFunctionValue(id).isDeleted())) {
             result.add(new SemanticError(Strings.ERROR_ALREADY_DECLARED_IDENTIFIER + id));
         } else {
-            e.addVariable(id, new STentry(e.getNestingLevel(), type, id));
+            this.offset = e.getOffset();
+            e.addVariable(id, new STentry(e.getNestingLevel(), e.getOffset(), type, id));
             this.addrwAccess(e.getVariableValueLocal(id));
         }
 
@@ -53,6 +58,6 @@ public class StmtVarDeclaration extends Stmt {
 
     @Override
     public String codeGeneration() {
-        return null;
+        return exp.codeGeneration() + Strings.storeW(ACC, Integer.toString(offset), FP);
     }
 }

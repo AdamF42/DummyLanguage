@@ -9,6 +9,7 @@ public class Environment {
 	private LinkedList<HashMap<String, STentry>> ftable = new LinkedList<>();
 	private boolean insideFunction = false;
 	private int nestingLevel = -1;
+	private int offset = 4; //TODO: think about it
 
 	public boolean isInsideFunctionDeclaration() {
 		return insideFunction;
@@ -26,6 +27,7 @@ public class Environment {
 	 */
 	public void addVariable(String id, STentry val) {
 		vtable.peek().put(id, val);
+		offset +=4;
 	}
 
 	public void addFunction(String id, STentry val) {
@@ -52,6 +54,7 @@ public class Environment {
 		nestingLevel--;
 		vtable.pop();
 		ftable.pop();
+		offset = 4; //TODO: think about it
 	}
 
 
@@ -134,4 +137,12 @@ public class Environment {
 		return identifierNL == nestingLevel;
 	}
 
+	// TODO :get offset should deincrement offset...maybe it is better to write another code
+	public int getOffset() {
+		return offset;
+	}
+
+	public void setOffset(int offset) {
+		this.offset = offset;
+	}
 }

@@ -1,5 +1,4 @@
 {
-
     int u = 1 ;
 
     f(var int x, int n){

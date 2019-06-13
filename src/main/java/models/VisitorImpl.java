@@ -1,8 +1,7 @@
-package models.values;
+package models;
 
 
-import models.ElementBase;
-import models.Parameter;
+import models.types.Parameter;
 import models.expressions.Exp;
 import models.expressions.Factor;
 import models.expressions.Term;
@@ -11,6 +10,10 @@ import models.types.Type;
 import models.types.TypeBool;
 import models.types.TypeInt;
 import models.types.TypeReferenceable;
+import models.values.Value;
+import models.values.ValueBool;
+import models.values.ValueId;
+import models.values.ValueInt;
 import parser.ComplexStaticAnalysisBaseVisitor;
 import parser.ComplexStaticAnalysisParser;
 

@@ -8,7 +8,7 @@ import models.*;
 
 
 import models.statements.StmtBlock;
-import models.values.VisitorImpl;
+import models.VisitorImpl;
 import org.antlr.v4.runtime.*;
 
 import parser.ComplexStaticAnalysisLexer;
@@ -84,6 +84,9 @@ public class MainApp {
                     mainBlock.typeCheck();
                 }
             }
+
+            String test = mainBlock.codeGeneration();
+            System.out.println(test);
 
         } catch (IOException | TypeCheckError e) {
             e.printStackTrace();

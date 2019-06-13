@@ -9,6 +9,7 @@ import java.util.Objects;
 public class STentry {
 
     private final int nl;
+    private final int offset;
     private final Type type;
     private final String id;
     private boolean deleted = false;
@@ -30,14 +31,10 @@ public class STentry {
         this.toBeDeleted = toBeDeleted;
     }
 
-    /**
-     * Constructor for STentry with type.
-     *  @param nl --> entry nesting level
-     * @param t  --> entry type
-     * @param id --> entry id
-     */
-    public STentry(int nl, Type t, String id) {
+
+    public STentry(int nl, int offset, Type t, String id) {
         this.nl = nl;
+        this.offset = offset;
         this.type = t;
         this.id = id;
     }
@@ -49,7 +46,6 @@ public class STentry {
     public int getNestinglevel() {
         return this.nl;
     }
-
 
     public String getId() {
         return id;
@@ -67,5 +63,9 @@ public class STentry {
     @Override
     public int hashCode() {
         return Objects.hash(nl, id, type);
+    }
+
+    public int getOffset() {
+        return offset;
     }
 }
