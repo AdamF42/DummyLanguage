@@ -48,7 +48,7 @@ public class Strings {
 	}
 
 	public static String push(String register){
-		return "addi $sp $sp -4\nsw "+register+ " 0($sp)\n";
+		return "push "+register+"\n";
 	}
 
 	public static String move(String dest, String src) {
@@ -74,38 +74,18 @@ public class Strings {
 		return "div "+storeRegister+" "+op1+" "+op2+"\n";
 	}
 
-	public static String pop(){
-		return "addi $sp $sp 4\n";
+	public static String assignTop(String register){
+		return register+" <- top\n";
 	}
 
-	//TODO: maybe it is better to move it in Exp
-	public static String GetCodeForOperator(String op, Exp right){
-		switch (op) {
-			case "+":
-				return add(ACC,ACC,TMP);
-			case "-":
-				return sub(ACC,ACC,TMP);
-			case "*":
-				return mult(ACC,ACC,TMP);
-			case "/":
-				return div(ACC,ACC,TMP);
-			case("&&"):
-				return Strings.GetFreshLabel("end")+
-						beq(ACC,"0","end") +
-						right.codeGeneration() +
-						"end:\n";
-			case("||"):
-				return Strings.GetFreshLabel("end")+
-						beq(ACC,"1","end") +
-						right.codeGeneration()+
-						"end:\n";
-			default:
-				throw new IllegalArgumentException("Invalid operator :" + op);
-		}
+	public static String pop(){
+		return "pop\n";
 	}
 
 	public static String GetFreshLabel(String label){
 		return label + " = newLabel()\n";
 	}
 
+
 }
+
