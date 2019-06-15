@@ -11,10 +11,16 @@ import util.TypeUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+import static util.Strings.*;
+
 public class StmtAssignment extends Stmt{
-    private Exp exp;
-    private String id;
+    private final Exp exp;
+    private final String id;
+    //TODO: remove
     private Type idType;
+    private int nl;
+    private STentry idEntry;
+
 
     /**
      * @param exp
@@ -50,7 +56,10 @@ public class StmtAssignment extends Stmt{
 
     @Override
     public String codeGeneration() {
-        return null;
+        return exp.codeGeneration() +
+                loadW(AL,"0",FP) +
+                getVariableForCgen(nl,idEntry)+
+                storeW(ACC, Integer.toString(idEntry.getOffset()), AL);
     }
 
     private List<SemanticError>  checkIdSemantics(Environment e) {
@@ -61,7 +70,10 @@ public class StmtAssignment extends Stmt{
         } else if (e.getVariableValue(id).isDeleted()) {
             result.add(new SemanticError(Strings.ERROR_VARIABLE_HAS_BEEN_DELETED + id));
         }else {
+            this.idEntry = e.getVariableValue(id);
+            // TODO: elimina sto campo e usa solo idEntry
             this.idType = e.getVariableValue(id).getType();
+            this.nl = e.getNestingLevel();
             this.addrwAccess(e.getVariableValue(id));
         }
 

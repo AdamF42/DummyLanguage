@@ -1,17 +1,17 @@
-package util;
+package util.operationCodeGenStrategy;
 
 import models.expressions.Exp;
 
 import static util.Strings.*;
 
-public class AddCodeGenStrategy implements OpCodeGenStrategy {
+public class DivCodeGenStrategy implements OpCodeGenStrategy {
 
     @Override
     public String GetCodeForOperator(Exp right) {
         return push(ACC) +
                 right.codeGeneration() +
                 assignTop(TMP) +
-                add(ACC,ACC,TMP) +
+                div(ACC,ACC,TMP) +
                 pop();
     }
 }

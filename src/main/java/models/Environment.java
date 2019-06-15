@@ -9,7 +9,7 @@ public class Environment {
 	private LinkedList<HashMap<String, STentry>> ftable = new LinkedList<>();
 	private boolean insideFunction = false;
 	private int nestingLevel = -1;
-	private int offset = 4; //TODO: think about it
+	private int offset = 0; //TODO: think about it
 
 	public boolean isInsideFunctionDeclaration() {
 		return insideFunction;
@@ -54,7 +54,7 @@ public class Environment {
 		nestingLevel--;
 		vtable.pop();
 		ftable.pop();
-		offset = 4; //TODO: think about it
+		offset = 0; //TODO: think about it
 	}
 
 
