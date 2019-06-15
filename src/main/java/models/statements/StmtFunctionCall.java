@@ -103,12 +103,12 @@ public class StmtFunctionCall extends Stmt {
     }
 
     private List<SemanticError> checkParamSemantics(Environment e, Exp actualParam, STentry formalParam) {
-        String actualParamId = actualParam.getIdFromExp();
+        String actualParamId = TypeUtils.getIdFromExp(actualParam);
         List<SemanticError> result = new ArrayList<>(actualParam.checkSemantics(e));
         if (formalParam == null) return result;
         // Handle EXAMPLE 1
         if (formalParam.isReference() &&
-                actualParam.isValueId() &&
+                TypeUtils.isExpValueId(actualParam) &&
                 e.containsVariable(actualParamId) &&
                 (formalParam.isDeleted() || formalParam.isToBeDeletedOnFunCall())) {
             e.getVariableValue(actualParamId).setDeleted(true);

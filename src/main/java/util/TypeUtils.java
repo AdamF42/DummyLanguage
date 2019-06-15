@@ -2,12 +2,31 @@ package util;
 
 import models.*;
 import models.expressions.Exp;
+import models.expressions.Factor;
+import models.expressions.Term;
 import models.types.Type;
 import models.types.TypeReferenceable;
 import models.values.Value;
 import models.values.ValueId;
 
 public class TypeUtils {
+
+    public static String getIdFromExp(Exp exp){
+        Term term = (Term) exp.getLeft();
+        Factor factor = (Factor) term.getLeft();
+        if(exp.getRight() == null && term.getRight()==null &&
+                factor.getRight()==null && factor.getLeft() instanceof ValueId)
+            return ((ValueId) factor.getLeft()).getId();
+
+        return null;
+    }
+
+    public static boolean isExpValueId(Exp exp){
+        Exp term = exp.getLeft();
+        Factor factor = (Factor) term.getLeft();
+        return exp.getRight() == null && term.getRight() == null &&
+                factor.getRight() == null && factor.getLeft() instanceof ValueId;
+    }
 
     public static void functionParamTypeCheck(Type expectedType, ElementBase actualElement) throws TypeCheckError {
 

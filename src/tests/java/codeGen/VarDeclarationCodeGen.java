@@ -71,9 +71,11 @@ class VarDeclarationCodeGen {
         StmtBlock mainBlock = getAST("{\n int x = 3 + 1;\n }");
         String expected =
                 "li $a0 3\n" +
-                "move $t1 $a0\n" +
+                "push $a0\n" +
                 "li $a0 1\n" +
+                "$t1 <- top\n" +
                 "add $a0 $a0 $t1\n" +
+                "pop\n" +
                 "sw $a0 4($fp)\n";
 
         String result = mainBlock.codeGeneration();
@@ -85,9 +87,11 @@ class VarDeclarationCodeGen {
         StmtBlock mainBlock = getAST("{\n int x = x + 1;\n }");
         String expected =
                 "lw $a0 4($fp)\n" +
-                "move $t1 $a0\n" +
+                "push $a0\n" +
                 "li $a0 1\n" +
+                "$t1 <- top\n" +
                 "add $a0 $a0 $t1\n" +
+                "pop\n" +
                 "sw $a0 4($fp)\n";
 
         String result = mainBlock.codeGeneration();
@@ -99,9 +103,11 @@ class VarDeclarationCodeGen {
         StmtBlock mainBlock = getAST("{\n int x = 3 - 1;\n }");
         String expected =
                 "li $a0 3\n" +
-                "move $t1 $a0\n" +
+                "push $a0\n" +
                 "li $a0 1\n" +
+                "$t1 <- top\n" +
                 "sub $a0 $a0 $t1\n" +
+                "pop\n" +
                 "sw $a0 4($fp)\n";
 
         String result = mainBlock.codeGeneration();
@@ -113,9 +119,11 @@ class VarDeclarationCodeGen {
         StmtBlock mainBlock = getAST("{\n int x = x - 1;\n }");
         String expected =
                 "lw $a0 4($fp)\n" +
-                "move $t1 $a0\n" +
+                "push $a0\n" +
                 "li $a0 1\n" +
+                "$t1 <- top\n" +
                 "sub $a0 $a0 $t1\n" +
+                "pop\n" +
                 "sw $a0 4($fp)\n";
 
         String result = mainBlock.codeGeneration();
@@ -127,9 +135,11 @@ class VarDeclarationCodeGen {
         StmtBlock mainBlock = getAST("{\n int x = x * 2;\n }");
         String expected =
                 "lw $a0 4($fp)\n" +
-                "move $t1 $a0\n" +
+                "push $a0\n" +
                 "li $a0 2\n" +
+                "$t1 <- top\n" +
                 "mult $a0 $a0 $t1\n" +
+                "pop\n" +
                 "sw $a0 4($fp)\n";
 
         String result = mainBlock.codeGeneration();
@@ -141,9 +151,11 @@ class VarDeclarationCodeGen {
         StmtBlock mainBlock = getAST("{\n int x = x / 2;\n }");
         String expected =
                 "lw $a0 4($fp)\n" +
-                "move $t1 $a0\n" +
+                "push $a0\n" +
                 "li $a0 2\n" +
+                "$t1 <- top\n" +
                 "div $a0 $a0 $t1\n" +
+                "pop\n" +
                 "sw $a0 4($fp)\n";
 
         String result = mainBlock.codeGeneration();
@@ -158,18 +170,26 @@ class VarDeclarationCodeGen {
                 "li $a0 6\n" +
                 "sw $a0 4($fp)\n" +
                 "lw $a0 4($fp)\n" +
-                "move $t1 $a0\n" +
+                "push $a0\n" +
                 "li $a0 1\n" +
+                "$t1 <- top\n" +
                 "add $a0 $a0 $t1\n" +
-                "move $t1 $a0\n" +
+                "pop\n" +
+                "push $a0\n" +
                 "lw $a0 8($fp)\n" +
-                "move $t1 $a0\n" +
+                "push $a0\n" +
                 "li $a0 1\n" +
+                "$t1 <- top\n" +
                 "sub $a0 $a0 $t1\n" +
-                "move $t1 $a0\n" +
+                "pop\n" +
+                "push $a0\n" +
                 "li $a0 2\n" +
+                "$t1 <- top\n" +
                 "div $a0 $a0 $t1\n" +
+                "pop\n" +
+                "$t1 <- top\n" +
                 "mult $a0 $a0 $t1\n" +
+                "pop\n" +
                 "sw $a0 8($fp)\n";
 
         String result = mainBlock.codeGeneration();
@@ -190,11 +210,8 @@ class VarDeclarationCodeGen {
     @Test
     void varDecWithBooleanExpressionAnd() {
         StmtBlock mainBlock = getAST("{ bool x = true && false; }");
-        //TODO: not sure if it is correct...check it on paper...
         String expected =
                 "li $a0 1\n" +
-                "move $t1 $a0\n" +
-                "li $a0 0\n" +
                 "end = newLabel()\n" +
                 "beq $a0 0 end\n" +
                 "li $a0 0\n" +
@@ -208,12 +225,8 @@ class VarDeclarationCodeGen {
     @Test
     void varDecWithBooleanExpressionOr() {
         StmtBlock mainBlock = getAST("{ bool x = true || false; }");
-        //TODO: not sure if it is correct...check it on paper...
-
         String expected =
                 "li $a0 1\n" +
-                "move $t1 $a0\n" +
-                "li $a0 0\n" +
                 "end = newLabel()\n" +
                 "beq $a0 1 end\n" +
                 "li $a0 0\n" +
