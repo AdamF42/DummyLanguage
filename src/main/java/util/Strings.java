@@ -1,12 +1,12 @@
 package util;
 
-import models.expressions.Exp;
+import models.STentry;
 
 import java.text.SimpleDateFormat;
+import java.util.UUID;
+
 
 public class Strings {
-
-	private static SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
 
 	public static final String ERROR_VARIABLE_DOESNT_EXIST = "No variable found. Variable either doesn't exist or has been deleted. Variable name: ";
 	public static final String ERROR_VARIABLE_HAS_BEEN_DELETED = "Variable has been deleted. Variable name: ";
@@ -82,10 +82,16 @@ public class Strings {
 		return "pop\n";
 	}
 
-	public static String GetFreshLabel(String label){
-		return label + " = newLabel()\n";
+	public static String GetFreshLabel(){
+		return UUID.randomUUID().toString();
 	}
 
-
+	public static String getVariableForCgen(int nl, STentry idEntry){
+		StringBuilder result = new StringBuilder();
+		for (int i = 0; i<nl-idEntry.getNestinglevel();i++){
+			result.append(loadW(AL, "0", AL));
+		}
+		return result.toString();
+	}
 }
 

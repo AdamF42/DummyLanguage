@@ -9,6 +9,8 @@ import util.TypeCheckError;
 import java.util.ArrayList;
 import java.util.List;
 
+import static util.Strings.*;
+
 public class StmtBlock extends Stmt {
 	private List<Stmt> children;
 
@@ -38,7 +40,6 @@ public class StmtBlock extends Stmt {
 
 		ArrayList<SemanticError> result = checkSemanticsWithNoOpenScope(e);
 
-		//close scope for this block
 		e.closeScope();
 
 		return result;
@@ -46,13 +47,15 @@ public class StmtBlock extends Stmt {
 
 	@Override
 	public String codeGeneration() {
-		String result = Strings.EMPTY;
-		if(children!=null){
-			for(Stmt child:children) {
-				result += child.codeGeneration();
-			}
+		StringBuilder result = new StringBuilder();
+		//result.append(push(FP));
+		//result.append(move(FP,SP));
+		for(Stmt child:children) {
+			result.append(child.codeGeneration());
 		}
-		return result;
+		//result.append(pop());
+//		result.append(assignTop(FP));
+		return result.toString();
 	}
 
 	public ArrayList<SemanticError> checkSemanticsWithNoOpenScope(Environment e) {
@@ -61,12 +64,11 @@ public class StmtBlock extends Stmt {
 		ArrayList<SemanticError> result = new ArrayList<SemanticError>();
 
 		//check children semantics
-		if(children!=null)
-			for(Stmt child:children) {
-				result.addAll(child.checkSemantics(e));
-				this.addAllDeletions(child.getDeletions());
-				this.addAllrwAccesses(child.getRwAccesses());
-			}
+		for(Stmt child:children) {
+			result.addAll(child.checkSemantics(e));
+			this.addAllDeletions(child.getDeletions());
+			this.addAllrwAccesses(child.getRwAccesses());
+		}
 
 		return result;
 	}

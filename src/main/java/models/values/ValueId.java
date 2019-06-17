@@ -1,6 +1,7 @@
 package models.values;
 
 import models.Environment;
+import models.STentry;
 import util.SemanticError;
 import models.types.Type;
 import util.Strings;
@@ -11,9 +12,13 @@ import java.util.List;
 import static util.Strings.*;
 
 public class ValueId extends Value {
+    //TODO: remove line and charPos, type
     private String line;
     private String charPos;
-    private int offset;
+    private int nl;
+    private STentry entry;
+    private Type type;
+
 
     public ValueId(String val, String line, String charPos) {
         super(val);
@@ -24,8 +29,6 @@ public class ValueId extends Value {
     public String getId() {
         return this.getVal();
     }
-
-    private Type type;
 
 
     @Override
@@ -45,7 +48,8 @@ public class ValueId extends Value {
         } else {
             type = e.getVariableValue(this.getVal()).getType();
             this.addrwAccess(e.getVariableValue(this.getVal()));
-            this.offset=e.getVariableValue(this.getVal()).getOffset();
+            this.entry=e.getVariableValue(this.getVal());
+            this.nl=e.getNestingLevel();
         }
 
         return res;
@@ -53,6 +57,8 @@ public class ValueId extends Value {
 
     @Override
     public String codeGeneration() {
-        return loadW(ACC,Integer.toString(offset),FP);
+        return loadW(AL,"0",FP) +
+                getVariableForCgen(nl,entry)+
+                loadW(ACC,Integer.toString(entry.getOffset()),AL);
     }
 }
