@@ -48,13 +48,16 @@ public class StmtBlock extends Stmt {
 	@Override
 	public String codeGeneration() {
 		StringBuilder result = new StringBuilder();
-		//result.append(push(FP));
-		//result.append(move(FP,SP));
+		result.append(push(FP));
+		result.append(push(AL));
+		result.append(move(FP,SP));
 		for(Stmt child:children) {
 			result.append(child.codeGeneration());
 		}
-		//result.append(pop());
-//		result.append(assignTop(FP));
+		result.append(assignTop(AL));
+		result.append(pop());
+		result.append(assignTop(FP));
+		result.append(pop());
 		return result.toString();
 	}
 
