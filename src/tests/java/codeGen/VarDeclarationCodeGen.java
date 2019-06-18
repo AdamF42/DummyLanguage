@@ -26,8 +26,15 @@ class VarDeclarationCodeGen {
     void varDeclaration() {
         StmtBlock mainBlock = getAST("{\n int x = 3;\n  }");
         String expected =
+                "push $fp\n" +
+                "push $al\n" +
+                "move $fp $sp\n" +
                 "li $a0 3\n" +
-                "sw $a0 0($fp)\n"; // at 0 ($fp) is located the old frame pointer
+                "sw $a0 0($fp)\n" + // at 0 ($fp) is located the old frame pointer
+                "$al <- top\n" +
+                "pop\n" +
+                "$fp <- top\n" +
+                "pop\n";
 
         String result = mainBlock.codeGeneration();
         assertEquals(expected,result);
@@ -37,10 +44,17 @@ class VarDeclarationCodeGen {
     void varDeclarations() {
         StmtBlock mainBlock = getAST("{\n int x = 3;\n int y = 5;  }");
         String expected =
+                "push $fp\n" +
+                "push $al\n" +
+                "move $fp $sp\n" +
                 "li $a0 3\n" +
                 "sw $a0 0($fp)\n" +
                 "li $a0 5\n" +
-                "sw $a0 4($fp)\n";
+                "sw $a0 4($fp)\n" +
+                "$al <- top\n" +
+                "pop\n" +
+                "$fp <- top\n" +
+                "pop\n";
 
         String result = mainBlock.codeGeneration();
         assertEquals(expected,result);
@@ -50,13 +64,20 @@ class VarDeclarationCodeGen {
     void varDecWithNumberAdd() {
         StmtBlock mainBlock = getAST("{\n int x = 3 + 1;\n }");
         String expected =
+                "push $fp\n" +
+                "push $al\n" +
+                "move $fp $sp\n" +
                 "li $a0 3\n" +
                 "push $a0\n" +
                 "li $a0 1\n" +
                 "$t1 <- top\n" +
                 "add $a0 $a0 $t1\n" +
                 "pop\n" +
-                "sw $a0 0($fp)\n";
+                "sw $a0 0($fp)\n" +
+                "$al <- top\n" +
+                "pop\n" +
+                "$fp <- top\n" +
+                "pop\n";
 
         String result = mainBlock.codeGeneration();
         assertEquals(expected,result);
@@ -66,6 +87,9 @@ class VarDeclarationCodeGen {
     void varDecWithVariableAndNumberAdd() {
         StmtBlock mainBlock = getAST("{\n int x = x + 1;\n }");
         String expected =
+                "push $fp\n" +
+                "push $al\n" +
+                "move $fp $sp\n" +
                 "lw $al 0($fp)\n" +
                 "lw $a0 0($al)\n" +
                 "push $a0\n" +
@@ -73,7 +97,11 @@ class VarDeclarationCodeGen {
                 "$t1 <- top\n" +
                 "add $a0 $a0 $t1\n" +
                 "pop\n" +
-                "sw $a0 0($fp)\n";
+                "sw $a0 0($fp)\n" +
+                "$al <- top\n" +
+                "pop\n" +
+                "$fp <- top\n" +
+                "pop\n";
 
         String result = mainBlock.codeGeneration();
         assertEquals(expected,result);
@@ -83,13 +111,20 @@ class VarDeclarationCodeGen {
     void varDecWithNumberSub() {
         StmtBlock mainBlock = getAST("{\n int x = 3 - 1;\n }");
         String expected =
+                "push $fp\n" +
+                "push $al\n" +
+                "move $fp $sp\n" +
                 "li $a0 3\n" +
                 "push $a0\n" +
                 "li $a0 1\n" +
                 "$t1 <- top\n" +
                 "sub $a0 $a0 $t1\n" +
                 "pop\n" +
-                "sw $a0 0($fp)\n";
+                "sw $a0 0($fp)\n" +
+                "$al <- top\n" +
+                "pop\n" +
+                "$fp <- top\n" +
+                "pop\n";
 
         String result = mainBlock.codeGeneration();
         assertEquals(expected,result);
@@ -99,6 +134,9 @@ class VarDeclarationCodeGen {
     void varDecWithVariableAndNumberSub() {
         StmtBlock mainBlock = getAST("{\n int x = x - 1;\n }");
         String expected =
+                "push $fp\n" +
+                "push $al\n" +
+                "move $fp $sp\n" +
                 "lw $al 0($fp)\n" +
                 "lw $a0 0($al)\n" +
                 "push $a0\n" +
@@ -106,7 +144,11 @@ class VarDeclarationCodeGen {
                 "$t1 <- top\n" +
                 "sub $a0 $a0 $t1\n" +
                 "pop\n" +
-                "sw $a0 0($fp)\n";
+                "sw $a0 0($fp)\n" +
+                "$al <- top\n" +
+                "pop\n" +
+                "$fp <- top\n" +
+                "pop\n";
 
         String result = mainBlock.codeGeneration();
         assertEquals(expected,result);
@@ -116,6 +158,9 @@ class VarDeclarationCodeGen {
     void varDecWithVariableAndNumberMult() {
         StmtBlock mainBlock = getAST("{\n int x = x * 2;\n }");
         String expected =
+                "push $fp\n" +
+                "push $al\n" +
+                "move $fp $sp\n" +
                 "lw $al 0($fp)\n" +
                 "lw $a0 0($al)\n" +
                 "push $a0\n" +
@@ -123,7 +168,11 @@ class VarDeclarationCodeGen {
                 "$t1 <- top\n" +
                 "mult $a0 $a0 $t1\n" +
                 "pop\n" +
-                "sw $a0 0($fp)\n";
+                "sw $a0 0($fp)\n" +
+                "$al <- top\n" +
+                "pop\n" +
+                "$fp <- top\n" +
+                "pop\n";
 
         String result = mainBlock.codeGeneration();
         assertEquals(expected,result);
@@ -133,6 +182,9 @@ class VarDeclarationCodeGen {
     void varDecWithVariableAndNumberDiv() {
         StmtBlock mainBlock = getAST("{\n int x = x / 2;\n }");
         String expected =
+                "push $fp\n" +
+                "push $al\n" +
+                "move $fp $sp\n" +
                 "lw $al 0($fp)\n" +
                 "lw $a0 0($al)\n" +
                 "push $a0\n" +
@@ -140,7 +192,11 @@ class VarDeclarationCodeGen {
                 "$t1 <- top\n" +
                 "div $a0 $a0 $t1\n" +
                 "pop\n" +
-                "sw $a0 0($fp)\n";
+                "sw $a0 0($fp)\n" +
+                "$al <- top\n" +
+                "pop\n" +
+                "$fp <- top\n" +
+                "pop\n";
 
         String result = mainBlock.codeGeneration();
         assertEquals(expected,result);
@@ -151,6 +207,9 @@ class VarDeclarationCodeGen {
         StmtBlock mainBlock = getAST("{ int y = 6; int x = (y+1)*((x-1) / 2); }");
         //TODO: not sure if it is correct...check it on paper...
         String expected =
+                "push $fp\n" +
+                "push $al\n" +
+                "move $fp $sp\n" +
                 "li $a0 6\n" +
                 "sw $a0 0($fp)\n" +
                 "lw $al 0($fp)\n" +
@@ -176,7 +235,11 @@ class VarDeclarationCodeGen {
                 "$t1 <- top\n" +
                 "mult $a0 $a0 $t1\n" +
                 "pop\n" +
-                "sw $a0 4($fp)\n";
+                "sw $a0 4($fp)\n" +
+                "$al <- top\n" +
+                "pop\n" +
+                "$fp <- top\n" +
+                "pop\n";
 
         String result = mainBlock.codeGeneration();
         assertEquals(expected,result);
@@ -186,8 +249,15 @@ class VarDeclarationCodeGen {
     void varDecWithSimpleBooleanAssignment() {
         StmtBlock mainBlock = getAST("{ bool x = true; }");
         String expected =
+                "push $fp\n" +
+                "push $al\n" +
+                "move $fp $sp\n" +
                 "li $a0 1\n" +
-                "sw $a0 0($fp)\n";
+                "sw $a0 0($fp)\n" +
+                "$al <- top\n" +
+                "pop\n" +
+                "$fp <- top\n" +
+                "pop\n";
 
         String result = mainBlock.codeGeneration();
         assertEquals(expected,result);
@@ -206,11 +276,18 @@ class VarDeclarationCodeGen {
 
         StmtBlock mainBlock = getAST("{ bool x = true && false; }");
         String expected =
+                "push $fp\n" +
+                "push $al\n" +
+                "move $fp $sp\n" +
                 "li $a0 1\n" +
                 "beq $a0 0 end\n" +
                 "li $a0 0\n" +
                 "end:\n" +
-                "sw $a0 0($fp)\n";
+                "sw $a0 0($fp)\n" +
+                "$al <- top\n" +
+                "pop\n" +
+                "$fp <- top\n" +
+                "pop\n";
         String result = mainBlock.codeGeneration();
         assertEquals(expected,result);
     }
@@ -227,11 +304,18 @@ class VarDeclarationCodeGen {
 
         StmtBlock mainBlock = getAST("{ bool x = true || false; }");
         String expected =
+                "push $fp\n" +
+                "push $al\n" +
+                "move $fp $sp\n" +
                 "li $a0 1\n" +
                 "beq $a0 1 end\n" +
                 "li $a0 0\n" +
                 "end:\n" +
-                "sw $a0 0($fp)\n";
+                "sw $a0 0($fp)\n" +
+                "$al <- top\n" +
+                "pop\n" +
+                "$fp <- top\n" +
+                "pop\n";
 
         String result = mainBlock.codeGeneration();
         assertEquals(expected,result);
@@ -250,6 +334,9 @@ class VarDeclarationCodeGen {
         StmtBlock mainBlock = getAST("{ bool x = (false || false) && (true && false) ; }");
         //TODO: not sure if it is correct...check it on paper...
         String expected =
+                "push $fp\n" +
+                "push $al\n" +
+                "move $fp $sp\n" +
                 "li $a0 0\n" +
                 "beq $a0 1 end\n" +
                 "li $a0 0\n" +
@@ -260,7 +347,11 @@ class VarDeclarationCodeGen {
                 "li $a0 0\n" +
                 "end:\n" +
                 "end:\n" +
-                "sw $a0 0($fp)\n";
+                "sw $a0 0($fp)\n" +
+                "$al <- top\n" +
+                "pop\n" +
+                "$fp <- top\n" +
+                "pop\n";
 
         String result = mainBlock.codeGeneration();
         assertEquals(expected,result);
