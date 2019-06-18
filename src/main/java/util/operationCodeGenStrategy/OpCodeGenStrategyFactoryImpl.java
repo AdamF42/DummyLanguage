@@ -19,6 +19,18 @@ public class OpCodeGenStrategyFactoryImpl implements OpCodeGenStrategyFactory {
                 return new AndCodeGenStrategy();
             case("||"):
                 return new OrCodeGenStrategy();
+            case("=="):
+                return new EqCodeGenStrategy();
+            case("!="):
+                return new NotEqCodeGenStrategy();
+            case(">"):
+                return new GrCodeGenStrategy();
+            case("<"):
+                return new LrCodeGenStrategy();
+            case(">="):
+                return new GreCodeGenStrategy();
+            case("<="):
+                return new LreCodeGenStrategy();
             default:
                 throw new IllegalArgumentException("Invalid operator :" + op);
         }

@@ -39,6 +39,10 @@ public class Strings {
 		return "lw "+register+" "+offset+"("+memPtr+")\n";
 	}
 
+	public static String b(String label){
+		return "b "+label+"\n";
+	}
+
 	public static String storeW(String register, String offset, String memPtr){
 		return "sw "+register+" "+offset+"("+memPtr+")\n";
 	}
@@ -68,6 +72,22 @@ public class Strings {
 
 	public static String beq(String r1, String r2, String label){
 		return "beq "+r1+" "+r2+" "+label+"\n";
+	}
+
+	public static String bgr(String r1, String r2, String label){
+		return "bgr "+r1+" "+r2+" "+label+"\n";
+	}
+
+	public static String bgre(String r1, String r2, String label){
+		return "bgre "+r1+" "+r2+" "+label+"\n";
+	}
+
+	public static String blr(String r1, String r2, String label){
+		return "blr "+r1+" "+r2+" "+label+"\n";
+	}
+
+	public static String blre(String r1, String r2, String label){
+		return "blre "+r1+" "+r2+" "+label+"\n";
 	}
 
 	public static String div(String storeRegister, String op1, String op2){

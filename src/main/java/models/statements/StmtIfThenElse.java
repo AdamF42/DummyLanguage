@@ -7,9 +7,11 @@ import models.types.TypeBool;
 import util.SemanticError;
 import util.Strings;
 import util.TypeCheckError;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import static util.Strings.*;
+
 
 public class StmtIfThenElse extends Stmt {
     private Exp condition;
@@ -38,7 +40,7 @@ public class StmtIfThenElse extends Stmt {
         elseBranch.typeCheck();
         if (!thenBranch.getDeletions().isEmpty() || !elseBranch.getDeletions().isEmpty()) {
             if (!thenBranch.getRwAccesses().containsAll(elseBranch.getRwAccesses()) || !thenBranch.getDeletions().containsAll(elseBranch.getDeletions()))
-                throw new TypeCheckError(Strings.ERROR_BEHAVIOR_MISMATCH);
+                throw new TypeCheckError(ERROR_BEHAVIOR_MISMATCH);
         }
         return null;
     }
@@ -63,6 +65,17 @@ public class StmtIfThenElse extends Stmt {
 
     @Override
     public String codeGeneration() {
-        return null;
+        String exit = Strings.GetFreshLabel();
+        String elseBranchLabel = Strings.GetFreshLabel();
+        return
+                condition.codeGeneration() +
+                loadI(TMP,"0") +
+                assignTop(TMP) +
+                Strings.beq(ACC,TMP,elseBranchLabel) +
+                thenBranch.codeGeneration() +
+                b(exit) +
+                elseBranchLabel+":\n" +
+                elseBranch.codeGeneration() +
+                exit+":\n";
     }
 }

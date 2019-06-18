@@ -1,5 +1,5 @@
 package util.operationCodeGenStrategy;
 
 public interface OpCodeGenStrategyFactory {
-    public OpCodeGenStrategy GetOperationStrategy(String operator);
+    OpCodeGenStrategy GetOperationStrategy(String operator);
 }

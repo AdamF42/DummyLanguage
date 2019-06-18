@@ -381,6 +381,4 @@ class MainAppTest {
         assertDoesNotThrow((Executable) mainBlock::typeCheck);
     }
 
-    // TODO: add tests for code generation -> TDD development
-
 }
