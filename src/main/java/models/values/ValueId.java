@@ -12,18 +12,12 @@ import java.util.List;
 import static util.Strings.*;
 
 public class ValueId extends Value {
-    //TODO: remove line and charPos, type
-    private String line;
-    private String charPos;
     private int nl;
     private STentry entry;
-    private Type type;
 
 
-    public ValueId(String val, String line, String charPos) {
+    public ValueId(String val) {
         super(val);
-        this.line = line;
-        this.charPos = charPos;
     }
 
     public String getId() {
@@ -33,7 +27,7 @@ public class ValueId extends Value {
 
     @Override
     public Type typeCheck() {
-        return type;
+        return entry.getType();
     }
 
     @Override
@@ -46,10 +40,9 @@ public class ValueId extends Value {
         } else if (e.getVariableValue(this.getVal()).isDeleted()){
             res.add(new SemanticError(Strings.ERROR_VARIABLE_HAS_BEEN_DELETED + this.getVal()));
         } else {
-            type = e.getVariableValue(this.getVal()).getType();
-            this.addrwAccess(e.getVariableValue(this.getVal()));
             this.entry=e.getVariableValue(this.getVal());
             this.nl=e.getNestingLevel();
+            this.addrwAccess(this.entry);
         }
 
         return res;

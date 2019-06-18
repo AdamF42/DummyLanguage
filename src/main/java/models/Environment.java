@@ -137,12 +137,8 @@ public class Environment {
 		return identifierNL == nestingLevel;
 	}
 
-	// TODO :get offset should deincrement offset...maybe it is better to write another code
 	public int getOffset() {
 		return offset;
 	}
 
-	public void setOffset(int offset) {
-		this.offset = offset;
-	}
 }

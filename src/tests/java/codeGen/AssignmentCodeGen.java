@@ -5,7 +5,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static codeGen.TestUtil.getAST;
+import static utils.TestUtil.getAST;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class AssignmentCodeGen {

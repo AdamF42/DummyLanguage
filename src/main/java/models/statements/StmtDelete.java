@@ -59,7 +59,7 @@ public class StmtDelete extends Stmt {
 
 	@Override
 	public String codeGeneration() {
-		return "";
+		return Strings.EMPTY;
 	}
 
 }
