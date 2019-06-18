@@ -12,7 +12,7 @@ import java.util.List;
 import static util.Strings.*;
 
 public class StmtBlock extends Stmt {
-	private List<Stmt> children;
+	private final List<Stmt> children;
 
 	/**
 	 * Creates a new block
@@ -20,7 +20,6 @@ public class StmtBlock extends Stmt {
 	 */
 	public StmtBlock(List<Stmt> children) {
 		this.children = children;
-
 	}
 
 	@Override

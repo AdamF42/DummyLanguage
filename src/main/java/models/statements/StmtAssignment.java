@@ -16,8 +16,6 @@ import static util.Strings.*;
 public class StmtAssignment extends Stmt{
     private final Exp exp;
     private final String id;
-    //TODO: remove
-    private Type idType;
     private int nl;
     private STentry idEntry;
 
@@ -33,8 +31,8 @@ public class StmtAssignment extends Stmt{
 
     @Override
     public Type typeCheck() throws TypeCheckError {
-        TypeUtils.typeCheck(idType, exp);
-        return this.idType;
+        TypeUtils.typeCheck(this.idEntry.getType(), exp);
+        return this.idEntry.getType();
     }
 
     @Override
@@ -71,8 +69,6 @@ public class StmtAssignment extends Stmt{
             result.add(new SemanticError(Strings.ERROR_VARIABLE_HAS_BEEN_DELETED + id));
         }else {
             this.idEntry = e.getVariableValue(id);
-            // TODO: elimina sto campo e usa solo idEntry
-            this.idType = e.getVariableValue(id).getType();
             this.nl = e.getNestingLevel();
             this.addrwAccess(e.getVariableValue(id));
         }

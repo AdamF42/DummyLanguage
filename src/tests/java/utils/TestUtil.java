@@ -1,4 +1,4 @@
-package codeGen;
+package utils;
 
 import models.Environment;
 import models.VisitorImpl;
@@ -16,7 +16,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestUtil {
-    protected static StmtBlock getAST(String file){
+    public static StmtBlock getAST(String file){
         CharStream is = CharStreams.fromString(file);
         ComplexStaticAnalysisLexer lexer = new ComplexStaticAnalysisLexer(is);
         CommonTokenStream tokens = new CommonTokenStream(lexer);

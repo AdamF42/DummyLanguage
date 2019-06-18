@@ -107,7 +107,6 @@ public class StmtFunctionCall extends Stmt {
         List<SemanticError> result = new ArrayList<>(actualParam.checkSemantics(e));
         if (formalParam == null) return result;
         // Handle EXAMPLE 1
-        //TODO: mod the visitor to get the specific obj will simplify this logic
         if (formalParam.isReference() &&
                 TypeUtils.isExpValueId(actualParam) &&
                 e.containsVariable(actualParamId) &&

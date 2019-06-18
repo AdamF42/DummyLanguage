@@ -45,25 +45,19 @@ public class StmtIfThenElse extends Stmt {
 
     @Override
     public List<SemanticError> checkSemantics(Environment e) {
-        //initialize result variable
-        List<SemanticError> result = new ArrayList<SemanticError>();
 
-        if (condition != null){
-            result.addAll(condition.checkSemantics(e));
-            this.addAllrwAccesses(condition.getRwAccesses());
-        }
+        List<SemanticError> result =
+                new ArrayList<>(condition.checkSemantics(e));
+        this.addAllrwAccesses(condition.getRwAccesses());
 
-        if (thenBranch != null){
-            result.addAll(thenBranch.checkSemantics(e));
-            this.addAllDeletions(thenBranch.getDeletions());
-            this.addAllrwAccesses(thenBranch.getRwAccesses());
-        }
+        result.addAll(thenBranch.checkSemantics(e));
+        this.addAllDeletions(thenBranch.getDeletions());
+        this.addAllrwAccesses(thenBranch.getRwAccesses());
 
-        if (elseBranch != null){
-            result.addAll(elseBranch.checkSemantics(e));
-            this.addAllDeletions(elseBranch.getDeletions());
-            this.addAllrwAccesses(elseBranch.getRwAccesses());
-        }
+        result.addAll(elseBranch.checkSemantics(e));
+        this.addAllDeletions(elseBranch.getDeletions());
+        this.addAllrwAccesses(elseBranch.getRwAccesses());
+
         return result;
     }
 

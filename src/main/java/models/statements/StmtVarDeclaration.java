@@ -58,6 +58,7 @@ public class StmtVarDeclaration extends Stmt {
 
     @Override
     public String codeGeneration() {
-        return exp.codeGeneration() + Strings.storeW(ACC, Integer.toString(offset), FP);
+        return exp.codeGeneration() +
+                Strings.storeW(ACC, Integer.toString(offset), FP);
     }
 }

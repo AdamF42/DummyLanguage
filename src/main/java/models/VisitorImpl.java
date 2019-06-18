@@ -164,9 +164,7 @@ public class VisitorImpl extends ComplexStaticAnalysisBaseVisitor<ElementBase> {
 
     @Override
     public Value visitIdValue(ComplexStaticAnalysisParser.IdValueContext ctx) {
-        String line = String.valueOf(ctx.ID().getSymbol().getLine());
-        String charPos = String.valueOf(ctx.ID().getSymbol().getCharPositionInLine());
-        return new ValueId(ctx.ID().getText(), line, charPos);
+        return new ValueId(ctx.ID().getText());
     }
 
     @Override
