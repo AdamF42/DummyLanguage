@@ -16,6 +16,18 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestUtil {
+
+    public static final String OPEN_SCOPE =
+            "push $fp\n" +
+            "push $al\n" +
+            "move $fp $sp\n";
+
+    public static final String CLOSE_SCOPE =
+            "$al <- top\n" +
+            "pop\n" +
+            "$fp <- top\n" +
+            "pop\n";
+
     public static StmtBlock getAST(String file){
         CharStream is = CharStreams.fromString(file);
         ComplexStaticAnalysisLexer lexer = new ComplexStaticAnalysisLexer(is);
