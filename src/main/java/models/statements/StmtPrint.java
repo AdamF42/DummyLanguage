@@ -10,6 +10,8 @@ import util.TypeCheckError;
 import java.util.ArrayList;
 import java.util.List;
 
+import static util.Strings.print;
+
 public class StmtPrint extends Stmt{
 
     private Exp exp;
@@ -33,6 +35,8 @@ public class StmtPrint extends Stmt{
 
     @Override
     public String codeGeneration() {
-        return null;
+        return
+                exp.codeGeneration()+
+                print();
     }
 }
