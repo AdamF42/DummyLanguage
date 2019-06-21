@@ -102,6 +102,10 @@ public class Strings {
 		return "pop\n";
 	}
 
+	public static String print() {
+		return "print\n";
+	}
+
 	public static String GetFreshLabel(){
 		return UUID.randomUUID().toString();
 	}
