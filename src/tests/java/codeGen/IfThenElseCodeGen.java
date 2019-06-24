@@ -49,7 +49,7 @@ public class IfThenElseCodeGen {
 
         StmtBlock mainBlock = getAST("{ int x = 1; if( x==1 ) then{ } else{ } }");
         String expected =
-                OPEN_SCOPE +
+                OpenScopeWithVars(1) +
                     X_DECLARATION +
                     CGEN_X +
                     "push $a0\n" +
@@ -65,14 +65,14 @@ public class IfThenElseCodeGen {
                     "li $t1 0\n" +
                     "$t1 <- top\n" +
                     "beq $a0 $t1 elseBranch\n" +
-                    OPEN_SCOPE +
-                    CLOSE_SCOPE +
+                    OpenScopeWithVars(0) +
+                    CloseScopeWithVars(0) +
                     "b ifThenElse_end\n" +
                     "elseBranch:\n" +
-                    OPEN_SCOPE +
-                    CLOSE_SCOPE +
+                    OpenScopeWithVars(0) +
+                    CloseScopeWithVars(0) +
                     "ifThenElse_end:\n" +
-                CLOSE_SCOPE;
+                CloseScopeWithVars(1);
 
         String result = mainBlock.codeGeneration();
         assertEquals(expected,result);
@@ -97,7 +97,7 @@ public class IfThenElseCodeGen {
 
         StmtBlock mainBlock = getAST("{ int x = 1; if( x!=1 ) then{ } else{ } }");
         String expected =
-                OPEN_SCOPE +
+                OpenScopeWithVars(1) +
                     X_DECLARATION +
                     CGEN_X +
                     "push $a0\n" +
@@ -113,14 +113,14 @@ public class IfThenElseCodeGen {
                     "li $t1 0\n" +
                     "$t1 <- top\n" +
                     "beq $a0 $t1 elseBranch\n" +
-                    OPEN_SCOPE +
-                    CLOSE_SCOPE +
+                    OpenScopeWithVars(0) +
+                    CloseScopeWithVars(0) +
                     "b ifThenElse_end\n" +
                     "elseBranch:\n" +
-                    OPEN_SCOPE +
-                    CLOSE_SCOPE +
+                    OpenScopeWithVars(0) +
+                    CloseScopeWithVars(0) +
                     "ifThenElse_end:\n" +
-                CLOSE_SCOPE;
+                CloseScopeWithVars(1);
 
         String result = mainBlock.codeGeneration();
         assertEquals(expected,result);
@@ -146,7 +146,7 @@ public class IfThenElseCodeGen {
 
         StmtBlock mainBlock = getAST("{ int x = 1; if(x>1) then{ } else{ }}");
         String expected =
-                OPEN_SCOPE +
+                OpenScopeWithVars(1) +
                     X_DECLARATION +
                     CGEN_X +
                     "push $a0\n" +
@@ -162,14 +162,14 @@ public class IfThenElseCodeGen {
                     "li $t1 0\n" +
                     "$t1 <- top\n" +
                     "beq $a0 $t1 elseBranch\n" +
-                    OPEN_SCOPE +
-                    CLOSE_SCOPE +
+                    OpenScopeWithVars(0) +
+                    CloseScopeWithVars(0) +
                     "b ifThenElse_end\n" +
                     "elseBranch:\n" +
-                    OPEN_SCOPE +
-                    CLOSE_SCOPE +
+                    OpenScopeWithVars(0) +
+                    CloseScopeWithVars(0) +
                     "ifThenElse_end:\n" +
-                CLOSE_SCOPE;
+                CloseScopeWithVars(1);
 
         String result = mainBlock.codeGeneration();
         assertEquals(expected,result);
@@ -194,7 +194,7 @@ public class IfThenElseCodeGen {
 
         StmtBlock mainBlock = getAST("{ int x = 1; if(x>=1) then{ } else{ }}");
         String expected =
-                OPEN_SCOPE +
+                OpenScopeWithVars(1) +
                     X_DECLARATION +
                     CGEN_X +
                     "push $a0\n" +
@@ -210,14 +210,14 @@ public class IfThenElseCodeGen {
                     "li $t1 0\n" +
                     "$t1 <- top\n" +
                     "beq $a0 $t1 elseBranch\n" +
-                    OPEN_SCOPE +
-                    CLOSE_SCOPE +
+                    OpenScopeWithVars(0) +
+                    CloseScopeWithVars(0) +
                     "b ifThenElse_end\n" +
                     "elseBranch:\n" +
-                    OPEN_SCOPE +
-                    CLOSE_SCOPE +
+                    OpenScopeWithVars(0) +
+                    CloseScopeWithVars(0) +
                     "ifThenElse_end:\n" +
-                CLOSE_SCOPE;
+                CloseScopeWithVars(1);
 
         String result = mainBlock.codeGeneration();
         assertEquals(expected,result);
@@ -242,7 +242,7 @@ public class IfThenElseCodeGen {
 
         StmtBlock mainBlock = getAST("{ int x = 1; if(x<1) then{ } else{ }}");
         String expected =
-                OPEN_SCOPE +
+                OpenScopeWithVars(1) +
                     X_DECLARATION +
                     CGEN_X +
                     "push $a0\n" +
@@ -258,14 +258,14 @@ public class IfThenElseCodeGen {
                     "li $t1 0\n" +
                     "$t1 <- top\n" +
                     "beq $a0 $t1 elseBranch\n" +
-                    OPEN_SCOPE +
-                    CLOSE_SCOPE +
+                    OpenScopeWithVars(0) +
+                    CloseScopeWithVars(0) +
                     "b ifThenElse_end\n" +
                     "elseBranch:\n" +
-                    OPEN_SCOPE +
-                    CLOSE_SCOPE +
+                    OpenScopeWithVars(0) +
+                    CloseScopeWithVars(0) +
                     "ifThenElse_end:\n" +
-                CLOSE_SCOPE;
+                CloseScopeWithVars(1);
 
         String result = mainBlock.codeGeneration();
         assertEquals(expected,result);
@@ -290,7 +290,7 @@ public class IfThenElseCodeGen {
 
         StmtBlock mainBlock = getAST("{ int x = 1; if(x<=1) then{ } else{ }}");
         String expected =
-                OPEN_SCOPE +
+                OpenScopeWithVars(1) +
                     X_DECLARATION +
                     CGEN_X +
                     "push $a0\n" +
@@ -306,14 +306,14 @@ public class IfThenElseCodeGen {
                     "li $t1 0\n" +
                     "$t1 <- top\n" +
                     "beq $a0 $t1 elseBranch\n" +
-                    OPEN_SCOPE +
-                    CLOSE_SCOPE +
+                    OpenScopeWithVars(0) +
+                    CloseScopeWithVars(0) +
                     "b ifThenElse_end\n" +
                     "elseBranch:\n" +
-                    OPEN_SCOPE +
-                    CLOSE_SCOPE +
+                    OpenScopeWithVars(0) +
+                    CloseScopeWithVars(0) +
                     "ifThenElse_end:\n" +
-                CLOSE_SCOPE;
+                CloseScopeWithVars(1);
 
         String result = mainBlock.codeGeneration();
         assertEquals(expected,result);
