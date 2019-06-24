@@ -36,12 +36,12 @@ public class PrintCodeGen {
     void printVariable() {
         StmtBlock mainBlock = getAST("{\n int x = 1; print x;\n  }");
         String expected =
-                OPEN_SCOPE +
+                OpenScopeWithVars(1) +
                     CGEN_X +
                     "lw $al 0($fp)\n" +
                     "lw $a0 0($al)\n" +
                     "print\n" +
-                CLOSE_SCOPE;
+                CloseScopeWithVars(1);
 
         String result = mainBlock.codeGeneration();
         assertEquals(expected,result);
@@ -51,10 +51,10 @@ public class PrintCodeGen {
     void printExpression() {
         StmtBlock mainBlock = getAST("{\n print 3+1;\n  }");
         String expected =
-                OPEN_SCOPE +
+                OpenScopeWithVars(0) +
                     CGEN_EXP +
                     "print\n" +
-                CLOSE_SCOPE;
+                CloseScopeWithVars(0);
 
         String result = mainBlock.codeGeneration();
         assertEquals(expected,result);
