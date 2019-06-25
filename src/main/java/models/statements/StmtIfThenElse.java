@@ -29,14 +29,10 @@ public class StmtIfThenElse extends Stmt {
     @Override
     public Type typeCheck() throws TypeCheckError {
 
-        // check the condType
         Type conditionType = condition.typeCheck();
         if (!(conditionType instanceof TypeBool))
             throw new TypeCheckError("Not boolean condition, got " + conditionType);
-
-        // check if the two Branches have the same behavioural type
         thenBranch.typeCheck();
-
         elseBranch.typeCheck();
         if (!thenBranch.getDeletions().isEmpty() || !elseBranch.getDeletions().isEmpty()) {
             if (!thenBranch.getRwAccesses().containsAll(elseBranch.getRwAccesses()) || !thenBranch.getDeletions().containsAll(elseBranch.getDeletions()))

@@ -1,11 +1,22 @@
 package models.expressions;
 
 
+import models.types.Type;
+import util.TypeCheckError;
+import util.TypeUtils;
 
-public class Term extends Exp {
+public abstract class Term extends Exp {
 
-    public Term(Exp left, Exp right, String op) {
-        super(left, right, op);
+    public Term(Exp left, Exp right) {
+        super(left, right);
+    }
+
+    @Override
+    public Type typeCheck() throws TypeCheckError {
+        if (getRight() != null){
+            TypeUtils.typeCheck(getLeft().typeCheck(),getRight());
+        }
+        return this.getLeft().typeCheck();
     }
 
 }

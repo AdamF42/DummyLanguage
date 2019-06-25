@@ -21,10 +21,6 @@ public class StmtAssignment extends Stmt{
     private VarSTentry idEntry;
 
 
-    /**
-     * @param exp
-     * @param id
-     */
     public StmtAssignment(Exp exp, String id) {
         this.exp = exp;
         this.id = id;
@@ -39,13 +35,8 @@ public class StmtAssignment extends Stmt{
     @Override
     public List<SemanticError> checkSemantics(Environment e) {
 
-        //initialize result variable
         List<SemanticError> result = new ArrayList<>();
-
-        //check id semantics
         result.addAll(checkIdSemantics(e));
-
-        // check exp semantics
         result.addAll(exp.checkSemantics(e));
         this.addAllrwAccesses(exp.getRwAccesses());
 

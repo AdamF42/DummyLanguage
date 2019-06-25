@@ -40,9 +40,8 @@ public class StmtVarDeclaration extends Stmt {
 
     @Override
     public List<SemanticError> checkSemantics(Environment e) {
-        //initialize result variable
-        List<SemanticError> result = new ArrayList<>();
 
+        List<SemanticError> result = new ArrayList<>();
         if ((e.containsVariableLocal(id) && !e.getVariableValueLocal(id).isDeleted())||
                 (e.containsFunction(id) && !e.getFunctionValue(id).isDeleted())) {
             result.add(new SemanticError(Strings.ERROR_ALREADY_DECLARED_IDENTIFIER + id));
@@ -51,10 +50,9 @@ public class StmtVarDeclaration extends Stmt {
             e.addVariable(id, new VarSTentry(e.getNestingLevel(), e.getOffset(), type, id));
             this.addrwAccess(e.getVariableValueLocal(id));
         }
-
-        // check exp semantic
         result.addAll(exp.checkSemantics(e));
         this.addAllrwAccesses(exp.getRwAccesses());
+
         return result;
     }
 

@@ -1,22 +1,27 @@
-package util.operationCodeGenStrategy;
+package models.expressions;
 
-import models.expressions.Exp;
 import util.Strings;
 
 import static util.Strings.*;
 import static util.Strings.ACC;
 
-public class LrCodeGenStrategy implements OpCodeGenStrategy {
+public class FactorLre extends Factor {
+
+    public FactorLre(Exp left, Exp right) {
+        super(left, right);
+    }
+
     @Override
-    public String GetCodeForOperator(Exp right) {
+    public String codeGeneration() {
         String lower = Strings.GetFreshLabel();
         String exit = GetFreshLabel();
         return
+                getLeft().codeGeneration() +
                 push(ACC) +
-                right.codeGeneration() +
+                getRight().codeGeneration() +
                 assignTop(TMP) +
                 pop() +
-                blr(ACC,TMP,lower) +
+                blre(ACC,TMP,lower) +
                 loadI(ACC, "0") +
                 b(exit)+
                 lower+":\n" +

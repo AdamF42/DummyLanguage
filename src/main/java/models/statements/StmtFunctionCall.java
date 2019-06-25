@@ -6,6 +6,8 @@ import models.stentry.FunSTentry;
 import models.stentry.STentry;
 import models.types.Type;
 import models.types.TypeFunction;
+import models.values.Value;
+import models.values.ValueId;
 import util.SemanticError;
 import util.Strings;
 import util.TypeCheckError;
@@ -14,6 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static util.Strings.*;
+import static util.TypeUtils.getIdFromExp;
+import static util.TypeUtils.isExpValueId;
 
 public class StmtFunctionCall extends Stmt {
 
@@ -114,13 +118,13 @@ public class StmtFunctionCall extends Stmt {
     }
 
     private List<SemanticError> checkParamSemantics(Environment e, Exp actualParam, STentry formalParam) {
-        String actualParamId = TypeUtils.getIdFromExp(actualParam);
+        String actualParamId = getIdFromExp(actualParam);
         List<SemanticError> result = new ArrayList<>(actualParam.checkSemantics(e));
         if (formalParam == null) return result;
         // Handle EXAMPLE 1
         if (formalParam.isReference() &&
-                TypeUtils.isExpValueId(actualParam) &&
                 e.containsVariable(actualParamId) &&
+                isExpValueId(actualParam) &&
                 (formalParam.isDeleted() || formalParam.isToBeDeletedOnFunCall())) {
             e.getVariableValue(actualParamId).setDeleted(true);
         }

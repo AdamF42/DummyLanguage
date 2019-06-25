@@ -7,6 +7,9 @@ import models.types.TypeInt;
 
 import java.util.ArrayList;
 
+import static util.Strings.ACC;
+import static util.Strings.loadI;
+
 public class ValueInt extends Value {
 
 
@@ -14,24 +17,19 @@ public class ValueInt extends Value {
         super(val);
     }
 
-    /**
-     * Checks ValueInt's semantic.
-     *
-     * @param env -> Environment that holds previously parsed information
-     * @return Empty ArrayList of semantic errors
-     */
+    @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
         return new ArrayList<>();
     }
 
-    /**
-     * Type check is empty because it's a terminal node.
-     *
-     * @return instance of TypeBool()
-     */
+    @Override
     public Type typeCheck() {
         return new TypeInt();
     }
 
+    @Override
+    public String codeGeneration() {
+        return loadI(ACC,getVal());
+    }
 
 }
