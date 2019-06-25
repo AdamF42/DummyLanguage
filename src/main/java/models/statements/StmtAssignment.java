@@ -2,6 +2,7 @@ package models.statements;
 
 import models.*;
 import models.expressions.Exp;
+import models.stentry.VarSTentry;
 import models.types.Type;
 import util.SemanticError;
 import util.Strings;
@@ -17,7 +18,7 @@ public class StmtAssignment extends Stmt{
     private final Exp exp;
     private final String id;
     private int nl;
-    private STentry idEntry;
+    private VarSTentry idEntry;
 
 
     /**

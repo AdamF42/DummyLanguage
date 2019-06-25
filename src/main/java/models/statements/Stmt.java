@@ -1,7 +1,7 @@
 package models.statements;
 
 import models.ElementBase;
-import models.STentry;
+import models.stentry.STentry;
 
 import java.util.*;
 
