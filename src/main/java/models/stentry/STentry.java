@@ -1,4 +1,4 @@
-package models;
+package models.stentry;
 
 
 import models.types.Type;
@@ -6,18 +6,20 @@ import models.types.TypeReferenceable;
 
 import java.util.Objects;
 
-public class STentry {
+public abstract class STentry {
 
     private final int nl;
-    private final int offset;
     private final Type type;
     private final String id;
     private boolean deleted = false;
     private boolean toBeDeleted = false;
 
-    public boolean isReference(){
-        return (this.type != null && this.type instanceof TypeReferenceable) && ((TypeReferenceable) this.type).isReference();
+    public STentry(int nl, Type t, String id) {
+        this.nl = nl;
+        this.type = t;
+        this.id = id;
     }
+
     public boolean isDeleted() {
         return deleted;
     }
@@ -31,12 +33,9 @@ public class STentry {
         this.toBeDeleted = toBeDeleted;
     }
 
-
-    public STentry(int nl, int offset, Type t, String id) {
-        this.nl = nl;
-        this.offset = offset;
-        this.type = t;
-        this.id = id;
+    //TODO sposta solo in VarSTentry -> refactor della morte
+    public boolean isReference(){
+        return (this.type != null && this.type instanceof TypeReferenceable) && ((TypeReferenceable) this.type).isReference();
     }
 
     public Type getType() {
@@ -65,7 +64,4 @@ public class STentry {
         return Objects.hash(nl, id, type);
     }
 
-    public int getOffset() {
-        return offset;
-    }
 }

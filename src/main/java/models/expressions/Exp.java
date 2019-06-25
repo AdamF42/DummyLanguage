@@ -1,6 +1,7 @@
 package models.expressions;
 
 import models.*;
+import models.stentry.STentry;
 import models.types.Type;
 import util.*;
 import util.operationCodeGenStrategy.OpCodeGenStrategy;

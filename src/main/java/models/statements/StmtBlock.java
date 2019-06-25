@@ -1,7 +1,6 @@
 package models.statements;
 
 import models.Environment;
-import models.STentry;
 import util.SemanticError;
 import models.types.Type;
 import util.TypeCheckError;
@@ -12,12 +11,11 @@ import java.util.List;
 import static util.Strings.*;
 
 public class StmtBlock extends Stmt {
-	private final List<Stmt> children;
 
-	/**
-	 * Creates a new block
-	 * @param children: the list of direct children elements of the block
-	 */
+	private final List<Stmt> children;
+	private String functionsDefinitions;
+	private int nl;
+
 	public StmtBlock(List<Stmt> children) {
 		this.children = children;
 	}
@@ -33,9 +31,7 @@ public class StmtBlock extends Stmt {
 	public ArrayList<SemanticError> checkSemantics(Environment e) {
 
 		e.openScope();
-
 		ArrayList<SemanticError> result = checkSemanticsWithNoOpenScope(e);
-
 		e.closeScope();
 
 		return result;
@@ -43,6 +39,7 @@ public class StmtBlock extends Stmt {
 
 	@Override
 	public String codeGeneration() {
+
 		StringBuilder result = new StringBuilder();
 		result.append(push(FP));
 		result.append(AllocateVariables());
@@ -53,15 +50,23 @@ public class StmtBlock extends Stmt {
 		result.append(DeallocateVariables());
 		result.append(assignTop(FP));
 		result.append(pop());
+
+		return result.toString();
+	}
+
+	public String codeGenerationForFunDec() {
+
+		StringBuilder result = new StringBuilder();
+		for(Stmt child:children) {
+			result.append(child.codeGeneration());
+		}
+
 		return result.toString();
 	}
 
 	public ArrayList<SemanticError> checkSemanticsWithNoOpenScope(Environment e) {
 
-		//initialize result variable
-		ArrayList<SemanticError> result = new ArrayList<SemanticError>();
-
-		//check children semantics
+		ArrayList<SemanticError> result = new ArrayList<>();
 		for(Stmt child:children) {
 			result.addAll(child.checkSemantics(e));
 			this.addAllDeletions(child.getDeletions());
@@ -72,6 +77,7 @@ public class StmtBlock extends Stmt {
 	}
 
 	private String AllocateVariables(){
+
 		StringBuilder result = new StringBuilder();
 		result.append(loadI(TMP,"0"));
 		for (Stmt var: children) {
@@ -82,6 +88,7 @@ public class StmtBlock extends Stmt {
 	}
 
 	private String DeallocateVariables(){
+
 		StringBuilder result = new StringBuilder();
 		for (Stmt var: children) {
 			if (var instanceof StmtVarDeclaration)
@@ -90,5 +97,10 @@ public class StmtBlock extends Stmt {
 		return result.toString();
 	}
 
+//	private String AddFunctionsDefinitions(StringBuilder generatedCode){
+//		if(this.nl==0){
+//			generatedCode.append()
+//		}
+//	}
 
 }

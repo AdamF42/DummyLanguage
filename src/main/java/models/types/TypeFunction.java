@@ -1,7 +1,7 @@
 package models.types;
 
 import models.Environment;
-import models.STentry;
+import models.stentry.STentry;
 import util.SemanticError;
 import models.statements.StmtBlock;
 

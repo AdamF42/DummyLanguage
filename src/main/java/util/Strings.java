@@ -1,8 +1,7 @@
 package util;
 
-import models.STentry;
+import models.stentry.STentry;
 
-import java.text.SimpleDateFormat;
 import java.util.UUID;
 
 
@@ -27,6 +26,7 @@ public class Strings {
 	public static final String SP = "$sp";
 	public static final String FP = "$fp";
 	public static final String AL = "$al";
+	public static final String RA = "$ra";
 
 
 	public static final String EMPTY = "";
@@ -58,8 +58,13 @@ public class Strings {
 	public static String move(String dest, String src) {
 		return	"move " + dest + " " + src +"\n";
 	}
+
 	public static String add(String storeRegister, String op1, String op2){
 		return "add "+storeRegister+" "+op1+" "+op2+"\n";
+	}
+
+	public static String addi(String storeRegister, String register, String integer){
+		return "add "+storeRegister+" "+register+" "+integer+"\n";
 	}
 
 	public static String mult(String storeRegister, String op1, String op2){
@@ -69,6 +74,15 @@ public class Strings {
 	public static String sub(String storeRegister, String op1, String op2){
 		return "sub "+storeRegister+" "+op1+" "+op2+"\n";
 	}
+
+	public static String jr(String register){
+		return "jr "+register+"\n";
+	}
+
+	public static String jal(String label){
+		return "jal "+label+"\n";
+	}
+
 
 	public static String beq(String r1, String r2, String label){
 		return "beq "+r1+" "+r2+" "+label+"\n";

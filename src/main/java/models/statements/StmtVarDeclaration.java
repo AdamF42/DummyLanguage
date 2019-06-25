@@ -2,6 +2,8 @@ package models.statements;
 
 import models.*;
 import models.expressions.Exp;
+import models.stentry.STentry;
+import models.stentry.VarSTentry;
 import models.types.Type;
 import util.SemanticError;
 import util.Strings;
@@ -46,7 +48,7 @@ public class StmtVarDeclaration extends Stmt {
             result.add(new SemanticError(Strings.ERROR_ALREADY_DECLARED_IDENTIFIER + id));
         } else {
             this.offset = e.getOffset();
-            e.addVariable(id, new STentry(e.getNestingLevel(), e.getOffset(), type, id));
+            e.addVariable(id, new VarSTentry(e.getNestingLevel(), e.getOffset(), type, id));
             this.addrwAccess(e.getVariableValueLocal(id));
         }
 
