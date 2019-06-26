@@ -2,8 +2,7 @@ package models.expressions;
 
 import util.Strings;
 
-import static util.Strings.ACC;
-import static util.Strings.beq;
+import static util.Strings.*;
 
 public class FactorOr extends Factor {
 
@@ -15,7 +14,8 @@ public class FactorOr extends Factor {
     public String codeGeneration() {
         String endLabel = Strings.GetFreshLabel();
         return  getLeft().codeGeneration() +
-                beq(ACC,"1",endLabel) +
+                loadI(TMP,"1") +
+                beq(ACC,TMP,endLabel) +
                 getRight().codeGeneration() +
                 endLabel+":\n";
     }

@@ -64,7 +64,7 @@ public class Strings {
 	}
 
 	public static String addi(String storeRegister, String register, String integer){
-		return "add "+storeRegister+" "+register+" "+integer+"\n";
+		return "addi "+storeRegister+" "+register+" "+integer+"\n";
 	}
 
 	public static String mult(String storeRegister, String op1, String op2){
@@ -75,6 +75,10 @@ public class Strings {
 		return "sub "+storeRegister+" "+op1+" "+op2+"\n";
 	}
 
+	public static String subi(String storeRegister, String op1, String op2){
+		return "subi "+storeRegister+" "+op1+" "+op2+"\n";
+	}
+
 	public static String jr(String register){
 		return "jr "+register+"\n";
 	}
@@ -82,7 +86,6 @@ public class Strings {
 	public static String jal(String label){
 		return "jal "+label+"\n";
 	}
-
 
 	public static String beq(String r1, String r2, String label){
 		return "beq "+r1+" "+r2+" "+label+"\n";

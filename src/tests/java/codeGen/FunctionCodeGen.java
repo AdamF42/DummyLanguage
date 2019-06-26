@@ -25,7 +25,7 @@ public class FunctionCodeGen {
                     "move $fp $sp\n" +
                     "push $ra\n" +
                     "$ra <- top\n" +
-                    "add $sp $sp 4\n" +
+                    "addi $sp $sp 4\n" +
                     "$fp <- top\n" +
                     "pop\n" +
                     "jr $ra\n";
@@ -52,7 +52,7 @@ public class FunctionCodeGen {
                 "move $fp $sp\n" +
                 "push $ra\n" +
                 "$ra <- top\n" +
-                "add $sp $sp 4\n" +
+                "addi $sp $sp 4\n" +
                 "$fp <- top\n" +
                 "pop\n" +
                 "jr $ra\n" +
