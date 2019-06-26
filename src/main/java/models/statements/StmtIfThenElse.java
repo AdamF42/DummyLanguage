@@ -7,9 +7,11 @@ import models.types.TypeBool;
 import util.SemanticError;
 import util.Strings;
 import util.TypeCheckError;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import static util.Strings.*;
+
 
 public class StmtIfThenElse extends Stmt {
     private Exp condition;
@@ -27,48 +29,48 @@ public class StmtIfThenElse extends Stmt {
     @Override
     public Type typeCheck() throws TypeCheckError {
 
-        // check the condType
         Type conditionType = condition.typeCheck();
         if (!(conditionType instanceof TypeBool))
             throw new TypeCheckError("Not boolean condition, got " + conditionType);
-
-        // check if the two Branches have the same behavioural type
         thenBranch.typeCheck();
-
         elseBranch.typeCheck();
         if (!thenBranch.getDeletions().isEmpty() || !elseBranch.getDeletions().isEmpty()) {
             if (!thenBranch.getRwAccesses().containsAll(elseBranch.getRwAccesses()) || !thenBranch.getDeletions().containsAll(elseBranch.getDeletions()))
-                throw new TypeCheckError(Strings.ERROR_BEHAVIOR_MISMATCH);
+                throw new TypeCheckError(ERROR_BEHAVIOR_MISMATCH);
         }
         return null;
     }
 
     @Override
     public List<SemanticError> checkSemantics(Environment e) {
-        //initialize result variable
-        List<SemanticError> result = new ArrayList<SemanticError>();
 
-        if (condition != null){
-            result.addAll(condition.checkSemantics(e));
-            this.addAllrwAccesses(condition.getRwAccesses());
-        }
+        List<SemanticError> result =
+                new ArrayList<>(condition.checkSemantics(e));
+        this.addAllrwAccesses(condition.getRwAccesses());
 
-        if (thenBranch != null){
-            result.addAll(thenBranch.checkSemantics(e));
-            this.addAllDeletions(thenBranch.getDeletions());
-            this.addAllrwAccesses(thenBranch.getRwAccesses());
-        }
+        result.addAll(thenBranch.checkSemantics(e));
+        this.addAllDeletions(thenBranch.getDeletions());
+        this.addAllrwAccesses(thenBranch.getRwAccesses());
 
-        if (elseBranch != null){
-            result.addAll(elseBranch.checkSemantics(e));
-            this.addAllDeletions(elseBranch.getDeletions());
-            this.addAllrwAccesses(elseBranch.getRwAccesses());
-        }
+        result.addAll(elseBranch.checkSemantics(e));
+        this.addAllDeletions(elseBranch.getDeletions());
+        this.addAllrwAccesses(elseBranch.getRwAccesses());
+
         return result;
     }
 
     @Override
     public String codeGeneration() {
-        return null;
+        String exit = Strings.GetFreshLabel();
+        String elseBranchLabel = Strings.GetFreshLabel();
+        return
+                condition.codeGeneration() +
+                loadI(TMP,"0") +
+                Strings.beq(ACC,TMP,elseBranchLabel) +
+                thenBranch.codeGeneration() +
+                b(exit) +
+                elseBranchLabel+":\n" +
+                elseBranch.codeGeneration() +
+                exit+":\n";
     }
 }

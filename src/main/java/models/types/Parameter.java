@@ -1,14 +1,14 @@
-package models;
+package models.types;
 
-import models.types.Type;
-import models.types.TypeReferenceable;
+import models.Environment;
+import models.stentry.VarSTentry;
 import util.SemanticError;
 import util.Strings;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Parameter extends ElementBase {
+public class Parameter extends Type {
 
     private final TypeReferenceable type;
     private final String id;
@@ -26,12 +26,11 @@ public class Parameter extends ElementBase {
     @Override
     public List<SemanticError> checkSemantics(Environment e) {
 
-        ArrayList<SemanticError> res = new ArrayList<SemanticError>();
-
+        ArrayList<SemanticError> res = new ArrayList<>();
         if (e.containsVariableLocal(id)||e.containsFunction(id)) {
             res.add(new SemanticError(Strings.ERROR_ALREADY_DECLARED_IDENTIFIER + id));
         } else {
-            e.addVariable(id, new STentry(e.getNestingLevel(), type, id));
+            e.addVariable(id, new VarSTentry(e.getNestingLevel(), e.getOffset(), type, id));
         }
 
         return res;
@@ -39,7 +38,7 @@ public class Parameter extends ElementBase {
 
     @Override
     public String codeGeneration() {
-        return null;
+        return Strings.EMPTY;
     }
 
     public String getId() {

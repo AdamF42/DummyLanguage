@@ -1,20 +1,25 @@
 package models.statements;
 
 import models.*;
+import models.stentry.FunSTentry;
+import models.stentry.STentry;
+import models.types.Parameter;
 import models.types.Type;
 import models.types.TypeFunction;
 import util.SemanticError;
 import util.Strings;
 import util.TypeCheckError;
-
 import java.util.ArrayList;
 import java.util.List;
+import static util.Strings.*;
+
 
 public class StmtFunDeclaration extends Stmt {
 
-    private String funId;
-    private List<Parameter> params;
-    private StmtBlock body;
+    private final String funId;
+    private final List<Parameter> params;
+    private final StmtBlock body;
+    private String f_label;
 
 
     public StmtFunDeclaration(String funId, List<Parameter> params, StmtBlock body){
@@ -31,28 +36,30 @@ public class StmtFunDeclaration extends Stmt {
 
     @Override
     public List<SemanticError> checkSemantics(Environment e) {
-        //check function id semantics
+
         List<SemanticError> result = new ArrayList<>(checkFunIdSemantics(e));
-        if(result.isEmpty()) {
-            e.openScope();
-            e.setInsideFunctionDeclaration(true);
-
-            //check params semantics
-            result.addAll(checkParamsSemantics(e));
-
-            //check body semantics
-            result.addAll(checkBodySemantics(e));
-
-            e.setInsideFunctionDeclaration(false);
-            e.closeScope();
-        }
+        e.openScope();
+        e.setInsideFunctionDeclaration(true);
+        result.addAll(checkParamsSemantics(e));
+        result.addAll(checkBodySemantics(e));
+        e.setInsideFunctionDeclaration(false);
+        e.closeScope();
 
         return result;
     }
 
     @Override
     public String codeGeneration() {
-        return null;
+
+        return this.f_label + ":\n" +
+                move(FP, SP) +
+                push(RA) +
+                body.codeGenerationForFunDec() +
+                assignTop(RA) +
+                addi(SP, SP, String.valueOf(params.size() * 4)) +
+                assignTop(FP) +
+                pop() +
+                jr(RA);
     }
 
     private List<SemanticError> checkFunIdSemantics(Environment e) {
@@ -63,7 +70,9 @@ public class StmtFunDeclaration extends Stmt {
             return result;
         }
         TypeFunction type = new TypeFunction(new ArrayList<>(), body);
-        e.addFunction(funId, new STentry(e.getNestingLevel(), type, funId));
+        String label = GetFreshLabel();
+        this.f_label=label;
+        e.addFunction(funId, new FunSTentry(e.getNestingLevel(), type, funId, label));
         return result;
 
     }
@@ -73,24 +82,19 @@ public class StmtFunDeclaration extends Stmt {
         List<SemanticError> result = new ArrayList<>();
         STentry funEntry = e.getFunctionValue(funId);
         TypeFunction funType = (TypeFunction) funEntry.getType();
-        if(params!=null) {
-            for (Parameter param : params) {
-                result.addAll(param.checkSemantics(e));
-                funType.addParam(e.getVariableValueLocal(param.getId()));
-            }
+        for (Parameter param : params) {
+            result.addAll(param.checkSemantics(e));
+            funType.addParam(e.getVariableValueLocal(param.getId()));
         }
+
         return result;
     }
 
     private List<SemanticError> checkBodySemantics(Environment e) {
 
-        List<SemanticError> result = new ArrayList<>();
-
-        if(body !=null) {
-            result.addAll(body.checkSemanticsWithNoOpenScope(e));
-            this.addAllDeletions(body.getDeletions());
-            this.addAllrwAccesses(body.getRwAccesses());
-        }
+        List<SemanticError> result = new ArrayList<>(body.checkSemanticsWithNoOpenScope(e));
+        this.addAllDeletions(body.getDeletions());
+        this.addAllrwAccesses(body.getRwAccesses());
 
         return result;
     }
