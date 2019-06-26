@@ -66,7 +66,6 @@ public class StmtIfThenElse extends Stmt {
         return
                 condition.codeGeneration() +
                 loadI(TMP,"0") +
-                assignTop(TMP) +
                 Strings.beq(ACC,TMP,elseBranchLabel) +
                 thenBranch.codeGeneration() +
                 b(exit) +

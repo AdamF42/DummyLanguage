@@ -63,7 +63,6 @@ public class IfThenElseCodeGen {
                     "li $a0 1\n" +
                     "condition_end:\n" +
                     "li $t1 0\n" +
-                    "$t1 <- top\n" +
                     "beq $a0 $t1 elseBranch\n" +
                     OpenScopeWithVars(0) +
                     CloseScopeWithVars(0) +
@@ -111,7 +110,6 @@ public class IfThenElseCodeGen {
                     "li $a0 0\n" +
                     "condition_end:\n" +
                     "li $t1 0\n" +
-                    "$t1 <- top\n" +
                     "beq $a0 $t1 elseBranch\n" +
                     OpenScopeWithVars(0) +
                     CloseScopeWithVars(0) +
@@ -160,7 +158,6 @@ public class IfThenElseCodeGen {
                     "li $a0 1\n" +
                     "condition_end:\n" +
                     "li $t1 0\n" +
-                    "$t1 <- top\n" +
                     "beq $a0 $t1 elseBranch\n" +
                     OpenScopeWithVars(0) +
                     CloseScopeWithVars(0) +
@@ -208,7 +205,6 @@ public class IfThenElseCodeGen {
                     "li $a0 1\n" +
                     "condition_end:\n" +
                     "li $t1 0\n" +
-                    "$t1 <- top\n" +
                     "beq $a0 $t1 elseBranch\n" +
                     OpenScopeWithVars(0) +
                     CloseScopeWithVars(0) +
@@ -256,7 +252,6 @@ public class IfThenElseCodeGen {
                     "li $a0 1\n" +
                     "condition_end:\n" +
                     "li $t1 0\n" +
-                    "$t1 <- top\n" +
                     "beq $a0 $t1 elseBranch\n" +
                     OpenScopeWithVars(0) +
                     CloseScopeWithVars(0) +
@@ -304,7 +299,6 @@ public class IfThenElseCodeGen {
                     "li $a0 1\n" +
                     "condition_end:\n" +
                     "li $t1 0\n" +
-                    "$t1 <- top\n" +
                     "beq $a0 $t1 elseBranch\n" +
                     OpenScopeWithVars(0) +
                     CloseScopeWithVars(0) +
