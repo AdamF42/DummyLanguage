@@ -12,7 +12,6 @@ public class VarSTentry extends STentry {
         this.offset = offset;
     }
 
-
     public int getOffset() {
         return offset;
     }

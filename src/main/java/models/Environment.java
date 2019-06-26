@@ -3,7 +3,6 @@ package models;
 import models.stentry.FunSTentry;
 import models.stentry.STentry;
 import models.stentry.VarSTentry;
-
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Objects;
@@ -14,12 +13,11 @@ public class Environment {
 	private LinkedList<HashMap<String, FunSTentry>> ftable = new LinkedList<>();
 	private boolean insideFunction = false;
 	private int nestingLevel = -1;
-	private int offset = 0; //TODO: think about it
+	private int offset = 0;
 
 	public boolean isInsideFunctionDeclaration() {
 		return insideFunction;
 	}
-
 
 	public void setInsideFunctionDeclaration(boolean insideFunction) {
 		this.insideFunction = insideFunction;
@@ -44,9 +42,8 @@ public class Environment {
 		nestingLevel--;
 		vtable.pop();
 		ftable.pop();
-		offset = 0; //TODO: think about it
+		offset = 0;
 	}
-
 
 	public boolean containsVariable(String id){
 
@@ -96,16 +93,13 @@ public class Environment {
 		return Objects.requireNonNull(vtable.peek()).get(id);
 	}
 
-
 	public int getNestingLevel() {
 		return this.nestingLevel;
 	}
 
-
 	public void setToBeDeletedOnFunCall(STentry entry) {
 		entry.setToBeDeleted(true);
 	}
-
 
 	public boolean isInCurrentScope(int identifierNL){
 		return identifierNL == nestingLevel;

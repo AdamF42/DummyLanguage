@@ -1,6 +1,5 @@
 package utils;
 
-import com.sun.org.apache.regexp.internal.RESyntaxException;
 import models.Environment;
 import models.VisitorImpl;
 import models.statements.StmtBlock;
@@ -11,9 +10,7 @@ import org.junit.jupiter.api.function.Executable;
 import parser.ComplexStaticAnalysisLexer;
 import parser.ComplexStaticAnalysisParser;
 import util.SemanticError;
-
 import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static util.Strings.*;
 
@@ -29,7 +26,6 @@ public class TestUtil {
         result.append(move(FP,SP));
         return result.toString();
     }
-
 
     public static String CloseScopeWithVars(int numVariables){
         StringBuilder result = new StringBuilder();
@@ -55,5 +51,4 @@ public class TestUtil {
         assertDoesNotThrow((Executable) mainBlock::typeCheck);
         return mainBlock;
     }
-
 }

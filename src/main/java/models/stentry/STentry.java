@@ -23,17 +23,19 @@ public abstract class STentry {
     public boolean isDeleted() {
         return deleted;
     }
+
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
     }
+
     public boolean isToBeDeletedOnFunCall() {
         return toBeDeleted;
     }
+
     public void setToBeDeleted(boolean toBeDeleted) {
         this.toBeDeleted = toBeDeleted;
     }
 
-    //TODO sposta solo in VarSTentry -> refactor della morte
     public boolean isReference(){
         return (this.type != null && this.type instanceof TypeReferenceable) && ((TypeReferenceable) this.type).isReference();
     }
