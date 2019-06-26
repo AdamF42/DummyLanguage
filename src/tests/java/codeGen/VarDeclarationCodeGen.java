@@ -229,7 +229,8 @@ class VarDeclarationCodeGen {
         String expected =
                 OpenScopeWithVars(1) +
                     "li $a0 1\n" +
-                    "beq $a0 0 end\n" +
+                    "li $t1 0\n" +
+                    "beq $a0 $t1 end\n" +
                     "li $a0 0\n" +
                     "end:\n" +
                     "sw $a0 0($fp)\n" +
@@ -252,7 +253,8 @@ class VarDeclarationCodeGen {
         String expected =
                 OpenScopeWithVars(1) +
                     "li $a0 1\n" +
-                    "beq $a0 1 end\n" +
+                    "li $t1 1\n" +
+                    "beq $a0 $t1 end\n" +
                     "li $a0 0\n" +
                     "end:\n" +
                     "sw $a0 0($fp)\n" +
@@ -277,12 +279,15 @@ class VarDeclarationCodeGen {
         String expected =
                 OpenScopeWithVars(1) +
                 "li $a0 0\n" +
-                "beq $a0 1 end\n" +
+                "li $t1 1\n" +
+                "beq $a0 $t1 end\n" +
                 "li $a0 0\n" +
                 "end:\n" +
-                "beq $a0 0 end\n" +
+                "li $t1 0\n" +
+                "beq $a0 $t1 end\n" +
                 "li $a0 1\n" +
-                "beq $a0 0 end\n" +
+                "li $t1 0\n" +
+                "beq $a0 $t1 end\n" +
                 "li $a0 0\n" +
                 "end:\n" +
                 "end:\n" +

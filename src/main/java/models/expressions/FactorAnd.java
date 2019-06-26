@@ -2,8 +2,7 @@ package models.expressions;
 
 import util.Strings;
 
-import static util.Strings.ACC;
-import static util.Strings.beq;
+import static util.Strings.*;
 
 public class FactorAnd extends Factor {
 
@@ -15,7 +14,8 @@ public class FactorAnd extends Factor {
     public String codeGeneration() {
         String endLabel = Strings.GetFreshLabel();
         return  getLeft().codeGeneration() +
-                beq(ACC,"0",endLabel) +
+                loadI(TMP, "0") +
+                beq(ACC,TMP,endLabel) +
                 getRight().codeGeneration() +
                 endLabel+":\n";
     }
