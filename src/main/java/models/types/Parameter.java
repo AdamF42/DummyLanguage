@@ -1,7 +1,6 @@
 package models.types;
 
 import models.Environment;
-import models.stentry.STentry;
 import models.stentry.VarSTentry;
 import util.SemanticError;
 import util.Strings;
@@ -27,8 +26,7 @@ public class Parameter extends Type {
     @Override
     public List<SemanticError> checkSemantics(Environment e) {
 
-        ArrayList<SemanticError> res = new ArrayList<SemanticError>();
-
+        ArrayList<SemanticError> res = new ArrayList<>();
         if (e.containsVariableLocal(id)||e.containsFunction(id)) {
             res.add(new SemanticError(Strings.ERROR_ALREADY_DECLARED_IDENTIFIER + id));
         } else {
@@ -40,7 +38,7 @@ public class Parameter extends Type {
 
     @Override
     public String codeGeneration() {
-        return null;
+        return Strings.EMPTY;
     }
 
     public String getId() {

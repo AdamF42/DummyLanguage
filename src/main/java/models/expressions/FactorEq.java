@@ -1,9 +1,8 @@
 package models.expressions;
 
-import util.Strings;
 
 import static util.Strings.*;
-import static util.Strings.ACC;
+
 
 public class FactorEq extends Factor {
 
@@ -13,7 +12,7 @@ public class FactorEq extends Factor {
 
     @Override
     public String codeGeneration() {
-        String equal = Strings.GetFreshLabel();
+        String equal = GetFreshLabel();
         String exit = GetFreshLabel();
         return
                 getLeft().codeGeneration() +
