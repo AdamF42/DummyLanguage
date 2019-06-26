@@ -49,7 +49,9 @@ public class Environment {
 
 
 	public boolean containsVariable(String id){
-		
+
+		if(id==null) return false;
+
 		for(HashMap<String, VarSTentry> scope: vtable){
 			if(scope.containsKey(id))
 				return true;

@@ -1,7 +1,6 @@
 package models.values;
 
 import models.Environment;
-import models.stentry.STentry;
 import models.stentry.VarSTentry;
 import util.SemanticError;
 import models.types.Type;
@@ -35,7 +34,6 @@ public class ValueId extends Value {
     public List<SemanticError> checkSemantics(Environment e) {
 
         ArrayList<SemanticError> res = new ArrayList<>();
-
         if(!e.containsVariable(this.getVal())){
             res.add(new SemanticError(Strings.ERROR_VARIABLE_DOESNT_EXIST + this.getVal()));
         } else if (e.getVariableValue(this.getVal()).isDeleted()){

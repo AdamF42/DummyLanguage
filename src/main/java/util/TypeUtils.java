@@ -12,20 +12,17 @@ import models.values.ValueId;
 public class TypeUtils {
 
     public static String getIdFromExp(Exp exp){
-        Term term = (Term) exp.getLeft();
-        Factor factor = (Factor) term.getLeft();
-        if(exp.getRight() == null && term.getRight()==null &&
-                factor.getRight()==null && factor.getLeft() instanceof ValueId)
-            return ((ValueId) factor.getLeft()).getId();
-
+//        Term term = (Term) exp.getLeft();
+//        Factor factor = (Factor) term.getLeft();
+//        if(exp.getRight() == null && term.getRight()==null &&
+//                factor.getRight()==null && factor.getLeft() instanceof ValueId)
+//            return ((ValueId) factor.getLeft()).getId();
+        if(exp instanceof ValueId) return ((ValueId) exp).getId();
         return null;
     }
 
     public static boolean isExpValueId(Exp exp){
-        Exp term = exp.getLeft();
-        Factor factor = (Factor) term.getLeft();
-        return exp.getRight() == null && term.getRight() == null &&
-                factor.getRight() == null && factor.getLeft() instanceof ValueId;
+        return exp instanceof ValueId;
     }
 
     public static void functionParamTypeCheck(Type expectedType, ElementBase actualElement) throws TypeCheckError {
@@ -48,7 +45,15 @@ public class TypeUtils {
         typeCheck(expectedType, actualElement);
     }
 
+//    public static void typeCheck(Type expectedType, ElementBase actualElement) throws TypeCheckError {
+//        if (!expectedType.getClass().equals(actualElement.typeCheck().getClass())) {
+//            throw new TypeCheckError("ExpectedType " + (expectedType instanceof TypeReferenceable ? "var " : "") + expectedType + ", got " + actualElement.typeCheck());
+//        }
+//    }
+
     public static void typeCheck(Type expectedType, ElementBase actualElement) throws TypeCheckError {
+        String expected = expectedType.getClass().getSimpleName();
+        String actual = actualElement.typeCheck().getClass().getSimpleName();
         if (!expectedType.getClass().equals(actualElement.typeCheck().getClass())) {
             throw new TypeCheckError("ExpectedType " + (expectedType instanceof TypeReferenceable ? "var " : "") + expectedType + ", got " + actualElement.typeCheck());
         }

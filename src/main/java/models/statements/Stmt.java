@@ -5,12 +5,7 @@ import models.stentry.STentry;
 
 import java.util.*;
 
-/**
- * Represents language statements
- * Some children of this class are SimpleAssignment, SimplePrint, SimpleDelete and SimpleBlock
- *
- * @author Abel
- */
+
 public abstract class Stmt extends ElementBase {
 
     private final Set<STentry> deletions = new HashSet<>();

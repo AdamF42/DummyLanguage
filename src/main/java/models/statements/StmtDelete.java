@@ -12,10 +12,7 @@ public class StmtDelete extends Stmt {
 
 	private String id;
 
-	/**
-	 * Creates a delete statement
-	 * @param id the variable we want to delete
-	 */
+
 	public StmtDelete(String id) {
 		this.id = id;
 	}

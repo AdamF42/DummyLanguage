@@ -16,6 +16,7 @@ public class ValueBool extends Value {
     public ValueBool(String val) {
         super(val);
     }
+
     private static final Map<String, String> valueToInteger;
     static {
         Map<String, String> aMap = new HashMap<>();
@@ -24,21 +25,11 @@ public class ValueBool extends Value {
         valueToInteger = Collections.unmodifiableMap(aMap);
     }
 
-    /**
-     * Checks ValueBool's semantic.
-     *
-     * @param env -> Environment that holds previously parsed information
-     * @return Empty ArrayList of semantic errors
-     */
+    @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
         return new ArrayList<>();
     }
 
-    /**
-     * Type check is empty because it's a terminal node.
-     *
-     * @return instance of TypeBool()
-     */
     @Override
     public Type typeCheck() {
         return new TypeBool();
@@ -46,7 +37,6 @@ public class ValueBool extends Value {
 
     @Override
     public String codeGeneration() {
-
         return loadI(ACC,valueToInteger.get(getVal()));
     }
 

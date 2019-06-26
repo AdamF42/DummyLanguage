@@ -1,20 +1,24 @@
-package util.operationCodeGenStrategy;
+package models.expressions;
 
-import models.expressions.Exp;
 import util.Strings;
 
-import java.util.SplittableRandom;
-
 import static util.Strings.*;
+import static util.Strings.ACC;
 
-public class EqCodeGenStrategy implements OpCodeGenStrategy {
+public class FactorEq extends Factor {
+
+    public FactorEq(Exp left, Exp right) {
+        super(left, right);
+    }
+
     @Override
-    public String GetCodeForOperator(Exp right) {
+    public String codeGeneration() {
         String equal = Strings.GetFreshLabel();
         String exit = GetFreshLabel();
         return
+                getLeft().codeGeneration() +
                 push(ACC) +
-                right.codeGeneration() +
+                getRight().codeGeneration() +
                 assignTop(TMP) +
                 pop() +
                 beq(ACC,TMP,equal) +

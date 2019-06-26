@@ -13,8 +13,6 @@ import static util.Strings.*;
 public class StmtBlock extends Stmt {
 
 	private final List<Stmt> children;
-	private String functionsDefinitions;
-	private int nl;
 
 	public StmtBlock(List<Stmt> children) {
 		this.children = children;
@@ -54,7 +52,8 @@ public class StmtBlock extends Stmt {
 		return result.toString();
 	}
 
-	public String codeGenerationForFunDec() {
+
+	String codeGenerationForFunDec() {
 
 		StringBuilder result = new StringBuilder();
 		for(Stmt child:children) {
@@ -64,7 +63,7 @@ public class StmtBlock extends Stmt {
 		return result.toString();
 	}
 
-	public ArrayList<SemanticError> checkSemanticsWithNoOpenScope(Environment e) {
+	ArrayList<SemanticError> checkSemanticsWithNoOpenScope(Environment e) {
 
 		ArrayList<SemanticError> result = new ArrayList<>();
 		for(Stmt child:children) {
@@ -96,11 +95,4 @@ public class StmtBlock extends Stmt {
 		}
 		return result.toString();
 	}
-
-//	private String AddFunctionsDefinitions(StringBuilder generatedCode){
-//		if(this.nl==0){
-//			generatedCode.append()
-//		}
-//	}
-
 }

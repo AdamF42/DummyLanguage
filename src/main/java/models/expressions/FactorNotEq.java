@@ -1,19 +1,24 @@
-package util.operationCodeGenStrategy;
+package models.expressions;
 
-import models.expressions.Exp;
 import util.Strings;
 
 import static util.Strings.*;
 import static util.Strings.ACC;
 
-public class NotEqCodeGenStrategy implements OpCodeGenStrategy {
+public class FactorNotEq extends Factor {
+
+    public FactorNotEq(Exp left, Exp right) {
+        super(left, right);
+    }
+
     @Override
-    public String GetCodeForOperator(Exp right) {
+    public String codeGeneration() {
         String notEqual = Strings.GetFreshLabel();
         String exit = GetFreshLabel();
         return
+                getLeft().codeGeneration() +
                 push(ACC) +
-                right.codeGeneration() +
+                getRight().codeGeneration() +
                 assignTop(TMP) +
                 pop() +
                 beq(ACC,TMP,notEqual) +
