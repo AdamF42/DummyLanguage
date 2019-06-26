@@ -45,7 +45,6 @@ public class FunctionCodeGen {
                     "    f(int x){" +
                     "    }" +
                     "}");
-        //TODO: controlla, non è garantito che il paste and cut del codice del prof vada bene
         String expected =
                 OpenScopeWithVars(0) +
                 "f_entry:\n" +
@@ -78,7 +77,6 @@ public class FunctionCodeGen {
                     "    }" +
                     "    f(42);" +
                     "}");
-        //TODO: controlla, non è garantito che il paste and cut del codice del prof vada bene
         String expected =
                 OpenScopeWithVars(0) +
                         F_DECLARATION +

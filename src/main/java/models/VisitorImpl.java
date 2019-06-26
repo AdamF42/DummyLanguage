@@ -11,7 +11,6 @@ import models.types.TypeReferenceable;
 import models.values.*;
 import parser.ComplexStaticAnalysisBaseVisitor;
 import parser.ComplexStaticAnalysisParser;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,7 +48,6 @@ public class VisitorImpl extends ComplexStaticAnalysisBaseVisitor<ElementBase> {
         return new StmtDelete(ctx.ID().getText());
     }
 
-
     @Override
     public StmtVarDeclaration visitVarDec(ComplexStaticAnalysisParser.VarDecContext ctx) {
 
@@ -77,8 +75,7 @@ public class VisitorImpl extends ComplexStaticAnalysisBaseVisitor<ElementBase> {
     public Parameter visitParameter(ComplexStaticAnalysisParser.ParameterContext ctx) {
 
         TypeReferenceable paramType = visitType(ctx.type());
-        // TODO: do not use contains var because it do not allow to call a variable with varExample
-        if ( ctx.children.toString().contains("var")) {
+        if ( ctx.children.get(0).toString().contains("var")) {
             paramType.setReference(true);
         }
 
@@ -90,9 +87,25 @@ public class VisitorImpl extends ComplexStaticAnalysisBaseVisitor<ElementBase> {
 
         Term leftTerm = (Term) visit(ctx.left);
         Exp righExp = ctx.right != null ? (Exp) visit(ctx.right) : null;
-        //TODO: tieni conto che possono essere negative
-        String op = ctx.getText().contains("+") ? "+" : (ctx.getText().contains("-")?"-":null);
-        if(op==null || righExp==null) return visitTerm(ctx.left);
+
+        if (ctx.getChild(0).getText().equals("-")) {
+            ValueInt zero = new ValueInt("0");
+            String op = ctx.getChild(2)!=null ? ctx.getChild(2).getText() :null;
+            if(op==null || righExp==null)
+                return visitTerm(ctx.left);
+            switch (op) {
+                case "+":
+                    return new ExpSub(zero, new ExpAdd(leftTerm,righExp));
+                case "-":
+                    return new ExpSub(zero, new ExpSub(leftTerm,righExp));
+                default:
+                    throw new IllegalArgumentException("Invalid operator :" + op);
+            }
+        }
+
+        String op = ctx.getChild(1)!=null ? ctx.getChild(1).getText() :null;
+        if(op==null || righExp==null)
+            return visitTerm(ctx.left);
         switch (op) {
             case "+":
                 return new ExpAdd(leftTerm,righExp);
@@ -103,14 +116,14 @@ public class VisitorImpl extends ComplexStaticAnalysisBaseVisitor<ElementBase> {
         }
     }
 
-
     @Override
     public Term visitTerm(ComplexStaticAnalysisParser.TermContext ctx) {
 
         Factor leftTerm = visitFactor(ctx.left);
         Term righExp = ctx.right != null ? visitTerm(ctx.right) : null;
-        String op = ctx.getText().contains("*") ? "*" : (ctx.getText().contains("/")?"/":null);
-        if(op==null || righExp==null) return visitFactor(ctx.left);
+        String op = ctx.getChild(1)!=null ? ctx.getChild(1).getText() :null;
+        if(op==null || righExp==null)
+            return visitFactor(ctx.left);
         switch (op) {
             case "*":
                 return new TermMult(leftTerm, righExp);
@@ -121,13 +134,15 @@ public class VisitorImpl extends ComplexStaticAnalysisBaseVisitor<ElementBase> {
         }
 
     }
+
     @Override
     public Factor visitFactor(ComplexStaticAnalysisParser.FactorContext ctx) {
 
         Exp leftTerm =  (Exp) visit(ctx.left);
         Exp righExp = ctx.right != null ? (Exp) visit(ctx.right) : null;
         String op = ctx.op != null ? ctx.op.getText() : null;
-        if(op==null || righExp==null) return (Value) visit(ctx.left);
+        if(op==null || righExp==null)
+            return (Value) visit(ctx.left);
         switch (op) {
             case("&&"):
                 return new FactorAnd(leftTerm,righExp);
@@ -150,7 +165,6 @@ public class VisitorImpl extends ComplexStaticAnalysisBaseVisitor<ElementBase> {
         }
     }
 
-
     @Override
     public StmtFunDeclaration visitFunDec(ComplexStaticAnalysisParser.FunDecContext ctx) {
 
@@ -168,7 +182,6 @@ public class VisitorImpl extends ComplexStaticAnalysisBaseVisitor<ElementBase> {
     public Value visitIntValue(ComplexStaticAnalysisParser.IntValueContext ctx) {
         return new ValueInt(ctx.INTEGER().getText());
     }
-
 
     @Override
     public Value visitIdValue(ComplexStaticAnalysisParser.IdValueContext ctx) {
