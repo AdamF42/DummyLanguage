@@ -40,7 +40,7 @@ public class FunctionCodeGen {
             }
         };
 
-        StmtBlock mainBlock = getAST(
+        StmtBlock mainBlock = GetAST(
                 "{" +
                     "    f(int x){" +
                     "    }" +
@@ -71,7 +71,7 @@ public class FunctionCodeGen {
             }
         };
 
-        StmtBlock mainBlock = getAST(
+        StmtBlock mainBlock = GetAST(
                 "{" +
                     "    f(int x){" +
                     "    }" +

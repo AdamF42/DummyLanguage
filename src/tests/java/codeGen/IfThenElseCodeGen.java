@@ -47,7 +47,7 @@ public class IfThenElseCodeGen {
             }
         };
 
-        StmtBlock mainBlock = getAST("{ int x = 1; if( x==1 ) then{ } else{ } }");
+        StmtBlock mainBlock = GetAST("{ int x = 1; if( x==1 ) then{ } else{ } }");
         String expected =
                 OpenScopeWithVars(1) +
                     X_DECLARATION +
@@ -94,7 +94,7 @@ public class IfThenElseCodeGen {
             }
         };
 
-        StmtBlock mainBlock = getAST("{ int x = 1; if( x!=1 ) then{ } else{ } }");
+        StmtBlock mainBlock = GetAST("{ int x = 1; if( x!=1 ) then{ } else{ } }");
         String expected =
                 OpenScopeWithVars(1) +
                     X_DECLARATION +
@@ -142,7 +142,7 @@ public class IfThenElseCodeGen {
             }
         };
 
-        StmtBlock mainBlock = getAST("{ int x = 1; if(x>1) then{ } else{ }}");
+        StmtBlock mainBlock = GetAST("{ int x = 1; if(x>1) then{ } else{ }}");
         String expected =
                 OpenScopeWithVars(1) +
                     X_DECLARATION +
@@ -189,7 +189,7 @@ public class IfThenElseCodeGen {
             }
         };
 
-        StmtBlock mainBlock = getAST("{ int x = 1; if(x>=1) then{ } else{ }}");
+        StmtBlock mainBlock = GetAST("{ int x = 1; if(x>=1) then{ } else{ }}");
         String expected =
                 OpenScopeWithVars(1) +
                     X_DECLARATION +
@@ -236,7 +236,7 @@ public class IfThenElseCodeGen {
             }
         };
 
-        StmtBlock mainBlock = getAST("{ int x = 1; if(x<1) then{ } else{ }}");
+        StmtBlock mainBlock = GetAST("{ int x = 1; if(x<1) then{ } else{ }}");
         String expected =
                 OpenScopeWithVars(1) +
                     X_DECLARATION +
@@ -283,7 +283,7 @@ public class IfThenElseCodeGen {
             }
         };
 
-        StmtBlock mainBlock = getAST("{ int x = 1; if(x<=1) then{ } else{ }}");
+        StmtBlock mainBlock = GetAST("{ int x = 1; if(x<=1) then{ } else{ }}");
         String expected =
                 OpenScopeWithVars(1) +
                     X_DECLARATION +

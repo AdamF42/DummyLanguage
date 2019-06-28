@@ -6,11 +6,10 @@ import models.expressions.Exp;
 import models.types.Type;
 import util.SemanticError;
 import util.TypeCheckError;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import static util.Strings.print;
+
 
 public class StmtPrint extends Stmt{
 

@@ -21,7 +21,7 @@ public class AssignmentCodeGen {
 
     @Test
     void assignmentInTheSameScope() {
-        StmtBlock mainBlock = getAST("{ int x = 1; x = 3; }");
+        StmtBlock mainBlock = GetAST("{ int x = 1; x = 3; }");
         String expected =
                 OpenScopeWithVars(1) +
                     "li $a0 1\n" +
@@ -38,7 +38,7 @@ public class AssignmentCodeGen {
 
     @Test
     void assignmentInNestedScopeWithValueInt() {
-        StmtBlock mainBlock = getAST("{\n int x = 1; {{x = 3;\n }}}");
+        StmtBlock mainBlock = GetAST("{\n int x = 1; {{x = 3;\n }}}");
         String expected =
                 OpenScopeWithVars(1) +
                     "li $a0 1\n" +
@@ -60,7 +60,7 @@ public class AssignmentCodeGen {
 
     @Test
     void assignmentInNestedScopeWithValueBool() {
-        StmtBlock mainBlock = getAST("{\n bool x = false; {{x = true;\n }}}");
+        StmtBlock mainBlock = GetAST("{\n bool x = false; {{x = true;\n }}}");
         String expected =
                 OpenScopeWithVars(1) +
                     "li $a0 0\n" +
@@ -82,7 +82,7 @@ public class AssignmentCodeGen {
 
     @Test
     void assignmentInNestedScopeWithValueId() {
-        StmtBlock mainBlock = getAST("{\n int y = 1; int x = 0; {{x = y;\n }}}");
+        StmtBlock mainBlock = GetAST("{\n int y = 1; int x = 0; {{x = y;\n }}}");
         String expected =
                 OpenScopeWithVars(2) +
                     "li $a0 1\n" +

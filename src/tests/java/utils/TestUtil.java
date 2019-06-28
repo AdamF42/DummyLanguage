@@ -10,6 +10,7 @@ import org.junit.jupiter.api.function.Executable;
 import parser.ComplexStaticAnalysisLexer;
 import parser.ComplexStaticAnalysisParser;
 import util.SemanticError;
+import java.util.ArrayList;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static util.Strings.*;
@@ -37,7 +38,7 @@ public class TestUtil {
         return result.toString();
     }
 
-    public static StmtBlock getAST(String file){
+    public static StmtBlock GetAST(String file){
         CharStream is = CharStreams.fromString(file);
         ComplexStaticAnalysisLexer lexer = new ComplexStaticAnalysisLexer(is);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
@@ -50,5 +51,17 @@ public class TestUtil {
         assertEquals(0, errors.size());
         assertDoesNotThrow((Executable) mainBlock::typeCheck);
         return mainBlock;
+    }
+
+    public static ArrayList<SemanticError> GetSemanticsErrors(String string){
+        CharStream is = CharStreams.fromString(string);
+        ComplexStaticAnalysisLexer lexer = new ComplexStaticAnalysisLexer(is);
+        CommonTokenStream tokens = new CommonTokenStream(lexer);
+        ComplexStaticAnalysisParser parser = new ComplexStaticAnalysisParser(tokens);
+        VisitorImpl visitor = new VisitorImpl();
+        StmtBlock mainBlock = visitor.visitBlock(parser.block());
+        Environment e = new Environment();
+        assertNotNull(mainBlock);
+        return mainBlock.checkSemantics(e);
     }
 }

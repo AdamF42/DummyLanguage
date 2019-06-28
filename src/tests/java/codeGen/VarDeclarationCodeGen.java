@@ -25,7 +25,7 @@ class VarDeclarationCodeGen {
 
     @Test
     void varDeclaration() {
-        StmtBlock mainBlock = getAST("{ int x = 3; }");
+        StmtBlock mainBlock = GetAST("{ int x = 3; }");
         String expected =
                 OpenScopeWithVars(1) +
                     "li $a0 3\n" +
@@ -38,7 +38,7 @@ class VarDeclarationCodeGen {
 
     @Test
     void varDeclarations() {
-        StmtBlock mainBlock = getAST("{ int x = 3; int y = 5;  }");
+        StmtBlock mainBlock = GetAST("{ int x = 3; int y = 5;  }");
         String expected =
                 OpenScopeWithVars(2) +
                     "li $a0 3\n" +
@@ -53,7 +53,7 @@ class VarDeclarationCodeGen {
 
     @Test
     void varDecWithNumberAdd() {
-        StmtBlock mainBlock = getAST("{ int x = 3 + 1; }");
+        StmtBlock mainBlock = GetAST("{ int x = 3 + 1; }");
         String expected =
                 OpenScopeWithVars(1) +
                     "li $a0 3\n" +
@@ -71,7 +71,7 @@ class VarDeclarationCodeGen {
 
     @Test
     void varDecWithVariableAndNumberAdd() {
-        StmtBlock mainBlock = getAST("{ int x = x + 1; }");
+        StmtBlock mainBlock = GetAST("{ int x = x + 1; }");
         String expected =
                 OpenScopeWithVars(1) +
                     "lw $al 0($fp)\n" +
@@ -90,7 +90,7 @@ class VarDeclarationCodeGen {
 
     @Test
     void varDecWithNumberSub() {
-        StmtBlock mainBlock = getAST("{ int x = 3 - 1; }");
+        StmtBlock mainBlock = GetAST("{ int x = 3 - 1; }");
         String expected =
                 OpenScopeWithVars(1) +
                 "li $a0 3\n" +
@@ -108,7 +108,7 @@ class VarDeclarationCodeGen {
 
     @Test
     void varDecWithVariableAndNumberSub() {
-        StmtBlock mainBlock = getAST("{\n int x = x - 1;\n }");
+        StmtBlock mainBlock = GetAST("{\n int x = x - 1;\n }");
         String expected =
                 OpenScopeWithVars(1) +
                     "lw $al 0($fp)\n" +
@@ -127,7 +127,7 @@ class VarDeclarationCodeGen {
 
     @Test
     void varDecWithVariableAndNumberMult() {
-        StmtBlock mainBlock = getAST("{\n int x = x * 2;\n }");
+        StmtBlock mainBlock = GetAST("{\n int x = x * 2;\n }");
         String expected =
                 OpenScopeWithVars(1) +
                     "lw $al 0($fp)\n" +
@@ -146,7 +146,7 @@ class VarDeclarationCodeGen {
 
     @Test
     void varDecWithVariableAndNumberDiv() {
-        StmtBlock mainBlock = getAST("{\n int x = x / 2;\n }");
+        StmtBlock mainBlock = GetAST("{\n int x = x / 2;\n }");
         String expected =
                 OpenScopeWithVars(1) +
                     "lw $al 0($fp)\n" +
@@ -165,8 +165,7 @@ class VarDeclarationCodeGen {
 
     @Test
     void varDecsWithComplexExp() {
-        StmtBlock mainBlock = getAST("{ int y = 6; int x = (y+1)*((x-1) / 2); }");
-        //TODO: not sure if it is correct...check it on paper...
+        StmtBlock mainBlock = GetAST("{ int y = 6; int x = (y+1)*((x-1) / 2); }");
         String expected =
                 OpenScopeWithVars(2) +
                     "li $a0 6\n" +
@@ -203,7 +202,7 @@ class VarDeclarationCodeGen {
 
     @Test
     void varDecWithSimpleBooleanAssignment() {
-        StmtBlock mainBlock = getAST("{ bool x = true; }");
+        StmtBlock mainBlock = GetAST("{ bool x = true; }");
         String expected =
                 OpenScopeWithVars(1) +
                     "li $a0 1\n" +
@@ -225,7 +224,7 @@ class VarDeclarationCodeGen {
             }
         };
 
-        StmtBlock mainBlock = getAST("{ bool x = true && false; }");
+        StmtBlock mainBlock = GetAST("{ bool x = true && false; }");
         String expected =
                 OpenScopeWithVars(1) +
                     "li $a0 1\n" +
@@ -249,7 +248,7 @@ class VarDeclarationCodeGen {
             }
         };
 
-        StmtBlock mainBlock = getAST("{ bool x = true || false; }");
+        StmtBlock mainBlock = GetAST("{ bool x = true || false; }");
         String expected =
                 OpenScopeWithVars(1) +
                     "li $a0 1\n" +
@@ -274,8 +273,7 @@ class VarDeclarationCodeGen {
             }
         };
 
-        StmtBlock mainBlock = getAST("{ bool x = (false || false) && (true && false) ; }");
-        //TODO: not sure if it is correct...check it on paper...
+        StmtBlock mainBlock = GetAST("{ bool x = (false || false) && (true && false) ; }");
         String expected =
                 OpenScopeWithVars(1) +
                 "li $a0 0\n" +

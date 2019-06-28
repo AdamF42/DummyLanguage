@@ -27,7 +27,7 @@ public class BlockCodeGen {
 
     @Test
     void simpleBlock() {
-        StmtBlock mainBlock = getAST("{ }");
+        StmtBlock mainBlock = GetAST("{ }");
         String expected =
                 "push $fp\n" +
                 "li $t1 0\n" +
@@ -41,7 +41,7 @@ public class BlockCodeGen {
 
     @Test
     void simpleBlockWithVarDec() {
-        StmtBlock mainBlock = getAST("{ int x=1;}");
+        StmtBlock mainBlock = GetAST("{ int x=1;}");
         String expected =
                 OpenScopeWithVars(1) +
                         X_CGEN +
@@ -53,7 +53,7 @@ public class BlockCodeGen {
 
     @Test
     void simpleBlockWithVarDecs() {
-        StmtBlock mainBlock = getAST("{ int x=1; int y=1;}");
+        StmtBlock mainBlock = GetAST("{ int x=1; int y=1;}");
         String expected =
                 OpenScopeWithVars(2) +
                     X_CGEN +
@@ -66,7 +66,7 @@ public class BlockCodeGen {
 
     @Test
     void nestedBlockWithVarDec() {
-        StmtBlock mainBlock = getAST("{ {int x=1;} }");
+        StmtBlock mainBlock = GetAST("{ {int x=1;} }");
         String expected =
                 OpenScopeWithVars(0) +
                     OpenScopeWithVars(1) +
@@ -80,7 +80,7 @@ public class BlockCodeGen {
 
     @Test
     void nestedBlockWithVarDecs() {
-        StmtBlock mainBlock = getAST("{ {int x=1; int y=1;} }");
+        StmtBlock mainBlock = GetAST("{ {int x=1; int y=1;} }");
         String expected =
                 OpenScopeWithVars(0) +
                     OpenScopeWithVars(2) +
@@ -95,7 +95,7 @@ public class BlockCodeGen {
 
     @Test
     void nestedBlockWithVarDecInOuterBlock() {
-        StmtBlock mainBlock = getAST("{ int x=1; {int y=1;}}");
+        StmtBlock mainBlock = GetAST("{ int x=1; {int y=1;}}");
         String expected =
                 OpenScopeWithVars(1) +
                     X_CGEN +

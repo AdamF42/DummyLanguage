@@ -1,7 +1,7 @@
 package models.values;
 
 import models.Environment;
-import models.stentry.VarSTentry;
+import models.stentry.VarStEntry;
 import util.SemanticError;
 import models.types.Type;
 import util.Strings;
@@ -13,7 +13,7 @@ import static util.Strings.*;
 
 public class ValueId extends Value {
     private int nl;
-    private VarSTentry entry;
+    private VarStEntry entry;
 
 
     public ValueId(String val) {

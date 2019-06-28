@@ -6,7 +6,7 @@ import models.types.TypeReferenceable;
 
 import java.util.Objects;
 
-public abstract class STentry {
+public abstract class StEntry {
 
     private final int nl;
     private final Type type;
@@ -14,7 +14,7 @@ public abstract class STentry {
     private boolean deleted = false;
     private boolean toBeDeleted = false;
 
-    public STentry(int nl, Type t, String id) {
+    public StEntry(int nl, Type t, String id) {
         this.nl = nl;
         this.type = t;
         this.id = id;
@@ -56,7 +56,7 @@ public abstract class STentry {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        STentry sTentry = (STentry) o;
+        StEntry sTentry = (StEntry) o;
         return nl == sTentry.nl &&
                 Objects.equals(id, sTentry.id);
     }

@@ -34,7 +34,7 @@ public class PrintCodeGen {
 
     @Test
     void printVariable() {
-        StmtBlock mainBlock = getAST("{\n int x = 1; print x;\n  }");
+        StmtBlock mainBlock = GetAST("{\n int x = 1; print x;\n  }");
         String expected =
                 OpenScopeWithVars(1) +
                     CGEN_X +
@@ -49,7 +49,7 @@ public class PrintCodeGen {
 
     @Test
     void printExpression() {
-        StmtBlock mainBlock = getAST("{\n print 3+1;\n  }");
+        StmtBlock mainBlock = GetAST("{\n print 3+1;\n  }");
         String expected =
                 OpenScopeWithVars(0) +
                     CGEN_EXP +

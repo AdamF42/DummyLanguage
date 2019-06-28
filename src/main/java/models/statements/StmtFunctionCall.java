@@ -1,20 +1,21 @@
 package models.statements;
 
+import com.google.common.collect.Lists;
 import models.*;
 import models.expressions.Exp;
-import models.stentry.FunSTentry;
-import models.stentry.STentry;
+import models.stentry.FunStEntry;
+import models.stentry.StEntry;
 import models.types.Type;
 import models.types.TypeFunction;
-import models.values.Value;
-import models.values.ValueId;
 import util.SemanticError;
 import util.Strings;
 import util.TypeCheckError;
 import util.TypeUtils;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-
+import java.util.function.Function;
+import static util.SemanticErrorChecker.*;
 import static util.Strings.*;
 import static util.TypeUtils.getIdFromExp;
 import static util.TypeUtils.isExpValueId;
@@ -23,9 +24,10 @@ public class StmtFunctionCall extends Stmt {
 
     private String id;
     private List<Exp> actualParams;
-    private List<STentry> formalParams;
+    private List<StEntry> formalParams;
     private TypeFunction envFunType;
     private String label;
+    private static List<Function<StEntry, Boolean>> CHECKS = Arrays.asList(IS_NULL, FUN_IS_DELETED);
 
 
     public StmtFunctionCall(String funId, List<Exp> actualParams) {
@@ -36,19 +38,16 @@ public class StmtFunctionCall extends Stmt {
     @Override
     public Type typeCheck() throws TypeCheckError {
 
-        if (envFunType != null) {
-
-            if (envFunType.getParam().size() != actualParams.size()) {
-                throw new TypeCheckError(Strings.ERROR_PARAMETER_MISMATCH +
-                        envFunType.getParam().size() + " got " + actualParams.size());
-            }
-            for (int i = 0; i < envFunType.getParam().size(); i++) {
-                Type expectedType = envFunType.getParam().get(i).getType();
-                ElementBase actualType = actualParams.get(i);
-                TypeUtils.functionParamTypeCheck(expectedType, actualType);
-
-            }
+        if (envFunType.getParam().size() != actualParams.size()) {
+            throw new TypeCheckError(Strings.ERROR_PARAMETER_MISMATCH +
+                    envFunType.getParam().size() + " got " + actualParams.size());
         }
+        for (int i = 0; i < envFunType.getParam().size(); i++) {
+            Type expectedType = envFunType.getParam().get(i).getType();
+            ElementBase actualType = actualParams.get(i);
+            TypeUtils.functionParamTypeCheck(expectedType, actualType);
+        }
+
         return this.envFunType;
     }
 
@@ -56,12 +55,13 @@ public class StmtFunctionCall extends Stmt {
     public List<SemanticError> checkSemantics(Environment e) {
 
         List<SemanticError> result = new ArrayList<>();
-        FunSTentry sTentry = e.getFunctionValue(id);
-        if (sTentry == null || sTentry.isDeleted()) {
-            result.add(new SemanticError(Strings.ERROR_FUNCTION_DOESNT_EXIST + id));
-            return result;
+        FunStEntry FunStEntry = e.getFunctionValue(id);
+        for (Function<StEntry, Boolean> check: CHECKS) {
+            if (check.apply(FunStEntry))
+                return Lists.newArrayList(VALIDATION_ERRORS.get(check).apply(id));
         }
-        this.label = sTentry.GetLabel();
+
+        this.label = FunStEntry.GetLabel();
         result.addAll(setFunctionWithParams(e));
         result.addAll(checkParametersSemantics(e));
         result.addAll(checkFunDeletionsSemantics(e));
@@ -88,7 +88,7 @@ public class StmtFunctionCall extends Stmt {
         if (actualParams != null && actualParams.size() == formalParams.size()) {
             for (int i = 0; i < formalParams.size(); i++) {
                 Exp actualParam = actualParams.get(i);
-                STentry formalParam = formalParams.get(i);
+                StEntry formalParam = formalParams.get(i);
                 result.addAll(checkParamSemantics(e, actualParam, formalParam));
             }
         } else result.add(new SemanticError(Strings.ERROR_PARAMETER_MISMATCH + id));
@@ -105,7 +105,7 @@ public class StmtFunctionCall extends Stmt {
 
     private List<SemanticError> checkFunDeletionsSemantics(Environment e) {
         List<SemanticError> result = new ArrayList<>();
-        for (STentry entry : envFunType.getDeletions()) {
+        for (StEntry entry : envFunType.getDeletions()) {
             if (entry.isToBeDeletedOnFunCall() && !entry.isReference()) {
                 if(entry.isDeleted()) {
                     result.add(new SemanticError(Strings.ERROR_VARIABLE_HAS_BEEN_DELETED + entry.getId()));
@@ -117,7 +117,7 @@ public class StmtFunctionCall extends Stmt {
         return result;
     }
 
-    private List<SemanticError> checkParamSemantics(Environment e, Exp actualParam, STentry formalParam) {
+    private List<SemanticError> checkParamSemantics(Environment e, Exp actualParam, StEntry formalParam) {
         String actualParamId = getIdFromExp(actualParam);
         List<SemanticError> result = new ArrayList<>(actualParam.checkSemantics(e));
         if (formalParam == null) return result;
@@ -130,7 +130,7 @@ public class StmtFunctionCall extends Stmt {
         }
 
         if (!this.envFunType.getDeletions().isEmpty()) {
-            for (STentry accessedVariable : this.envFunType.getRwAccesses()) {
+            for (StEntry accessedVariable : this.envFunType.getRwAccesses()) {
                 if (accessedVariable.getNestinglevel() <= e.getFunctionValue(id).getNestinglevel()) {
                     if (e.getVariableValue(actualParamId).equals(accessedVariable)) {
                         result.add(new SemanticError(Strings.ERROR_DANGEROUS_USE_OF_PARAMETER + actualParamId));

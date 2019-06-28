@@ -76,7 +76,7 @@ class MainAppTest {
         assertNotNull(mainBlock);
         List<SemanticError> errors =  mainBlock.checkSemantics(e);
         assertEquals(1, errors.size());
-        assertEquals(Strings.ERROR_FUNCTION_DOESNT_EXIST + "f", errors.get(0).toString());
+        assertEquals(Strings.ERROR_FUNCTION_HAS_BEEN_DELETED + "f", errors.get(0).toString());
     }
 
 
@@ -87,7 +87,7 @@ class MainAppTest {
         assertNotNull(mainBlock);
         List<SemanticError> errors =  mainBlock.checkSemantics(e);
         assertEquals(1, errors.size());
-        assertEquals(Strings.ERROR_FUNCTION_DOESNT_EXIST + "f", errors.get(0).toString());
+        assertEquals(Strings.ERROR_FUNCTION_HAS_BEEN_DELETED + "f", errors.get(0).toString());
     }
 
     @Test
@@ -232,7 +232,7 @@ class MainAppTest {
         assertNotNull(mainBlock);
         List<SemanticError> errors =  mainBlock.checkSemantics(e);
         assertEquals(1, errors.size());
-        assertEquals(Strings.ERROR_FUNCTION_DOESNT_EXIST + "g", errors.get(0).toString());
+        assertEquals(Strings.ERROR_IDENTIFIER_DOESNT_EXIST + "g", errors.get(0).toString());
     }
 
     @Test
