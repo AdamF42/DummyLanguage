@@ -1,24 +1,28 @@
 package models.statements;
 
+
+import com.google.common.collect.Lists;
 import models.*;
 import models.expressions.Exp;
-import models.stentry.VarSTentry;
+import models.stentry.StEntry;
+import models.stentry.VarStEntry;
 import models.types.Type;
 import util.SemanticError;
-import util.Strings;
 import util.TypeCheckError;
 import util.TypeUtils;
-
-import java.util.ArrayList;
-import java.util.List;
-
+import java.util.*;
+import java.util.function.Function;
+import static util.SemanticErrorChecker.*;
 import static util.Strings.*;
 
+
 public class StmtAssignment extends Stmt{
+
+    private static List<Function<StEntry, Boolean>> CHECKS = Arrays.asList(IS_NULL, VAR_IS_DELETED, FUN_IS_DELETED);
     private final Exp exp;
     private final String id;
     private int nl;
-    private VarSTentry idEntry;
+    private VarStEntry idEntry;
 
 
     public StmtAssignment(Exp exp, String id) {
@@ -41,7 +45,6 @@ public class StmtAssignment extends Stmt{
         this.addAllrwAccesses(exp.getRwAccesses());
 
         return result;
-
     }
 
     @Override
@@ -53,18 +56,17 @@ public class StmtAssignment extends Stmt{
     }
 
     private List<SemanticError>  checkIdSemantics(Environment e) {
-        List<SemanticError> result = new ArrayList<>();
 
-        if (!e.containsVariable(id)) {
-            result.add(new SemanticError(Strings.ERROR_VARIABLE_DOESNT_EXIST + id));
-        } else if (e.getVariableValue(id).isDeleted()) {
-            result.add(new SemanticError(Strings.ERROR_VARIABLE_HAS_BEEN_DELETED + id));
-        }else {
-            this.idEntry = e.getVariableValue(id);
-            this.nl = e.getNestingLevel();
-            this.addrwAccess(e.getVariableValue(id));
+        StEntry idEntry = e.getVariableValue(id);
+        for (Function<StEntry, Boolean> check: CHECKS) {
+            if (check.apply(idEntry))
+                return Lists.newArrayList(VALIDATION_ERRORS.get(check).apply(id));
         }
 
-        return result;
+        this.idEntry = e.getVariableValue(id);
+        this.nl = e.getNestingLevel();
+        this.addrwAccess(e.getVariableValue(id));
+
+        return new ArrayList<>();
     }
 }

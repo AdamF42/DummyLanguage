@@ -1,7 +1,7 @@
 package models.expressions;
 
 import models.*;
-import models.stentry.STentry;
+import models.stentry.StEntry;
 import models.types.Type;
 import util.*;
 import java.util.ArrayList;
@@ -15,7 +15,7 @@ public abstract class Exp extends ElementBase {
     private final Exp left;
     private final Exp right;
 
-    private final Set<STentry> rwAccesses = new HashSet<>();
+    private final Set<StEntry> rwAccesses = new HashSet<>();
 
     public Exp(Exp left, Exp right) {
         this.left = left;
@@ -49,15 +49,15 @@ public abstract class Exp extends ElementBase {
         return right;
     }
 
-    public void addAllrwAccesses(Set<STentry> rwAccesses) {
+    public void addAllrwAccesses(Set<StEntry> rwAccesses) {
         this.rwAccesses.addAll(rwAccesses);
     }
 
-    public void addrwAccess(STentry entry) {
+    public void addrwAccess(StEntry entry) {
         this.rwAccesses.add(entry);
     }
 
-    public Set<STentry> getRwAccesses() {
+    public Set<StEntry> getRwAccesses() {
         return rwAccesses;
     }
 }

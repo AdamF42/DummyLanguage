@@ -1,33 +1,33 @@
 package models.statements;
 
+import com.google.common.collect.Lists;
 import models.*;
-import models.stentry.FunSTentry;
-import models.stentry.STentry;
+import models.stentry.FunStEntry;
+import models.stentry.StEntry;
 import models.types.Parameter;
 import models.types.Type;
 import models.types.TypeFunction;
 import util.SemanticError;
-import util.Strings;
 import util.TypeCheckError;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.function.Function;
+import static util.SemanticErrorChecker.*;
 import static util.Strings.*;
 
 
 public class StmtFunDeclaration extends Stmt {
 
+    private static List<Function<StEntry, Boolean>> CHECKS = Collections.singletonList(ALREADY_DECLARED);
     private final String funId;
     private final List<Parameter> params;
     private final StmtBlock body;
     private String f_label;
-
 
     public StmtFunDeclaration(String funId, List<Parameter> params, StmtBlock body){
         this.funId = funId;
         this.params = params;
         this.body = body;
     }
-
 
     @Override
     public Type typeCheck() throws TypeCheckError {
@@ -64,23 +64,24 @@ public class StmtFunDeclaration extends Stmt {
 
     private List<SemanticError> checkFunIdSemantics(Environment e) {
 
-        List<SemanticError> result = new ArrayList<>();
-        if ((e.containsFunction(funId) && !e.getFunctionValue(funId).isDeleted()) || (e.containsVariable(funId) && !e.getVariableValue(funId).isDeleted())) {
-            result.add(new SemanticError(Strings.ERROR_ALREADY_DECLARED_IDENTIFIER + funId));
-            return result;
+        StEntry idEntry = Optional.ofNullable((StEntry)e.getVariableValue(funId)).orElse(e.getFunctionValue(funId));
+        for (Function<StEntry, Boolean> check: CHECKS) {
+            if (check.apply(idEntry))
+                return Lists.newArrayList(VALIDATION_ERRORS.get(check).apply(funId));
         }
+
         TypeFunction type = new TypeFunction(new ArrayList<>(), body);
         String label = GetFreshLabel();
         this.f_label=label;
-        e.addFunction(funId, new FunSTentry(e.getNestingLevel(), type, funId, label));
-        return result;
+        e.addFunction(funId, new FunStEntry(e.getNestingLevel(), type, funId, label));
+        return new ArrayList<>();
 
     }
 
     private List<SemanticError> checkParamsSemantics(Environment e) {
 
         List<SemanticError> result = new ArrayList<>();
-        STentry funEntry = e.getFunctionValue(funId);
+        StEntry funEntry = e.getFunctionValue(funId);
         TypeFunction funType = (TypeFunction) funEntry.getType();
         for (Parameter param : params) {
             result.addAll(param.checkSemantics(e));

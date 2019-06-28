@@ -1,17 +1,17 @@
 package models.types;
 
 import models.Environment;
-import models.stentry.STentry;
+import models.stentry.StEntry;
 import util.SemanticError;
 import models.statements.StmtBlock;
 
 import java.util.*;
 
 public class TypeFunction extends Type {
-    private final List<STentry> param;
+    private final List<StEntry> param;
     private final StmtBlock body;
 
-    public TypeFunction(List<STentry> param, StmtBlock body) {
+    public TypeFunction(List<StEntry> param, StmtBlock body) {
         this.param = param;
         this.body = body;
     }
@@ -31,19 +31,19 @@ public class TypeFunction extends Type {
         return null;
     }
 
-    public List<STentry> getParam() {
+    public List<StEntry> getParam() {
         return param;
     }
 
-    public Set<STentry> getDeletions() {
+    public Set<StEntry> getDeletions() {
         return body.getDeletions();
     }
 
-    public Set<STentry> getRwAccesses() {
+    public Set<StEntry> getRwAccesses() {
         return body.getRwAccesses();
     }
 
-    public void addParam(STentry paramEntry){
+    public void addParam(StEntry paramEntry){
         this.param.add(paramEntry);
     }
 }

@@ -1,17 +1,21 @@
 package models.statements;
 
+import com.google.common.collect.Lists;
 import models.Environment;
-import models.stentry.STentry;
+import models.stentry.StEntry;
 import util.SemanticError;
 import models.types.Type;
 import util.Strings;
+import java.util.*;
+import java.util.function.Function;
+import static util.SemanticErrorChecker.*;
 
-import java.util.ArrayList;
 
 public class StmtDelete extends Stmt {
 
 	private String id;
 
+    private static List<Function<StEntry, Boolean>> CHECKS = Arrays.asList(IS_NULL, VAR_IS_DELETED, FUN_IS_DELETED);
 
 	public StmtDelete(String id) {
 		this.id = id;
@@ -22,36 +26,28 @@ public class StmtDelete extends Stmt {
 		return null;
 	}
 
-	// TODO: refactor this horrible code...
 	@Override
 	public ArrayList<SemanticError> checkSemantics(Environment e) {
 
-		ArrayList<SemanticError> result = new ArrayList<>();
-		STentry variable = e.getVariableValue(id);
-		STentry idEntry = variable == null ? e.getFunctionValue(id) : variable;
-
-		if(idEntry == null) {
-			result.add(new SemanticError(Strings.ERROR_VARIABLE_DOESNT_EXIST + id));
+		StEntry idEntry = Optional.ofNullable((StEntry)e.getVariableValue(id)).orElse(e.getFunctionValue(id));
+		for (Function<StEntry, Boolean> check: CHECKS) {
+			if (check.apply(idEntry))
+				return Lists.newArrayList(VALIDATION_ERRORS.get(check).apply(id));
 		}
-		else if (idEntry.isDeleted()){
-			result.add(new SemanticError(Strings.ERROR_VARIABLE_HAS_BEEN_DELETED + id));
+
+		if (e.isInCurrentScope(idEntry.getNestinglevel())){
+			idEntry.setDeleted(true);
 		}
 		else {
-			if (e.isInCurrentScope(idEntry.getNestinglevel())){
+			if(e.isInsideFunctionDeclaration()){
+				e.setToBeDeletedOnFunCall(idEntry);
+			} else {
 				idEntry.setDeleted(true);
 			}
-			else {
-				// check if I'm inside a scope but I'm trying to delete something out
-				// Need to distinguish if i'm in a function or not
-				if(e.isInsideFunctionDeclaration()){
-					e.setToBeDeletedOnFunCall(idEntry);
-				} else {
-					idEntry.setDeleted(true);
-				}
-			}
-			this.addDeletion(idEntry);
 		}
-		return result;
+		this.addDeletion(idEntry);
+
+		return new ArrayList<>();
 	}
 
 	@Override

@@ -1,25 +1,24 @@
 package util;
 
-import models.stentry.STentry;
+import models.stentry.StEntry;
 
 import java.util.UUID;
 
 
 public class Strings {
 
-	public static final String ERROR_VARIABLE_DOESNT_EXIST = "No variable found. Variable either doesn't exist or has been deleted. Variable name: ";
+	public static final String ERROR_IDENTIFIER_DOESNT_EXIST = "Identifier doesn't exist. Identifier name: ";
+	public static final String ERROR_VARIABLE_DOESNT_EXIST = "Variable doesn't exist. Variable name: ";
 	public static final String ERROR_VARIABLE_HAS_BEEN_DELETED = "Variable has been deleted. Variable name: ";
-	public static final String ERROR_FUNCTION_DOESNT_EXIST = "No function found. Function either doesn't exist or has been deleted. Function name: ";
+	public static final String ERROR_FUNCTION_HAS_BEEN_DELETED = "Function has been deleted. Function name: ";
 	public static final String ERROR_ALREADY_DECLARED_IDENTIFIER = "Identifier already declared. Identifier name: ";
 	public static final String ERROR_PARAMETER_MISMATCH = "Parameters count doesn't match. Expected ";
 	public static final String ERROR_DANGEROUS_USE_OF_PARAMETER = "Potentially deleted parameter inside function. Name: ";
 	public static final String ERROR_BEHAVIOR_MISMATCH = "Mismatching behavioural types between If-Then-Else statement branches";
 
-
 	public static final String LEXICAL_CHECK = "Check Lexical Errors";
 	public static final String SEMANTIC_CHECK = "Check Semantic Errors";
 	public static final String TYPE_CHECK = "Check Type Errors";
-
 
 	public static final String ACC = "$a0";
 	public static final String TMP = "$t1";
@@ -27,7 +26,6 @@ public class Strings {
 	public static final String FP = "$fp";
 	public static final String AL = "$al";
 	public static final String RA = "$ra";
-
 
 	public static final String EMPTY = "";
 	public static void printCheckingStatus(String status) {
@@ -127,7 +125,7 @@ public class Strings {
 		return UUID.randomUUID().toString();
 	}
 
-	public static String getVariableForCgen(int nl, STentry idEntry){
+	public static String getVariableForCgen(int nl, StEntry idEntry){
 		StringBuilder result = new StringBuilder();
 		for (int i = 0; i<nl-idEntry.getNestinglevel();i++){
 			result.append(loadW(AL, "0", AL));

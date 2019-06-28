@@ -95,7 +95,7 @@ public class ComplexSamples {
             }
         };
 
-        StmtBlock mainBlock = getAST(
+        StmtBlock mainBlock = GetAST(
                 "{" +
                 "    int x = 1;" +
                 "    f(int y){" +
@@ -175,7 +175,7 @@ public class ComplexSamples {
             }
         };
 
-        StmtBlock mainBlock = getAST(
+        StmtBlock mainBlock = GetAST(
                 "{" +
                     "    int u = 1 ;\n" +
                     "    f(var int x, int n){\n" +
@@ -268,7 +268,7 @@ public class ComplexSamples {
             }
         };
 
-        StmtBlock mainBlock = getAST(
+        StmtBlock mainBlock = GetAST(
                 "{" +
                     "    f(int m, int n){" +
                     "        if (m>n) then { print(m+n) ;}" +

@@ -1,7 +1,7 @@
 package models.types;
 
 import models.Environment;
-import models.stentry.VarSTentry;
+import models.stentry.VarStEntry;
 import util.SemanticError;
 import util.Strings;
 
@@ -30,7 +30,7 @@ public class Parameter extends Type {
         if (e.containsVariableLocal(id)||e.containsFunction(id)) {
             res.add(new SemanticError(Strings.ERROR_ALREADY_DECLARED_IDENTIFIER + id));
         } else {
-            e.addVariable(id, new VarSTentry(e.getNestingLevel(), e.getOffset(), type, id));
+            e.addVariable(id, new VarStEntry(e.getNestingLevel(), e.getOffset(), type, id));
         }
 
         return res;

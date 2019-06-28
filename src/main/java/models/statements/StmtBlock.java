@@ -4,10 +4,8 @@ import models.Environment;
 import util.SemanticError;
 import models.types.Type;
 import util.TypeCheckError;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import static util.Strings.*;
 
 public class StmtBlock extends Stmt {
