@@ -1,6 +1,6 @@
 package codeGen;
 
-import models.statements.StmtBlock;
+import compilermodels.statements.StmtBlock;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -8,11 +8,11 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static utils.TestUtil.*;
 
-public class PrintCodeGen {
+class PrintCodeGen {
 
     private static final String CGEN_X =
             "li $a0 1\n" +
-            "sw $a0 0($fp)\n";
+            "sw $a0 4($fp)\n";
 
     private static final String CGEN_EXP =
             "li $a0 3\n" +
@@ -21,8 +21,6 @@ public class PrintCodeGen {
             "$t1 <- top\n" +
             "add $a0 $a0 $t1\n" +
             "pop\n";
-
-
 
     @BeforeEach
     void setUp() {
@@ -38,8 +36,7 @@ public class PrintCodeGen {
         String expected =
                 OpenScopeWithVars(1) +
                     CGEN_X +
-                    "lw $al 0($fp)\n" +
-                    "lw $a0 0($al)\n" +
+                    "lw $a0 4($fp)\n" +
                     "print\n" +
                 CloseScopeWithVars(1);
 

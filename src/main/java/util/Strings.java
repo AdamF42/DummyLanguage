@@ -1,8 +1,7 @@
 package util;
 
-import models.stentry.StEntry;
-
-import java.util.UUID;
+import compilermodels.stentry.StEntry;
+import org.apache.commons.lang3.RandomStringUtils;
 
 
 public class Strings {
@@ -26,6 +25,7 @@ public class Strings {
 	public static final String FP = "$fp";
 	public static final String AL = "$al";
 	public static final String RA = "$ra";
+	public static final String IP = "$ip";
 
 	public static final String EMPTY = "";
 	public static void printCheckingStatus(String status) {
@@ -122,12 +122,12 @@ public class Strings {
 	}
 
 	public static String GetFreshLabel(){
-		return UUID.randomUUID().toString();
+		return RandomStringUtils.randomAlphabetic(10);
 	}
 
 	public static String getVariableForCgen(int nl, StEntry idEntry){
 		StringBuilder result = new StringBuilder();
-		for (int i = 0; i<nl-idEntry.getNestinglevel();i++){
+		for (int i = 0; i < nl-idEntry.getNestinglevel() -1; i++){ //TODO: fatti meglio i conti...evita i magic numbers
 			result.append(loadW(AL, "0", AL));
 		}
 		return result.toString();

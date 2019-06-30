@@ -1,6 +1,6 @@
 package codeGen;
 
-import models.statements.StmtBlock;
+import compilermodels.statements.StmtBlock;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static utils.TestUtil.*;
 
-public class AssignmentCodeGen {
+class AssignmentCodeGen {
 
     @BeforeEach
     void setUp() {
@@ -25,10 +25,9 @@ public class AssignmentCodeGen {
         String expected =
                 OpenScopeWithVars(1) +
                     "li $a0 1\n" +
-                    "sw $a0 0($fp)\n" +
+                    "sw $a0 4($fp)\n" +
                     "li $a0 3\n" +
-                    "lw $al 0($fp)\n" +
-                    "sw $a0 0($al)\n" +
+                    "sw $a0 4($fp)\n" +
                 CloseScopeWithVars(1);
 
         String result = mainBlock.codeGeneration();
@@ -42,14 +41,13 @@ public class AssignmentCodeGen {
         String expected =
                 OpenScopeWithVars(1) +
                     "li $a0 1\n" +
-                    "sw $a0 0($fp)\n" +
+                    "sw $a0 4($fp)\n" +
                     OpenScopeWithVars(0) +
                         OpenScopeWithVars(0) +
                             "li $a0 3\n" +
                             "lw $al 0($fp)\n" +
                             "lw $al 0($al)\n" +
-                            "lw $al 0($al)\n" +
-                            "sw $a0 0($al)\n" +
+                            "sw $a0 4($al)\n" +
                         CloseScopeWithVars(0) +
                     CloseScopeWithVars(0) +
                 CloseScopeWithVars(1);
@@ -64,14 +62,13 @@ public class AssignmentCodeGen {
         String expected =
                 OpenScopeWithVars(1) +
                     "li $a0 0\n" +
-                    "sw $a0 0($fp)\n" +
+                    "sw $a0 4($fp)\n" +
                     OpenScopeWithVars(0) +
                         OpenScopeWithVars(0) +
                             "li $a0 1\n" +
                             "lw $al 0($fp)\n" +
                             "lw $al 0($al)\n" +
-                            "lw $al 0($al)\n" +
-                            "sw $a0 0($al)\n" +
+                            "sw $a0 4($al)\n" +
                         CloseScopeWithVars(0) +
                     CloseScopeWithVars(0) +
                 CloseScopeWithVars(1);
@@ -86,20 +83,18 @@ public class AssignmentCodeGen {
         String expected =
                 OpenScopeWithVars(2) +
                     "li $a0 1\n" +
-                    "sw $a0 0($fp)\n" +
-                    "li $a0 0\n" +
                     "sw $a0 4($fp)\n" +
+                    "li $a0 0\n" +
+                    "sw $a0 8($fp)\n" +
                     OpenScopeWithVars(0) +
                         OpenScopeWithVars(0) +
                             "lw $al 0($fp)\n" +
                             "lw $al 0($al)\n" +
-                            "lw $al 0($al)\n" +
-                            "lw $a0 0($al)\n" + // cgen(y)
+                            "lw $a0 4($al)\n" + // cgen(y)
 
                             "lw $al 0($fp)\n" +
                             "lw $al 0($al)\n" +
-                            "lw $al 0($al)\n" +
-                            "sw $a0 4($al)\n" + // cgen(x=y)
+                            "sw $a0 8($al)\n" + // cgen(x=y)
                         CloseScopeWithVars(0) +
                     CloseScopeWithVars(0) +
                 CloseScopeWithVars(2);

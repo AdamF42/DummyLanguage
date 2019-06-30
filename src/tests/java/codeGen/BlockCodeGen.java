@@ -1,6 +1,6 @@
 package codeGen;
 
-import models.statements.StmtBlock;
+import compilermodels.statements.StmtBlock;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static utils.TestUtil.*;
 
-public class BlockCodeGen {
+class BlockCodeGen {
     @BeforeEach
     void setUp() {
     }
@@ -19,7 +19,7 @@ public class BlockCodeGen {
 
     private static final String X_CGEN =
                 "li $a0 1\n" +
-                "sw $a0 0($fp)\n";
+                "sw $a0 4($fp)\n";
 
     private static final String Y_CGEN =
                 "li $a0 1\n" +
@@ -30,8 +30,9 @@ public class BlockCodeGen {
         StmtBlock mainBlock = GetAST("{ }");
         String expected =
                 "push $fp\n" +
-                "li $t1 0\n" +
+                "push $fp\n" +
                 "move $fp $sp\n" +
+                "pop\n" +
                 "$fp <- top\n" +
                 "pop\n";
 
@@ -41,7 +42,7 @@ public class BlockCodeGen {
 
     @Test
     void simpleBlockWithVarDec() {
-        StmtBlock mainBlock = GetAST("{ int x=1;}");
+        StmtBlock mainBlock = GetAST("{ int x = 1;}");
         String expected =
                 OpenScopeWithVars(1) +
                         X_CGEN +
@@ -57,7 +58,8 @@ public class BlockCodeGen {
         String expected =
                 OpenScopeWithVars(2) +
                     X_CGEN +
-                    Y_CGEN +
+                    "li $a0 1\n" +
+                    "sw $a0 8($fp)\n" +
                 CloseScopeWithVars(2);
 
         String result = mainBlock.codeGeneration();

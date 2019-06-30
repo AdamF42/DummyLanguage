@@ -2,7 +2,7 @@ package codeGen;
 
 import mockit.Mock;
 import mockit.MockUp;
-import models.statements.StmtBlock;
+import compilermodels.statements.StmtBlock;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,10 +13,10 @@ import java.util.HashMap;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static utils.TestUtil.*;
 
-public class IfThenElseCodeGen {
+class IfThenElseCodeGen {
 
-    private static final String X_DECLARATION = "li $a0 1\nsw $a0 0($fp)\n";
-    private static final String CGEN_X = "lw $al 0($fp)\nlw $a0 0($al)\n";
+    private static final String X_DECLARATION = "li $a0 1\nsw $a0 4($fp)\n";
+    private static final String CGEN_X = "lw $a0 4($fp)\n";
     private static final String CGEN_1 =  "li $a0 1\n";
 
     private static int label_count;
@@ -312,6 +312,4 @@ public class IfThenElseCodeGen {
         String result = mainBlock.codeGeneration();
         assertEquals(expected,result);
     }
-
-
 }

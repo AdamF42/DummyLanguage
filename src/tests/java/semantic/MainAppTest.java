@@ -1,8 +1,8 @@
 package semantic;
 
-import models.*;
-import models.statements.StmtBlock;
-import models.VisitorImpl;
+import compilermodels.*;
+import compilermodels.statements.StmtBlock;
+import compilermodels.VisitorImpl;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
