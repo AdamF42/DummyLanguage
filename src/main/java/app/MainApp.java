@@ -4,11 +4,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import models.*;
+import compilermodels.*;
 
 
-import models.statements.StmtBlock;
-import models.VisitorImpl;
+import compilermodels.statements.StmtBlock;
+import compilermodels.VisitorImpl;
 import org.antlr.v4.runtime.*;
 
 import parser.ComplexStaticAnalysisLexer;

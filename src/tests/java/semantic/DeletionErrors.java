@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static util.Strings.*;
 import static utils.TestUtil.*;
 
-public class DeletionErrors {
+class DeletionErrors {
     @BeforeEach
     void setUp() {
     }

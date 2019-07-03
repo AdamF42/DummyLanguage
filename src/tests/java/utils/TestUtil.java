@@ -1,14 +1,17 @@
 package utils;
 
-import models.Environment;
-import models.VisitorImpl;
-import models.statements.StmtBlock;
+import compilermodels.Environment;
+import compilermodels.VisitorImpl;
+import compilermodels.expressions.Exp;
+import compilermodels.statements.StmtBlock;
+import interpretermodels.Assembly;
+import interpretermodels.CVMVisitorImpl;
+import interpretermodels.InterpreterEnv;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.junit.jupiter.api.function.Executable;
-import parser.ComplexStaticAnalysisLexer;
-import parser.ComplexStaticAnalysisParser;
+import parser.*;
 import util.SemanticError;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,10 +23,10 @@ public class TestUtil {
     public static String OpenScopeWithVars(int numVariables){
         StringBuilder result = new StringBuilder();
         result.append(push(FP));
-        result.append(loadI(TMP,"0"));
         for (int i = 0; i < numVariables; i++) {
             result.append(push(TMP));
         }
+        result.append(push(FP));
         result.append(move(FP,SP));
         return result.toString();
     }
@@ -33,6 +36,7 @@ public class TestUtil {
         for (int i = 0; i < numVariables; i++) {
             result.append(pop());
         }
+        result.append(pop());
         result.append(assignTop(FP));
         result.append(pop());
         return result.toString();
@@ -51,6 +55,25 @@ public class TestUtil {
         assertEquals(0, errors.size());
         assertDoesNotThrow((Executable) mainBlock::typeCheck);
         return mainBlock;
+    }
+
+    public static List<Integer> GetExecutionPrintsForFile(String file, boolean shouldPrintCgen){
+        StmtBlock mainBlock = GetAST(file);
+        String result = mainBlock.codeGeneration();
+        if(shouldPrintCgen) {
+            System.out.println(result);
+        }
+        CharStream is = CharStreams.fromString(result);
+        CVMLexer lexer = new CVMLexer(is);
+        CommonTokenStream tokens = new CommonTokenStream(lexer);
+        CVMParser parser = new CVMParser(tokens);
+        CVMVisitorImpl visitor = new CVMVisitorImpl();
+        InterpreterEnv e = new InterpreterEnv();
+        Assembly assembly = visitor.visitAssembly(parser.assembly());
+        assembly.loadCode(e);
+        ExecuteVM vm = new ExecuteVM(e.code);
+        vm.cpu();
+        return vm.getPrintedResults();
     }
 
     public static ArrayList<SemanticError> GetSemanticsErrors(String string){

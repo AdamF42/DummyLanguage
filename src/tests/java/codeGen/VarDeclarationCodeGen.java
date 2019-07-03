@@ -3,7 +3,7 @@ package codeGen;
 
 import mockit.Mock;
 import mockit.MockUp;
-import models.statements.StmtBlock;
+import compilermodels.statements.StmtBlock;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,7 +29,7 @@ class VarDeclarationCodeGen {
         String expected =
                 OpenScopeWithVars(1) +
                     "li $a0 3\n" +
-                    "sw $a0 0($fp)\n" +
+                    "sw $a0 4($fp)\n" +
                 CloseScopeWithVars(1);
 
         String result = mainBlock.codeGeneration();
@@ -42,9 +42,9 @@ class VarDeclarationCodeGen {
         String expected =
                 OpenScopeWithVars(2) +
                     "li $a0 3\n" +
-                    "sw $a0 0($fp)\n" +
-                    "li $a0 5\n" +
                     "sw $a0 4($fp)\n" +
+                    "li $a0 5\n" +
+                    "sw $a0 8($fp)\n" +
                 CloseScopeWithVars(2);
 
         String result = mainBlock.codeGeneration();
@@ -62,7 +62,7 @@ class VarDeclarationCodeGen {
                     "$t1 <- top\n" +
                     "add $a0 $a0 $t1\n" +
                     "pop\n" +
-                    "sw $a0 0($fp)\n" +
+                    "sw $a0 4($fp)\n" +
                 CloseScopeWithVars(1);
 
         String result = mainBlock.codeGeneration();
@@ -71,17 +71,16 @@ class VarDeclarationCodeGen {
 
     @Test
     void varDecWithVariableAndNumberAdd() {
-        StmtBlock mainBlock = GetAST("{ int x = x + 1; }");
+        StmtBlock mainBlock = GetAST("{ int x = x + 1; }"); //TODO: se in x ci metto un valore random, che succede??? Impedisci la dichiarazione ricorsiva. "Variable x might not be initialized"
         String expected =
                 OpenScopeWithVars(1) +
-                    "lw $al 0($fp)\n" +
-                    "lw $a0 0($al)\n" +
+                    "lw $a0 4($fp)\n" +
                     "push $a0\n" +
                     "li $a0 1\n" +
                     "$t1 <- top\n" +
                     "add $a0 $a0 $t1\n" +
                     "pop\n" +
-                    "sw $a0 0($fp)\n" +
+                    "sw $a0 4($fp)\n" +
                 CloseScopeWithVars(1);
 
         String result = mainBlock.codeGeneration();
@@ -99,7 +98,7 @@ class VarDeclarationCodeGen {
                 "$t1 <- top\n" +
                 "sub $a0 $a0 $t1\n" +
                 "pop\n" +
-                "sw $a0 0($fp)\n" +
+                "sw $a0 4($fp)\n" +
                 CloseScopeWithVars(1);
 
         String result = mainBlock.codeGeneration();
@@ -108,17 +107,16 @@ class VarDeclarationCodeGen {
 
     @Test
     void varDecWithVariableAndNumberSub() {
-        StmtBlock mainBlock = GetAST("{\n int x = x - 1;\n }");
+        StmtBlock mainBlock = GetAST("{\n int x = x - 1;\n }"); //TODO: stesso problema di prima
         String expected =
                 OpenScopeWithVars(1) +
-                    "lw $al 0($fp)\n" +
-                    "lw $a0 0($al)\n" +
+                    "lw $a0 4($fp)\n" +
                     "push $a0\n" +
                     "li $a0 1\n" +
                     "$t1 <- top\n" +
                     "sub $a0 $a0 $t1\n" +
                     "pop\n" +
-                    "sw $a0 0($fp)\n" +
+                    "sw $a0 4($fp)\n" +
                 CloseScopeWithVars(1);
 
         String result = mainBlock.codeGeneration();
@@ -127,17 +125,16 @@ class VarDeclarationCodeGen {
 
     @Test
     void varDecWithVariableAndNumberMult() {
-        StmtBlock mainBlock = GetAST("{\n int x = x * 2;\n }");
+        StmtBlock mainBlock = GetAST("{\n int x = x * 2;\n }"); //TODO: stesso problema di prima
         String expected =
                 OpenScopeWithVars(1) +
-                    "lw $al 0($fp)\n" +
-                    "lw $a0 0($al)\n" +
+                    "lw $a0 4($fp)\n" +
                     "push $a0\n" +
                     "li $a0 2\n" +
                     "$t1 <- top\n" +
                     "mult $a0 $a0 $t1\n" +
                     "pop\n" +
-                    "sw $a0 0($fp)\n" +
+                    "sw $a0 4($fp)\n" +
                 CloseScopeWithVars(1);
 
         String result = mainBlock.codeGeneration();
@@ -149,14 +146,13 @@ class VarDeclarationCodeGen {
         StmtBlock mainBlock = GetAST("{\n int x = x / 2;\n }");
         String expected =
                 OpenScopeWithVars(1) +
-                    "lw $al 0($fp)\n" +
-                    "lw $a0 0($al)\n" +
+                    "lw $a0 4($fp)\n" +
                     "push $a0\n" +
                     "li $a0 2\n" +
                     "$t1 <- top\n" +
                     "div $a0 $a0 $t1\n" +
                     "pop\n" +
-                    "sw $a0 0($fp)\n" +
+                    "sw $a0 4($fp)\n" +
                 CloseScopeWithVars(1);
 
         String result = mainBlock.codeGeneration();
@@ -169,17 +165,15 @@ class VarDeclarationCodeGen {
         String expected =
                 OpenScopeWithVars(2) +
                     "li $a0 6\n" +
-                    "sw $a0 0($fp)\n" +
-                    "lw $al 0($fp)\n" +
-                    "lw $a0 0($al)\n" +
+                    "sw $a0 4($fp)\n" +
+                    "lw $a0 4($fp)\n" +
                     "push $a0\n" +
                     "li $a0 1\n" +
                     "$t1 <- top\n" +
                     "add $a0 $a0 $t1\n" +
                     "pop\n" +
                     "push $a0\n" +
-                    "lw $al 0($fp)\n" +
-                    "lw $a0 4($al)\n" +
+                    "lw $a0 8($fp)\n" +
                     "push $a0\n" +
                     "li $a0 1\n" +
                     "$t1 <- top\n" +
@@ -193,7 +187,7 @@ class VarDeclarationCodeGen {
                     "$t1 <- top\n" +
                     "mult $a0 $a0 $t1\n" +
                     "pop\n" +
-                    "sw $a0 4($fp)\n" +
+                    "sw $a0 8($fp)\n" +
                 CloseScopeWithVars(2);
 
         String result = mainBlock.codeGeneration();
@@ -206,7 +200,7 @@ class VarDeclarationCodeGen {
         String expected =
                 OpenScopeWithVars(1) +
                     "li $a0 1\n" +
-                    "sw $a0 0($fp)\n" +
+                    "sw $a0 4($fp)\n" +
                 CloseScopeWithVars(1);
 
         String result = mainBlock.codeGeneration();
@@ -232,7 +226,7 @@ class VarDeclarationCodeGen {
                     "beq $a0 $t1 end\n" +
                     "li $a0 0\n" +
                     "end:\n" +
-                    "sw $a0 0($fp)\n" +
+                    "sw $a0 4($fp)\n" +
                 CloseScopeWithVars(1);
         String result = mainBlock.codeGeneration();
         assertEquals(expected,result);
@@ -256,7 +250,7 @@ class VarDeclarationCodeGen {
                     "beq $a0 $t1 end\n" +
                     "li $a0 0\n" +
                     "end:\n" +
-                    "sw $a0 0($fp)\n" +
+                    "sw $a0 4($fp)\n" +
                 CloseScopeWithVars(1);
 
         String result = mainBlock.codeGeneration();
@@ -289,7 +283,7 @@ class VarDeclarationCodeGen {
                 "li $a0 0\n" +
                 "end:\n" +
                 "end:\n" +
-                "sw $a0 0($fp)\n" +
+                "sw $a0 4($fp)\n" +
                 CloseScopeWithVars(1);
 
         String result = mainBlock.codeGeneration();
