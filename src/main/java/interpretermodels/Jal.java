@@ -1,5 +1,7 @@
 package interpretermodels;
 
+import parser.CVMParser;
+
 public class Jal extends ElementBase {
 
     private final String label;
@@ -10,6 +12,7 @@ public class Jal extends ElementBase {
 
     @Override
     public void loadCode(InterpreterEnv env) {
+        env.code[env.i++] = CVMParser.JAL;
         env.getLabelRef().put(env.i++, label);
     }
 }

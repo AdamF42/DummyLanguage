@@ -43,8 +43,8 @@ class FunctionCodeGen {
             }
         };
 
-        StmtBlock mainBlock = GetAST(
-                "{" +
+        StmtBlock mainBlock = GetAST("" +
+                    "{" +
                     "    f(int x){" +
                     "    }" +
                     "}");

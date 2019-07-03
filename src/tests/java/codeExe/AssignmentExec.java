@@ -14,7 +14,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static utils.TestUtil.GetExecutionPrintsForFile;
 
-class AssignmentWithSimpleExp {
+class AssignmentExec {
 
     private static int label_count;
 
@@ -180,5 +180,4 @@ class AssignmentWithSimpleExp {
 
         assertEquals(expected,actual);
     }
-
 }
