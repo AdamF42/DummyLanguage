@@ -1,8 +1,8 @@
 package util;
 
-import compilermodels.stentry.FunStEntry;
-import compilermodels.stentry.StEntry;
-import compilermodels.stentry.VarStEntry;
+import models.compiler.stentry.FunStEntry;
+import models.compiler.stentry.StEntry;
+import models.compiler.stentry.VarStEntry;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;

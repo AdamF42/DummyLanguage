@@ -85,7 +85,7 @@ class IfThenElseExecution {
 
         List<Integer> actual = GetExecutionPrintsForFile("{ int x = 42; if( x > 0 ) then{ print x; } else { print x+8; } }", false);
         List<Integer> expected = new ArrayList<>();
-        expected.add(50);
+        expected.add(42);
 
         assertEquals(expected,actual);
     }

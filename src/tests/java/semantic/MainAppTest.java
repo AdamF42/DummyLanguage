@@ -1,8 +1,8 @@
 package semantic;
 
-import compilermodels.*;
-import compilermodels.statements.StmtBlock;
-import compilermodels.VisitorImpl;
+import models.compiler.*;
+import models.compiler.statements.StmtBlock;
+import models.compiler.VisitorImpl;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -21,6 +21,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+// TODO: rewrite all test class in order to accomplish tests conventions
 class MainAppTest {
 
     private String baseTestsRoot = "src/tests/samples/";

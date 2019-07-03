@@ -1,6 +1,6 @@
 package codeGen;
 
-import compilermodels.statements.StmtBlock;
+import models.compiler.statements.StmtBlock;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,6 +25,10 @@ class BlockCodeGen {
                 "li $a0 1\n" +
                 "sw $a0 4($fp)\n";
 
+    private static final String Y_CGEN2 =
+            "li $a0 1\n" +
+            "sw $a0 8($fp)\n";
+
     @Test
     void simpleBlock() {
         StmtBlock mainBlock = GetAST("{ }");
@@ -32,6 +36,7 @@ class BlockCodeGen {
                 "push $fp\n" +
                 "push $fp\n" +
                 "move $fp $sp\n" +
+                "sw $fp 0($fp)\n" +
                 "pop\n" +
                 "$fp <- top\n" +
                 "pop\n";
@@ -44,7 +49,7 @@ class BlockCodeGen {
     void simpleBlockWithVarDec() {
         StmtBlock mainBlock = GetAST("{ int x = 1;}");
         String expected =
-                OpenScopeWithVars(1) +
+                OpenScopeWithVars(1,true) +
                         X_CGEN +
                 CloseScopeWithVars(1);
 
@@ -56,7 +61,7 @@ class BlockCodeGen {
     void simpleBlockWithVarDecs() {
         StmtBlock mainBlock = GetAST("{ int x=1; int y=1;}");
         String expected =
-                OpenScopeWithVars(2) +
+                OpenScopeWithVars(2,true) +
                     X_CGEN +
                     "li $a0 1\n" +
                     "sw $a0 8($fp)\n" +
@@ -70,8 +75,8 @@ class BlockCodeGen {
     void nestedBlockWithVarDec() {
         StmtBlock mainBlock = GetAST("{ {int x=1;} }");
         String expected =
-                OpenScopeWithVars(0) +
-                    OpenScopeWithVars(1) +
+                OpenScopeWithVars(0,true) +
+                    OpenScopeWithVars(1, false) +
                     X_CGEN +
                     CloseScopeWithVars(1) +
                 CloseScopeWithVars(0);
@@ -84,10 +89,10 @@ class BlockCodeGen {
     void nestedBlockWithVarDecs() {
         StmtBlock mainBlock = GetAST("{ {int x=1; int y=1;} }");
         String expected =
-                OpenScopeWithVars(0) +
-                    OpenScopeWithVars(2) +
+                OpenScopeWithVars(0,true) +
+                    OpenScopeWithVars(2,false) +
                         X_CGEN +
-                        Y_CGEN +
+                        Y_CGEN2 +
                     CloseScopeWithVars(2) +
                 CloseScopeWithVars(0);
 
@@ -99,9 +104,9 @@ class BlockCodeGen {
     void nestedBlockWithVarDecInOuterBlock() {
         StmtBlock mainBlock = GetAST("{ int x=1; {int y=1;}}");
         String expected =
-                OpenScopeWithVars(1) +
+                OpenScopeWithVars(1,true) +
                     X_CGEN +
-                    OpenScopeWithVars(1) +
+                    OpenScopeWithVars(1,false) +
                         Y_CGEN +
                     CloseScopeWithVars(1) +
                 CloseScopeWithVars(1);

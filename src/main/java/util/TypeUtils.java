@@ -1,11 +1,11 @@
 package util;
 
-import compilermodels.*;
-import compilermodels.expressions.Exp;
-import compilermodels.types.Type;
-import compilermodels.types.TypeReferenceable;
-import compilermodels.values.Value;
-import compilermodels.values.ValueId;
+import models.compiler.*;
+import models.compiler.expressions.Exp;
+import models.compiler.types.Type;
+import models.compiler.types.TypeReferenceable;
+import models.compiler.values.Value;
+import models.compiler.values.ValueId;
 
 public class TypeUtils {
 
