@@ -50,8 +50,9 @@ public class StmtFunDeclaration extends Stmt {
 
     @Override
     public String codeGeneration() {
-
-        return this.f_label + ":\n" +
+        String end = GetFreshLabel();
+        return  b(end) +
+                this.f_label + ":\n" +
                 move(FP, SP) +
                 push(RA) +
                 body.codeGenerationForFunDec() +
@@ -59,7 +60,8 @@ public class StmtFunDeclaration extends Stmt {
                 addi(SP, SP, String.valueOf(params.size() * 4)) +
                 assignTop(FP) +
                 pop() +
-                jr(RA);
+                jr(RA) +
+                end+":\n";
     }
 
     private List<SemanticError> checkFunIdSemantics(Environment e) {

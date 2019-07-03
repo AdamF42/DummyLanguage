@@ -16,7 +16,6 @@ public class BranchLess extends ElementBase {
         this.label = label;
     }
 
-
     @Override
     public void loadCode(InterpreterEnv env) {
         env.code[env.i++] = CVMParser.BRANCHLESS;

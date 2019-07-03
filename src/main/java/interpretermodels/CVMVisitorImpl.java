@@ -107,17 +107,17 @@ public class CVMVisitorImpl extends CVMBaseVisitor {
 
     @Override
     public ElementBase visitBlre(CVMParser.BlreContext ctx) {
-        return new BranchLess(ctx.REGISTER(0).getText(), ctx.REGISTER(1).getText(), ctx.LABEL().getText());
+        return new BranchLessEq(ctx.REGISTER(0).getText(), ctx.REGISTER(1).getText(), ctx.LABEL().getText());
     }
 
     @Override
     public ElementBase visitBgr(CVMParser.BgrContext ctx) {
-        return new BranchLess(ctx.REGISTER(0).getText(), ctx.REGISTER(1).getText(), ctx.LABEL().getText());
+        return new BranchGreater(ctx.REGISTER(0).getText(), ctx.REGISTER(1).getText(), ctx.LABEL().getText());
     }
 
     @Override
     public ElementBase visitBgre(CVMParser.BgreContext ctx) {
-        return new BranchLess(ctx.REGISTER(0).getText(), ctx.REGISTER(1).getText(), ctx.LABEL().getText());
+        return new BranchGreaterEq(ctx.REGISTER(0).getText(), ctx.REGISTER(1).getText(), ctx.LABEL().getText());
     }
 
     @Override

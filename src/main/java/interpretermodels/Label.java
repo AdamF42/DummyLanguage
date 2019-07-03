@@ -12,7 +12,5 @@ public class Label extends ElementBase {
     @Override
     public void loadCode(InterpreterEnv env) {
         env.getLabelAdd().put(label,env.i);
-       // env.code[env.i++] = CVMParser.LABEL;
-
     }
 }

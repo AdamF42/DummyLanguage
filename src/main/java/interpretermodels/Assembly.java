@@ -2,6 +2,7 @@ package interpretermodels;
 
 import parser.CVMParser;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class Assembly extends ElementBase{
@@ -18,12 +19,11 @@ public class Assembly extends ElementBase{
         for (ElementBase child: this.children) {
             child.loadCode(env);
         }
-
+//        System.out.print(Arrays.toString(env.code) + "\n");
         for (Integer refAdd: env.getLabelRef().keySet()) {
-            //String test = env.getLabelRef().get(refAdd);
-            //Integer test1 = env.getLabelAdd().get(test);
             env.code[refAdd] = env.getLabelAdd().get(env.getLabelRef().get(refAdd));
         }
+//        System.out.print(Arrays.toString(env.code) + "\n");
 
         env.code[env.i++] = CVMParser.HALT;
     }

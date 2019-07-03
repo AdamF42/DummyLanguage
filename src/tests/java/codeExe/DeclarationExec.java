@@ -7,14 +7,13 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import util.Strings;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static utils.TestUtil.GetExecutionPrintsForFile;
 
-class DeclarationWithSimpleExp {
+class DeclarationExec {
     private static int label_count;
 
     @BeforeEach
