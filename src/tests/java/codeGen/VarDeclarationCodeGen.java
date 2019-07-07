@@ -71,9 +71,11 @@ class VarDeclarationCodeGen {
 
     @Test
     void varDecWithVariableAndNumberAdd() {
-        StmtBlock mainBlock = GetAST("{ int x = x + 1; }"); //TODO: se in x ci metto un valore random, che succede??? Impedisci la dichiarazione ricorsiva. "Variable x might not be initialized"
+        StmtBlock mainBlock = GetAST("{ int x = 0; x = x + 1; }"); //TODO: se in x ci metto un valore random, che succede??? Impedisci la dichiarazione ricorsiva. "Variable x might not be initialized"
         String expected =
                 OpenScopeWithVars(1) +
+                    "li $a0 0\n" +
+                    "sw $a0 4($fp)\n" +
                     "lw $a0 4($fp)\n" +
                     "push $a0\n" +
                     "li $a0 1\n" +
@@ -107,9 +109,11 @@ class VarDeclarationCodeGen {
 
     @Test
     void varDecWithVariableAndNumberSub() {
-        StmtBlock mainBlock = GetAST("{\n int x = x - 1;\n }"); //TODO: stesso problema di prima
+        StmtBlock mainBlock = GetAST("{int x = 0; x = x - 1; }"); //TODO: stesso problema di prima
         String expected =
                 OpenScopeWithVars(1) +
+                    "li $a0 0\n" +
+                    "sw $a0 4($fp)\n" +
                     "lw $a0 4($fp)\n" +
                     "push $a0\n" +
                     "li $a0 1\n" +
@@ -125,9 +129,11 @@ class VarDeclarationCodeGen {
 
     @Test
     void varDecWithVariableAndNumberMult() {
-        StmtBlock mainBlock = GetAST("{\n int x = x * 2;\n }"); //TODO: stesso problema di prima
+        StmtBlock mainBlock = GetAST("{int x = 0; x = x * 2; }"); //TODO: stesso problema di prima
         String expected =
                 OpenScopeWithVars(1) +
+                    "li $a0 0\n" +
+                    "sw $a0 4($fp)\n" +
                     "lw $a0 4($fp)\n" +
                     "push $a0\n" +
                     "li $a0 2\n" +
@@ -143,9 +149,11 @@ class VarDeclarationCodeGen {
 
     @Test
     void varDecWithVariableAndNumberDiv() {
-        StmtBlock mainBlock = GetAST("{\n int x = x / 2;\n }");
+        StmtBlock mainBlock = GetAST("{ int x = 0; x = x / 2; }");
         String expected =
                 OpenScopeWithVars(1) +
+                    "li $a0 0\n" +
+                    "sw $a0 4($fp)\n" +
                     "lw $a0 4($fp)\n" +
                     "push $a0\n" +
                     "li $a0 2\n" +
@@ -161,11 +169,13 @@ class VarDeclarationCodeGen {
 
     @Test
     void varDecsWithComplexExp() {
-        StmtBlock mainBlock = GetAST("{ int y = 6; int x = (y+1)*((x-1) / 2); }");
+        StmtBlock mainBlock = GetAST("{ int y = 6; int x = 0; x = (y+1)*((x-1) / 2); }");
         String expected =
                 OpenScopeWithVars(2) +
                     "li $a0 6\n" +
                     "sw $a0 4($fp)\n" +
+                    "li $a0 0\n" +
+                    "sw $a0 8($fp)\n" +
                     "lw $a0 4($fp)\n" +
                     "push $a0\n" +
                     "li $a0 1\n" +
