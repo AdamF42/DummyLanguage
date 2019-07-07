@@ -127,7 +127,7 @@ public class Environment {
 		this.declaredVariable = id;
 	}
 
-	public boolean getIsInsideVarDeclaration() {
+	public boolean isInsideVarDeclaration() {
 		return this.isInsideVarDeclaration;
 	}
 
