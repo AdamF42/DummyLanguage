@@ -15,7 +15,9 @@ public class Environment {
 	private boolean insideFunction = false;
 	private int nestingLevel = -1;
 	private static final int BASE_OFFSET = 0;
+	private String declaredVariable;
 
+	public boolean isInsideVarDeclaration = false;
 
 	public boolean isInsideFunctionDeclaration() {
 		return insideFunction;
@@ -118,4 +120,11 @@ public class Environment {
 		return topOffSet;
 	}
 
+	public String getDeclaredVariable() {
+		return this.declaredVariable;
+	}
+
+	public void setDeclaredVariable(String id) {
+		this.declaredVariable = id;
+	}
 }

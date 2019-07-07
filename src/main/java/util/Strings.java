@@ -8,6 +8,7 @@ public class Strings {
 
 	public static final String ERROR_IDENTIFIER_DOESNT_EXIST = "Identifier doesn't exist. Identifier name: ";
 	public static final String ERROR_VARIABLE_DOESNT_EXIST = "Variable doesn't exist. Variable name: ";
+	public static final String ERROR_VARIABLE_NOT_INITIALIZED = "Variable might not be initialized: ";
 	public static final String ERROR_VARIABLE_HAS_BEEN_DELETED = "Variable has been deleted. Variable name: ";
 	public static final String ERROR_FUNCTION_HAS_BEEN_DELETED = "Function has been deleted. Function name: ";
 	public static final String ERROR_ALREADY_DECLARED_IDENTIFIER = "Identifier already declared. Identifier name: ";
