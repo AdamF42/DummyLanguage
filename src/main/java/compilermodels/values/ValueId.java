@@ -38,7 +38,7 @@ public class ValueId extends Value {
             res.add(new SemanticError(Strings.ERROR_VARIABLE_DOESNT_EXIST + this.getVal()));
         } else if (e.getVariableValue(this.getVal()).isDeleted()){
             res.add(new SemanticError(Strings.ERROR_VARIABLE_HAS_BEEN_DELETED + this.getVal())); //TODO rifattorizza i controlli semantici
-        } else if (e.isInsideVarDeclaration) {
+        } else if (e.getIsInsideVarDeclaration()) {
             if (e.getDeclaredVariable().equals(this.getId()))
                 res.add(new SemanticError(ERROR_VARIABLE_NOT_INITIALIZED + this.getVal()));
         } else {
