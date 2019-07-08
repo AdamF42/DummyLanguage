@@ -54,7 +54,10 @@ public class StmtVarDeclaration extends Stmt {
 
         this.offset = e.incrementOffset();
         e.addVariable(id, new VarStEntry(e.getNestingLevel(), offset, type, id));
+        e.setIsInsideVarDeclaration(true);
+        e.setDeclaredVariable(id);
         List<SemanticError> result = new ArrayList<>(exp.checkSemantics(e));
+        e.setIsInsideVarDeclaration(false);
         this.addrwAccess(e.getVariableValueLocal(id));
         this.addAllrwAccesses(exp.getRwAccesses());
 
