@@ -1,6 +1,6 @@
 package util;
 
-import compilermodels.stentry.StEntry;
+import models.compiler.stentry.StEntry;
 import org.apache.commons.lang3.RandomStringUtils;
 
 
@@ -128,7 +128,15 @@ public class Strings {
 
 	public static String getVariableForCgen(int nl, StEntry idEntry){
 		StringBuilder result = new StringBuilder();
-		for (int i = 0; i < nl-idEntry.getNestinglevel() -1; i++){ //TODO: fatti meglio i conti...evita i magic numbers
+		for (int i = 1; i < nl-idEntry.getNestinglevel(); i++){ //TODO: fatti meglio i conti...evita i magic numbers
+			result.append(loadW(AL, "0", AL));
+		}
+		return result.toString();
+	}
+
+	public static String getAccessLinkForCgen(int nl, StEntry idEntry){
+		StringBuilder result = new StringBuilder();
+		for (int i = 1; i < nl-idEntry.getNestinglevel()-1; i++){ //TODO: fatti meglio i conti...evita i magic numbers
 			result.append(loadW(AL, "0", AL));
 		}
 		return result.toString();

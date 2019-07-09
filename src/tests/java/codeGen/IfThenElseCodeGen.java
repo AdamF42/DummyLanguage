@@ -2,7 +2,7 @@ package codeGen;
 
 import mockit.Mock;
 import mockit.MockUp;
-import compilermodels.statements.StmtBlock;
+import models.compiler.statements.StmtBlock;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -49,7 +49,7 @@ class IfThenElseCodeGen {
 
         StmtBlock mainBlock = GetAST("{ int x = 1; if( x==1 ) then{ } else{ } }");
         String expected =
-                OpenScopeWithVars(1) +
+                OpenScopeWithVars(1, true) +
                     X_DECLARATION +
                     CGEN_X +
                     "push $a0\n" +
@@ -64,11 +64,11 @@ class IfThenElseCodeGen {
                     "condition_end:\n" +
                     "li $t1 0\n" +
                     "beq $a0 $t1 elseBranch\n" +
-                    OpenScopeWithVars(0) +
+                    OpenScopeWithVars(0, false) +
                     CloseScopeWithVars(0) +
                     "b ifThenElse_end\n" +
                     "elseBranch:\n" +
-                    OpenScopeWithVars(0) +
+                    OpenScopeWithVars(0, false) +
                     CloseScopeWithVars(0) +
                     "ifThenElse_end:\n" +
                 CloseScopeWithVars(1);
@@ -96,7 +96,7 @@ class IfThenElseCodeGen {
 
         StmtBlock mainBlock = GetAST("{ int x = 1; if( x!=1 ) then{ } else{ } }");
         String expected =
-                OpenScopeWithVars(1) +
+                OpenScopeWithVars(1, true) +
                     X_DECLARATION +
                     CGEN_X +
                     "push $a0\n" +
@@ -111,11 +111,11 @@ class IfThenElseCodeGen {
                     "condition_end:\n" +
                     "li $t1 0\n" +
                     "beq $a0 $t1 elseBranch\n" +
-                    OpenScopeWithVars(0) +
+                    OpenScopeWithVars(0, false) +
                     CloseScopeWithVars(0) +
                     "b ifThenElse_end\n" +
                     "elseBranch:\n" +
-                    OpenScopeWithVars(0) +
+                    OpenScopeWithVars(0, false) +
                     CloseScopeWithVars(0) +
                     "ifThenElse_end:\n" +
                 CloseScopeWithVars(1);
@@ -144,7 +144,7 @@ class IfThenElseCodeGen {
 
         StmtBlock mainBlock = GetAST("{ int x = 1; if(x>1) then{ } else{ }}");
         String expected =
-                OpenScopeWithVars(1) +
+                OpenScopeWithVars(1, true) +
                     X_DECLARATION +
                     CGEN_X +
                     "push $a0\n" +
@@ -159,11 +159,11 @@ class IfThenElseCodeGen {
                     "condition_end:\n" +
                     "li $t1 0\n" +
                     "beq $a0 $t1 elseBranch\n" +
-                    OpenScopeWithVars(0) +
+                    OpenScopeWithVars(0, false) +
                     CloseScopeWithVars(0) +
                     "b ifThenElse_end\n" +
                     "elseBranch:\n" +
-                    OpenScopeWithVars(0) +
+                    OpenScopeWithVars(0, false) +
                     CloseScopeWithVars(0) +
                     "ifThenElse_end:\n" +
                 CloseScopeWithVars(1);
@@ -191,7 +191,7 @@ class IfThenElseCodeGen {
 
         StmtBlock mainBlock = GetAST("{ int x = 1; if(x>=1) then{ } else{ }}");
         String expected =
-                OpenScopeWithVars(1) +
+                OpenScopeWithVars(1, true) +
                     X_DECLARATION +
                     CGEN_X +
                     "push $a0\n" +
@@ -206,11 +206,11 @@ class IfThenElseCodeGen {
                     "condition_end:\n" +
                     "li $t1 0\n" +
                     "beq $a0 $t1 elseBranch\n" +
-                    OpenScopeWithVars(0) +
+                    OpenScopeWithVars(0, false) +
                     CloseScopeWithVars(0) +
                     "b ifThenElse_end\n" +
                     "elseBranch:\n" +
-                    OpenScopeWithVars(0) +
+                    OpenScopeWithVars(0, false) +
                     CloseScopeWithVars(0) +
                     "ifThenElse_end:\n" +
                 CloseScopeWithVars(1);
@@ -238,7 +238,7 @@ class IfThenElseCodeGen {
 
         StmtBlock mainBlock = GetAST("{ int x = 1; if(x<1) then{ } else{ }}");
         String expected =
-                OpenScopeWithVars(1) +
+                OpenScopeWithVars(1, true) +
                     X_DECLARATION +
                     CGEN_X +
                     "push $a0\n" +
@@ -253,11 +253,11 @@ class IfThenElseCodeGen {
                     "condition_end:\n" +
                     "li $t1 0\n" +
                     "beq $a0 $t1 elseBranch\n" +
-                    OpenScopeWithVars(0) +
+                    OpenScopeWithVars(0, false) +
                     CloseScopeWithVars(0) +
                     "b ifThenElse_end\n" +
                     "elseBranch:\n" +
-                    OpenScopeWithVars(0) +
+                    OpenScopeWithVars(0, false) +
                     CloseScopeWithVars(0) +
                     "ifThenElse_end:\n" +
                 CloseScopeWithVars(1);
@@ -285,7 +285,7 @@ class IfThenElseCodeGen {
 
         StmtBlock mainBlock = GetAST("{ int x = 1; if(x<=1) then{ } else{ }}");
         String expected =
-                OpenScopeWithVars(1) +
+                OpenScopeWithVars(1, true) +
                     X_DECLARATION +
                     CGEN_X +
                     "push $a0\n" +
@@ -300,11 +300,11 @@ class IfThenElseCodeGen {
                     "condition_end:\n" +
                     "li $t1 0\n" +
                     "beq $a0 $t1 elseBranch\n" +
-                    OpenScopeWithVars(0) +
+                    OpenScopeWithVars(0, false) +
                     CloseScopeWithVars(0) +
                     "b ifThenElse_end\n" +
                     "elseBranch:\n" +
-                    OpenScopeWithVars(0) +
+                    OpenScopeWithVars(0, false) +
                     CloseScopeWithVars(0) +
                     "ifThenElse_end:\n" +
                 CloseScopeWithVars(1);

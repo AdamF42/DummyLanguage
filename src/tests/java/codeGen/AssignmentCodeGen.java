@@ -1,6 +1,6 @@
 package codeGen;
 
-import compilermodels.statements.StmtBlock;
+import models.compiler.statements.StmtBlock;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,7 +23,7 @@ class AssignmentCodeGen {
     void assignmentInTheSameScope() {
         StmtBlock mainBlock = GetAST("{ int x = 1; x = 3; }");
         String expected =
-                OpenScopeWithVars(1) +
+                OpenScopeWithVars(1,true) +
                     "li $a0 1\n" +
                     "sw $a0 4($fp)\n" +
                     "li $a0 3\n" +
@@ -39,11 +39,11 @@ class AssignmentCodeGen {
     void assignmentInNestedScopeWithValueInt() {
         StmtBlock mainBlock = GetAST("{\n int x = 1; {{x = 3;\n }}}");
         String expected =
-                OpenScopeWithVars(1) +
+                OpenScopeWithVars(1,true) +
                     "li $a0 1\n" +
                     "sw $a0 4($fp)\n" +
-                    OpenScopeWithVars(0) +
-                        OpenScopeWithVars(0) +
+                    OpenScopeWithVars(0,false) +
+                        OpenScopeWithVars(0,false) +
                             "li $a0 3\n" +
                             "lw $al 0($fp)\n" +
                             "lw $al 0($al)\n" +
@@ -60,11 +60,11 @@ class AssignmentCodeGen {
     void assignmentInNestedScopeWithValueBool() {
         StmtBlock mainBlock = GetAST("{\n bool x = false; {{x = true;\n }}}");
         String expected =
-                OpenScopeWithVars(1) +
+                OpenScopeWithVars(1,true) +
                     "li $a0 0\n" +
                     "sw $a0 4($fp)\n" +
-                    OpenScopeWithVars(0) +
-                        OpenScopeWithVars(0) +
+                    OpenScopeWithVars(0,false) +
+                        OpenScopeWithVars(0,false) +
                             "li $a0 1\n" +
                             "lw $al 0($fp)\n" +
                             "lw $al 0($al)\n" +
@@ -81,13 +81,13 @@ class AssignmentCodeGen {
     void assignmentInNestedScopeWithValueId() {
         StmtBlock mainBlock = GetAST("{\n int y = 1; int x = 0; {{x = y;\n }}}");
         String expected =
-                OpenScopeWithVars(2) +
+                OpenScopeWithVars(2,true) +
                     "li $a0 1\n" +
                     "sw $a0 4($fp)\n" +
                     "li $a0 0\n" +
                     "sw $a0 8($fp)\n" +
-                    OpenScopeWithVars(0) +
-                        OpenScopeWithVars(0) +
+                    OpenScopeWithVars(0,false) +
+                        OpenScopeWithVars(0,false) +
                             "lw $al 0($fp)\n" +
                             "lw $al 0($al)\n" +
                             "lw $a0 4($al)\n" + // cgen(y)

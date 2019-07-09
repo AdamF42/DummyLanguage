@@ -44,20 +44,20 @@ class DeclarationExec {
 
         List<Integer> actual = GetExecutionPrintsForFile("" +
                 "{ " +
-                "   int x = 3 + 3; " +
+                "   int x = 3 + 2; " +
                 "   print x;" +
-                "   int y = 3 - 3;" +
+                "   int y = 3 - 2;" +
                 "   print y;" +
                 "   int z = 3 * 3; " +
                 "   print z;" +
-                "   int w = 3 / 3; " +
+                "   int w = 6 / 3; " +
                 "   print w;" +
                 "}", false);
         List<Integer> expected = new ArrayList<>();
-        expected.add(6);
-        expected.add(0);
-        expected.add(9);
+        expected.add(5);
         expected.add(1);
+        expected.add(9);
+        expected.add(2);
 
         assertEquals(expected,actual);
     }

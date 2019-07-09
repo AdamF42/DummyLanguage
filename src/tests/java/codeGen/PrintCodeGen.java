@@ -1,6 +1,6 @@
 package codeGen;
 
-import compilermodels.statements.StmtBlock;
+import models.compiler.statements.StmtBlock;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,7 +34,7 @@ class PrintCodeGen {
     void printVariable() {
         StmtBlock mainBlock = GetAST("{\n int x = 1; print x;\n  }");
         String expected =
-                OpenScopeWithVars(1) +
+                OpenScopeWithVars(1, true) +
                     CGEN_X +
                     "lw $a0 4($fp)\n" +
                     "print\n" +
@@ -48,7 +48,7 @@ class PrintCodeGen {
     void printExpression() {
         StmtBlock mainBlock = GetAST("{\n print 3+1;\n  }");
         String expected =
-                OpenScopeWithVars(0) +
+                OpenScopeWithVars(0, true) +
                     CGEN_EXP +
                     "print\n" +
                 CloseScopeWithVars(0);

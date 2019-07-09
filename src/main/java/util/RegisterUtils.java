@@ -1,7 +1,7 @@
 package util;
 
 import parser.CVMParser;
-import parser.ExecuteVM;
+import models.interpreter.ExecuteVM;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
@@ -16,6 +16,7 @@ public class RegisterUtils {
     private static final Function<ExecuteVM, Integer> FP_REGISTER_VALUE = ExecuteVM::getFp;
     private static final Function<ExecuteVM, Integer> AL_REGISTER_VALUE = ExecuteVM::getAl;
     private static final Function<ExecuteVM, Integer> RA_REGISTER_VALUE = ExecuteVM::getRa;
+    private static final Function<ExecuteVM, Integer> IP_REGISTER_VALUE = ExecuteVM::getIp;
 
     private static final BiFunction<ExecuteVM, Integer, Integer> ACC_REGISTER_VALUE_SET = ExecuteVM::setA0;
     private static final BiFunction<ExecuteVM, Integer, Integer> TMP_REGISTER_VALUE_SET = ExecuteVM::setT1;
@@ -23,6 +24,7 @@ public class RegisterUtils {
     private static final BiFunction<ExecuteVM, Integer, Integer> FP_REGISTER_VALUE_SET = ExecuteVM::setFp;
     private static final BiFunction<ExecuteVM, Integer, Integer> AL_REGISTER_VALUE_SET = ExecuteVM::setAl;
     private static final BiFunction<ExecuteVM, Integer, Integer> RA_REGISTER_VALUE_SET = ExecuteVM::setRa;
+    private static final BiFunction<ExecuteVM, Integer, Integer> IP_REGISTER_VALUE_SET = ExecuteVM::setIp;
 
     private static final BiFunction<Integer, Integer, Integer> ADD_FUNCTION = Integer::sum;
     private static final BiFunction<Integer, Integer, Integer> SUB_FUNCTION = (int1, int2) -> int1 - int2;
@@ -33,14 +35,14 @@ public class RegisterUtils {
     public static final Map<String, BiFunction<ExecuteVM, Integer, Integer>> SET_REGISTER_VALUE;
     public static final HashMap<Integer, BiFunction<Integer, Integer, Integer>> DO_OPERATION;
     public static final HashMap<String,Integer> REGISTER_TO_INT;
-    public static final HashMap<Integer,String> INT_TO_REGISTER;
+    public static final HashMap<Integer,String> INT_TO_STRING_REGISTER;
 
     static {
         GET_REGISTER_VALUE = new HashMap<>();
         SET_REGISTER_VALUE = new HashMap<>();
         DO_OPERATION = new HashMap<>();
         REGISTER_TO_INT = new HashMap<>();
-        INT_TO_REGISTER = new HashMap<>();
+        INT_TO_STRING_REGISTER = new HashMap<>();
 
         GET_REGISTER_VALUE.put(ACC,ACC_REGISTER_VALUE);
         GET_REGISTER_VALUE.put(TMP,TMP_REGISTER_VALUE);
@@ -48,6 +50,7 @@ public class RegisterUtils {
         GET_REGISTER_VALUE.put(FP,FP_REGISTER_VALUE);
         GET_REGISTER_VALUE.put(AL,AL_REGISTER_VALUE);
         GET_REGISTER_VALUE.put(RA,RA_REGISTER_VALUE);
+        GET_REGISTER_VALUE.put(IP,IP_REGISTER_VALUE);
 
         SET_REGISTER_VALUE.put(ACC, ACC_REGISTER_VALUE_SET);
         SET_REGISTER_VALUE.put(TMP, TMP_REGISTER_VALUE_SET);
@@ -55,6 +58,8 @@ public class RegisterUtils {
         SET_REGISTER_VALUE.put(FP, FP_REGISTER_VALUE_SET);
         SET_REGISTER_VALUE.put(AL, AL_REGISTER_VALUE_SET);
         SET_REGISTER_VALUE.put(RA, RA_REGISTER_VALUE_SET);
+        SET_REGISTER_VALUE.put(IP,IP_REGISTER_VALUE_SET);
+
 
         DO_OPERATION.put(CVMParser.ADD, ADD_FUNCTION);
         DO_OPERATION.put(CVMParser.SUB, SUB_FUNCTION);
@@ -68,11 +73,11 @@ public class RegisterUtils {
         REGISTER_TO_INT.put(AL, 4);
         REGISTER_TO_INT.put(RA, 5);
 
-        INT_TO_REGISTER.put(0,ACC);
-        INT_TO_REGISTER.put(1,TMP);
-        INT_TO_REGISTER.put(2, SP);
-        INT_TO_REGISTER.put(3, FP);
-        INT_TO_REGISTER.put(4, AL);
-        INT_TO_REGISTER.put(5, RA);
+        INT_TO_STRING_REGISTER.put(0,ACC);
+        INT_TO_STRING_REGISTER.put(1,TMP);
+        INT_TO_STRING_REGISTER.put(2, SP);
+        INT_TO_STRING_REGISTER.put(3, FP);
+        INT_TO_STRING_REGISTER.put(4, AL);
+        INT_TO_STRING_REGISTER.put(5, RA);
     }
 }

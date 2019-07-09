@@ -3,7 +3,7 @@ package codeGen;
 
 import mockit.Mock;
 import mockit.MockUp;
-import compilermodels.statements.StmtBlock;
+import models.compiler.statements.StmtBlock;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,7 +27,7 @@ class VarDeclarationCodeGen {
     void varDeclaration() {
         StmtBlock mainBlock = GetAST("{ int x = 3; }");
         String expected =
-                OpenScopeWithVars(1) +
+                OpenScopeWithVars(1, true) +
                     "li $a0 3\n" +
                     "sw $a0 4($fp)\n" +
                 CloseScopeWithVars(1);
@@ -40,7 +40,7 @@ class VarDeclarationCodeGen {
     void varDeclarations() {
         StmtBlock mainBlock = GetAST("{ int x = 3; int y = 5;  }");
         String expected =
-                OpenScopeWithVars(2) +
+                OpenScopeWithVars(2, true) +
                     "li $a0 3\n" +
                     "sw $a0 4($fp)\n" +
                     "li $a0 5\n" +
@@ -55,7 +55,7 @@ class VarDeclarationCodeGen {
     void varDecWithNumberAdd() {
         StmtBlock mainBlock = GetAST("{ int x = 3 + 1; }");
         String expected =
-                OpenScopeWithVars(1) +
+                OpenScopeWithVars(1, true) +
                     "li $a0 3\n" +
                     "push $a0\n" +
                     "li $a0 1\n" +
@@ -73,7 +73,7 @@ class VarDeclarationCodeGen {
     void varDecWithVariableAndNumberAdd() {
         StmtBlock mainBlock = GetAST("{ int x = 0; x = x + 1; }"); //TODO: se in x ci metto un valore random, che succede??? Impedisci la dichiarazione ricorsiva. "Variable x might not be initialized"
         String expected =
-                OpenScopeWithVars(1) +
+                OpenScopeWithVars(1, true) +
                     "li $a0 0\n" +
                     "sw $a0 4($fp)\n" +
                     "lw $a0 4($fp)\n" +
@@ -93,7 +93,7 @@ class VarDeclarationCodeGen {
     void varDecWithNumberSub() {
         StmtBlock mainBlock = GetAST("{ int x = 3 - 1; }");
         String expected =
-                OpenScopeWithVars(1) +
+                OpenScopeWithVars(1, true) +
                 "li $a0 3\n" +
                 "push $a0\n" +
                 "li $a0 1\n" +
@@ -111,7 +111,7 @@ class VarDeclarationCodeGen {
     void varDecWithVariableAndNumberSub() {
         StmtBlock mainBlock = GetAST("{int x = 0; x = x - 1; }"); //TODO: stesso problema di prima
         String expected =
-                OpenScopeWithVars(1) +
+                OpenScopeWithVars(1, true) +
                     "li $a0 0\n" +
                     "sw $a0 4($fp)\n" +
                     "lw $a0 4($fp)\n" +
@@ -131,7 +131,7 @@ class VarDeclarationCodeGen {
     void varDecWithVariableAndNumberMult() {
         StmtBlock mainBlock = GetAST("{int x = 0; x = x * 2; }"); //TODO: stesso problema di prima
         String expected =
-                OpenScopeWithVars(1) +
+                OpenScopeWithVars(1, true) +
                     "li $a0 0\n" +
                     "sw $a0 4($fp)\n" +
                     "lw $a0 4($fp)\n" +
@@ -151,7 +151,7 @@ class VarDeclarationCodeGen {
     void varDecWithVariableAndNumberDiv() {
         StmtBlock mainBlock = GetAST("{ int x = 0; x = x / 2; }");
         String expected =
-                OpenScopeWithVars(1) +
+                OpenScopeWithVars(1, true) +
                     "li $a0 0\n" +
                     "sw $a0 4($fp)\n" +
                     "lw $a0 4($fp)\n" +
@@ -171,7 +171,7 @@ class VarDeclarationCodeGen {
     void varDecsWithComplexExp() {
         StmtBlock mainBlock = GetAST("{ int y = 6; int x = 0; x = (y+1)*((x-1) / 2); }");
         String expected =
-                OpenScopeWithVars(2) +
+                OpenScopeWithVars(2, true) +
                     "li $a0 6\n" +
                     "sw $a0 4($fp)\n" +
                     "li $a0 0\n" +
@@ -208,7 +208,7 @@ class VarDeclarationCodeGen {
     void varDecWithSimpleBooleanAssignment() {
         StmtBlock mainBlock = GetAST("{ bool x = true; }");
         String expected =
-                OpenScopeWithVars(1) +
+                OpenScopeWithVars(1, true) +
                     "li $a0 1\n" +
                     "sw $a0 4($fp)\n" +
                 CloseScopeWithVars(1);
@@ -230,7 +230,7 @@ class VarDeclarationCodeGen {
 
         StmtBlock mainBlock = GetAST("{ bool x = true && false; }");
         String expected =
-                OpenScopeWithVars(1) +
+                OpenScopeWithVars(1, true) +
                     "li $a0 1\n" +
                     "li $t1 0\n" +
                     "beq $a0 $t1 end\n" +
@@ -254,7 +254,7 @@ class VarDeclarationCodeGen {
 
         StmtBlock mainBlock = GetAST("{ bool x = true || false; }");
         String expected =
-                OpenScopeWithVars(1) +
+                OpenScopeWithVars(1, true) +
                     "li $a0 1\n" +
                     "li $t1 1\n" +
                     "beq $a0 $t1 end\n" +
@@ -279,7 +279,7 @@ class VarDeclarationCodeGen {
 
         StmtBlock mainBlock = GetAST("{ bool x = (false || false) && (true && false) ; }");
         String expected =
-                OpenScopeWithVars(1) +
+                OpenScopeWithVars(1, true) +
                 "li $a0 0\n" +
                 "li $t1 1\n" +
                 "beq $a0 $t1 end\n" +
