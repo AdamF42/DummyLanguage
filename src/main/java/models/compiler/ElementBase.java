@@ -2,7 +2,7 @@ package models.compiler;
 
 import models.compiler.types.Type;
 import util.SemanticError;
-import util.TypeCheckError;
+import util.TypeCheckException;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ public abstract class ElementBase {
      *
      * @return type of Node
      */
-    public abstract Type typeCheck() throws TypeCheckError;
+    public abstract Type typeCheck() throws TypeCheckException;
 
 
     /**

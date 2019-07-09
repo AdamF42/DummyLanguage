@@ -12,6 +12,7 @@ import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.junit.jupiter.api.function.Executable;
 import parser.*;
+import util.ExecutionException;
 import util.SemanticError;
 import java.util.ArrayList;
 import java.util.List;
@@ -87,7 +88,11 @@ public class TestUtil {
         Assembly assembly = visitor.visitAssembly(parser.assembly());
         assembly.loadCode(e);
         ExecuteVM vm = new ExecuteVM(e.code);
-        vm.cpu();
+        try {
+            vm.cpu();
+        } catch (ExecutionException ex) {
+            ex.printStackTrace();
+        }
 
         return vm.getPrintedResults();
     }
@@ -103,7 +108,11 @@ public class TestUtil {
         Assembly assembly = visitor.visitAssembly(parser.assembly());
         assembly.loadCode(e);
         ExecuteVM vm = new ExecuteVM(e.code);
-        vm.cpu();
+        try {
+            vm.cpu();
+        } catch (ExecutionException ex) {
+            ex.printStackTrace();
+        }
 
         return vm.getPrintedResults();
     }

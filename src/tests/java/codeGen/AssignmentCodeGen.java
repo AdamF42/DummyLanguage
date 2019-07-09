@@ -10,14 +10,6 @@ import static utils.TestUtil.*;
 
 class AssignmentCodeGen {
 
-    @BeforeEach
-    void setUp() {
-    }
-
-    @AfterEach
-    void tearDown() {
-    }
-
 
     @Test
     void assignmentInTheSameScope() {

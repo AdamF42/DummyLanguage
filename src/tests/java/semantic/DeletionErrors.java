@@ -11,13 +11,6 @@ import static util.Strings.*;
 import static utils.TestUtil.*;
 
 class DeletionErrors {
-    @BeforeEach
-    void setUp() {
-    }
-
-    @AfterEach
-    void tearDown() {
-    }
 
 
     @Test

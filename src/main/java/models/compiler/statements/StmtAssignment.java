@@ -8,7 +8,7 @@ import models.compiler.stentry.StEntry;
 import models.compiler.stentry.VarStEntry;
 import models.compiler.types.Type;
 import util.SemanticError;
-import util.TypeCheckError;
+import util.TypeCheckException;
 import util.TypeUtils;
 import java.util.*;
 import java.util.function.Function;
@@ -18,7 +18,7 @@ import static util.Strings.*;
 
 public class StmtAssignment extends Stmt{
 
-    private static List<Function<StEntry, Boolean>> CHECKS = Arrays.asList(IS_NULL, VAR_IS_DELETED, FUN_IS_DELETED);
+    private static final List<Function<StEntry, Boolean>> CHECKS = Arrays.asList(IS_NULL, VAR_IS_DELETED, FUN_IS_DELETED);
     private final Exp exp;
     private final String id;
     private int nl;
@@ -31,7 +31,7 @@ public class StmtAssignment extends Stmt{
     }
 
     @Override
-    public Type typeCheck() throws TypeCheckError {
+    public Type typeCheck() throws TypeCheckException {
         TypeUtils.typeCheck(this.idEntry.getType(), exp);
         return this.idEntry.getType();
     }
@@ -49,14 +49,17 @@ public class StmtAssignment extends Stmt{
 
     @Override
     public String codeGeneration() {
-        // TODO: rifattorizza
-        if (nl==idEntry.getNestinglevel())
-            return  exp.codeGeneration() +
-                    storeW(ACC,Integer.toString(idEntry.getOffset()),FP);
-        return exp.codeGeneration() +
-                loadW(AL,"0",FP) +
-                getVariableForCgen(nl,idEntry)+
-                storeW(ACC, Integer.toString(idEntry.getOffset()), AL);
+
+        StringBuilder result = new StringBuilder();
+
+        result.append(exp.codeGeneration());
+        if(nl==idEntry.getNestinglevel())
+            return result.append(storeW(ACC,Integer.toString(idEntry.getOffset()),FP)).toString();
+        result.append(loadW(AL, "0", FP));
+        result.append(getVariableForCgen(nl, idEntry.getNestinglevel()));
+        result.append(storeW(ACC,Integer.toString(idEntry.getOffset()),AL));
+
+        return result.toString();
     }
 
     private List<SemanticError>  checkIdSemantics(Environment e) {

@@ -3,7 +3,7 @@ package models.compiler.expressions;
 
 import models.compiler.types.Type;
 import models.compiler.types.TypeBool;
-import util.TypeCheckError;
+import util.TypeCheckException;
 
 
 public abstract class Factor extends Term {
@@ -14,7 +14,7 @@ public abstract class Factor extends Term {
     }
 
     @Override
-    public Type typeCheck() throws TypeCheckError {
+    public Type typeCheck() throws TypeCheckException {
         return new TypeBool();
     }
 

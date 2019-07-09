@@ -2,16 +2,25 @@ package codeExe;
 
 import mockit.Mock;
 import mockit.MockUp;
-import org.junit.jupiter.api.AfterEach;
+import models.compiler.statements.StmtBlock;
+import models.interpreter.CodeMemory;
+import models.interpreter.ExecuteVM;
+import models.interpreter.instructions.Assembly;
+import models.interpreter.instructions.CVMVisitorImpl;
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.CommonTokenStream;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import parser.CVMLexer;
+import parser.CVMParser;
+import util.ExecutionException;
 import util.Strings;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static utils.TestUtil.*;
 
 
@@ -38,10 +47,6 @@ class FunctionExec {
                 return labels.get(label_count);
             }
         };
-    }
-
-    @AfterEach
-    void tearDown() {
     }
 
     @Test
@@ -162,6 +167,76 @@ class FunctionExec {
     }
 
     @Test
+    void FunctionReferenceParam_ShouldPrintExpected_WithReferenceParameter() {
+        new MockUp<Strings>() {
+            @Mock
+            public String GetFreshLabel() {
+                label_count ++;
+                return "label"+String.valueOf(label_count);
+            }
+        };
+
+        List<Integer> actual = GetExecutionPrintsForFile("" +
+                "{" +
+                "   int y = 41;" +
+                "   f(var int x){" +
+                "       g(var int x){" +
+                "           x = x+1;" +
+                "           print x;" +
+                "       }" +
+                "       g(x);" +
+                "   }" +
+                "   f(y);" +
+                "   print y;" +
+                "}", false);
+
+        List<Integer> expected = new ArrayList<>();
+        expected.add(42);
+        expected.add(42);
+
+        assertEquals(expected,actual);
+    }
+
+    @Test
+    void Function_ShouldPrintExpected_WithReferenceParameter() {
+        new MockUp<Strings>() {
+            @Mock
+            public String GetFreshLabel() {
+                label_count ++;
+                return "label"+String.valueOf(label_count);
+            }
+        };
+
+        List<Integer> actual = GetExecutionPrintsForFile("" +
+                "{" +
+                "   int a = 41;" +
+                "   int w = 90;" +
+                "   f(var int x, int y){" +
+                "       x = x+1;" +
+                "       g(int x, var int y){" +
+                "           y = y+4;" +
+                "       }" +
+                "       print a;" +
+                "       print w;" +
+                "       g(x, w);" +
+                "   }" +
+                "   f(a,5);" +
+                "   print a;" +
+                "   print w;" +
+                "}", false);
+
+        List<Integer> expected = new ArrayList<>();
+        // TODO: Giustifica nella relazione il perchè non stampa 42..l'update viene fatto dopo il ritorno della funzione...
+        expected.add(41);
+        expected.add(90);
+
+        expected.add(42);
+        expected.add(94);
+
+        assertEquals(expected,actual);
+    }
+
+    @Test
     void RecursiveFunction_ShouldPrint42_WithActualCode() {
 
         List<Integer> actual = GetExecutionPrintsForFile(
@@ -261,24 +336,30 @@ class FunctionExec {
     @Test
     void RecursiveFunction_ShouldGoOutOfMemory_WithActualCode() {
 
-        List<Integer> actual = GetExecutionPrintsForFile(
-                "{\n" +
-                        "    f(int m, int n){\n" +
-                        "        if (m > n) then { " +
-                        "           print(m+n) ;" +
-                        "        }\n" +
-                        "        else { " +
-                        "           f(m+1,n+1) ; " +
-                        "        }\n" +
-                        "    }\n" +
-                        "    f(4,5) ;\n" +
-                        "}", false);
+        StmtBlock mainBlock = GetAST("{\n" +
+                "    f(int m, int n){\n" +
+                "        if (m > n) then { " +
+                "           print(m+n) ;" +
+                "        }\n" +
+                "        else { " +
+                "           f(m+1,n+1) ; " +
+                "        }\n" +
+                "    }\n" +
+                "    f(4,5) ;\n" +
+                "}");
+        String result = mainBlock.codeGeneration();
+        CharStream is = CharStreams.fromString(result);
+        CVMLexer lexer = new CVMLexer(is);
+        CommonTokenStream tokens = new CommonTokenStream(lexer);
+        CVMParser parser = new CVMParser(tokens);
+        CVMVisitorImpl visitor = new CVMVisitorImpl();
+        CodeMemory e = new CodeMemory();
+        Assembly assembly = visitor.visitAssembly(parser.assembly());
+        assembly.loadCode(e);
+        ExecuteVM vm = new ExecuteVM(e.code);
+        Throwable exception = assertThrows(ExecutionException.class, vm::cpu);
+        assertEquals(Strings.ERROR_OUT_OF_MEMORY, exception.getMessage());
 
-        List<Integer> expected = new ArrayList<>();
-        expected.add(-94);
-
-
-        assertEquals(expected,actual);
     }
 
     @Test
@@ -287,12 +368,12 @@ class FunctionExec {
         List<Integer> actual = GetExecutionPrintsForFile(
                 "{\n" +
                         "int b = 41;\n" +
-                        "int s = 40;" +
+                        "int s = 90;" +
                         "f (var int c, int b, var int x){\n" +
                         "   c = c + 1;" +
-                        "   x = x + 2;" +
-                            "print c;\n" +
-                            "print x;\n" +
+                        "   x = x + 4;" +
+                        "   print c;\n" +
+                        "   print x;\n" +
                         "}\n" +
                     "    {\n" +
                     "        f(b, 54, s);\n" +
@@ -303,10 +384,9 @@ class FunctionExec {
 
         List<Integer> expected = new ArrayList<>();
         expected.add(42);
+        expected.add(94);
         expected.add(42);
-        expected.add(42);
-        expected.add(42);
-
+        expected.add(94);
 
         assertEquals(expected,actual);
     }

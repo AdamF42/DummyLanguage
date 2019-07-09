@@ -6,15 +6,13 @@ import models.compiler.VisitorImpl;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 import parser.ComplexStaticAnalysisLexer;
 import parser.ComplexStaticAnalysisParser;
 import util.SemanticError;
 import util.Strings;
-import util.TypeCheckError;
+import util.TypeCheckException;
 
 import java.io.IOException;
 import java.util.List;
@@ -24,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 // TODO: rewrite all test class in order to accomplish tests conventions
 class MainAppTest {
 
-    private String baseTestsRoot = "src/tests/samples/";
+    private final String baseTestsRoot = "src/tests/samples/";
 
     private StmtBlock getAST(String fileName){
         try {
@@ -38,14 +36,6 @@ class MainAppTest {
             e.printStackTrace();
         }
         return null;
-    }
-
-    @BeforeEach
-    void setUp() {
-    }
-
-    @AfterEach
-    void tearDown() {
     }
 
     @Test
@@ -119,7 +109,7 @@ class MainAppTest {
         assertNotNull(mainBlock);
         List<SemanticError> errors =  mainBlock.checkSemantics(e);
         assertEquals(0, errors.size());
-        Throwable exception = assertThrows(TypeCheckError.class, mainBlock::typeCheck);
+        Throwable exception = assertThrows(TypeCheckException.class, mainBlock::typeCheck);
         assertEquals(Strings.ERROR_BEHAVIOR_MISMATCH, exception.getMessage());
     }
 
@@ -150,7 +140,7 @@ class MainAppTest {
         assertNotNull(mainBlock);
         List<SemanticError> errors =  mainBlock.checkSemantics(e);
         assertEquals(0, errors.size());
-        Throwable exception = assertThrows(TypeCheckError.class, mainBlock::typeCheck);
+        Throwable exception = assertThrows(TypeCheckException.class, mainBlock::typeCheck);
         assertEquals(Strings.ERROR_BEHAVIOR_MISMATCH, exception.getMessage());
     }
 
@@ -201,7 +191,7 @@ class MainAppTest {
         assertNotNull(mainBlock);
         List<SemanticError> errors =  mainBlock.checkSemantics(e);
         assertEquals(0, errors.size());
-        Throwable exception = assertThrows(TypeCheckError.class, mainBlock::typeCheck);
+        Throwable exception = assertThrows(TypeCheckException.class, mainBlock::typeCheck);
         assertEquals(Strings.ERROR_BEHAVIOR_MISMATCH, exception.getMessage());
     }
 
@@ -243,7 +233,7 @@ class MainAppTest {
         assertNotNull(mainBlock);
         List<SemanticError> errors =  mainBlock.checkSemantics(e);
         assertEquals(0, errors.size());
-        Throwable exception = assertThrows(TypeCheckError.class, mainBlock::typeCheck);
+        Throwable exception = assertThrows(TypeCheckException.class, mainBlock::typeCheck);
         assertEquals("ExpectedType var TypeBool, got TypeInt", exception.getMessage());
     }
 
@@ -254,7 +244,7 @@ class MainAppTest {
         assertNotNull(mainBlock);
         List<SemanticError> errors =  mainBlock.checkSemantics(e);
         assertEquals(0, errors.size());
-        Throwable exception = assertThrows(TypeCheckError.class, mainBlock::typeCheck);
+        Throwable exception = assertThrows(TypeCheckException.class, mainBlock::typeCheck);
         assertEquals("ExpectedType var TypeInt, got TypeBool", exception.getMessage());
     }
 
@@ -265,7 +255,7 @@ class MainAppTest {
         assertNotNull(mainBlock);
         List<SemanticError> errors =  mainBlock.checkSemantics(e);
         assertEquals(0, errors.size());
-        Throwable exception = assertThrows(TypeCheckError.class, mainBlock::typeCheck);
+        Throwable exception = assertThrows(TypeCheckException.class, mainBlock::typeCheck);
         assertEquals("ExpectedType var TypeInt, got TypeBool", exception.getMessage());
     }
 
@@ -276,7 +266,7 @@ class MainAppTest {
         assertNotNull(mainBlock);
         List<SemanticError> errors =  mainBlock.checkSemantics(e);
         assertEquals(0, errors.size());
-        Throwable exception = assertThrows(TypeCheckError.class, mainBlock::typeCheck);
+        Throwable exception = assertThrows(TypeCheckException.class, mainBlock::typeCheck);
         assertEquals("ExpectedType var TypeBool, got TypeInt", exception.getMessage());
     }
 
@@ -307,7 +297,7 @@ class MainAppTest {
         assertNotNull(mainBlock);
         List<SemanticError> errors =  mainBlock.checkSemantics(e);
         assertEquals(0, errors.size());
-        Throwable exception = assertThrows(TypeCheckError.class, mainBlock::typeCheck);
+        Throwable exception = assertThrows(TypeCheckException.class, mainBlock::typeCheck);
         assertEquals(Strings.ERROR_BEHAVIOR_MISMATCH, exception.getMessage());
     }
 
@@ -328,7 +318,7 @@ class MainAppTest {
         assertNotNull(mainBlock);
         List<SemanticError> errors =  mainBlock.checkSemantics(e);
         assertEquals(0, errors.size());
-        Throwable exception = assertThrows(TypeCheckError.class, mainBlock::typeCheck);
+        Throwable exception = assertThrows(TypeCheckException.class, mainBlock::typeCheck);
         assertEquals("ExpectedType: var TypeInt, got: right term TypeInt", exception.getMessage());
     }
 

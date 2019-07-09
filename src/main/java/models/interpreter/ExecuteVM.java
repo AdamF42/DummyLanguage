@@ -1,16 +1,14 @@
 package models.interpreter;
 
 
-import com.sun.org.apache.bcel.internal.generic.PUSH;
 import parser.CVMParser;
+import util.ExecutionException;
 
-import java.lang.management.ThreadInfo;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static util.RegisterUtils.*;
+import static util.Strings.ERROR_OUT_OF_MEMORY;
 import static util.Strings.IP;
 
 public class ExecuteVM {
@@ -18,8 +16,8 @@ public class ExecuteVM {
     static final int CODE_SIZE = 1000;
     private static final int MEM_SIZE = 100;
 
-    private int[] code;
-    private int[] memory = new int[MEM_SIZE];
+    private final int[] code;
+    private final int[] memory = new int[MEM_SIZE];
     private int ip = 0;
     private int sp = MEM_SIZE;
     private int fp = MEM_SIZE;
@@ -28,18 +26,16 @@ public class ExecuteVM {
     private int t1 = 0;
     private int ra = 0;
 
-    private List<Integer> printedResults = new ArrayList<>();
+    private final List<Integer> printedResults = new ArrayList<>();
 
     public ExecuteVM(int[] code) {
         this.code = code;
     }
 
-    public void cpu() {
+    public void cpu() throws ExecutionException {
         while (true) {
             if(sp<=0) {
-                //System.out.println("\nError: Out of memory"); // TODO: spara un'eccezzione
-                printedResults.add(-94);
-                return;
+                throw new ExecutionException(ERROR_OUT_OF_MEMORY);
             }
             int bytecode = code[ip++]; 
             int v1, v2, offset;

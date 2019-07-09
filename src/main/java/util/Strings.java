@@ -15,6 +15,7 @@ public class Strings {
 	public static final String ERROR_PARAMETER_MISMATCH = "Parameters count doesn't match. Expected ";
 	public static final String ERROR_DANGEROUS_USE_OF_PARAMETER = "Potentially deleted parameter inside function. Name: ";
 	public static final String ERROR_BEHAVIOR_MISMATCH = "Mismatching behavioural types between If-Then-Else statement branches";
+	public static final String ERROR_OUT_OF_MEMORY = "Error: Out of memory";
 
 	public static final String LEXICAL_CHECK = "Check Lexical Errors";
 	public static final String SEMANTIC_CHECK = "Check Semantic Errors";
@@ -126,17 +127,9 @@ public class Strings {
 		return RandomStringUtils.randomAlphabetic(10);
 	}
 
-	public static String getVariableForCgen(int nl, StEntry idEntry){
+	public static String getVariableForCgen(int nl, int varNl){
 		StringBuilder result = new StringBuilder();
-		for (int i = 1; i < nl-idEntry.getNestinglevel(); i++){ //TODO: fatti meglio i conti...evita i magic numbers
-			result.append(loadW(AL, "0", AL));
-		}
-		return result.toString();
-	}
-
-	public static String getAccessLinkForCgen(int nl, StEntry idEntry){
-		StringBuilder result = new StringBuilder();
-		for (int i = 1; i < nl-idEntry.getNestinglevel()-1; i++){ //TODO: fatti meglio i conti...evita i magic numbers
+		for (int i = 1; i < nl-varNl; i++){
 			result.append(loadW(AL, "0", AL));
 		}
 		return result.toString();

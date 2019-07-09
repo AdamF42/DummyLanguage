@@ -34,10 +34,6 @@ class IfThenElseExecution {
         label_count = 0;
     }
 
-    @AfterEach
-    void tearDown() {
-    }
-
 
     @Test
     void ifThenElseEqCondition_ShouldExecuteThenBranch_WithTrueCondition() {

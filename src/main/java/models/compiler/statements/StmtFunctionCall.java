@@ -11,7 +11,7 @@ import models.compiler.types.TypeFunction;
 import models.compiler.values.ValueId;
 import util.SemanticError;
 import util.Strings;
-import util.TypeCheckError;
+import util.TypeCheckException;
 import util.TypeUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,13 +24,13 @@ import static util.TypeUtils.isExpValueId;
 
 public class StmtFunctionCall extends Stmt {
 
-    private String id;
-    private List<Exp> actualParams;
+    private final String id;
+    private final List<Exp> actualParams;
     private List<VarStEntry> formalParams;
     private TypeFunction envFunType;
     private String label;
     private int nl;
-    private static List<Function<StEntry, Boolean>> CHECKS = Arrays.asList(IS_NULL, FUN_IS_DELETED);
+    private static final List<Function<StEntry, Boolean>> CHECKS = Arrays.asList(IS_NULL, FUN_IS_DELETED);
 
 
     public StmtFunctionCall(String funId, List<Exp> actualParams) {
@@ -39,10 +39,10 @@ public class StmtFunctionCall extends Stmt {
     }
 
     @Override
-    public Type typeCheck() throws TypeCheckError {
+    public Type typeCheck() throws TypeCheckException {
 
         if (envFunType.getParam().size() != actualParams.size()) {
-            throw new TypeCheckError(Strings.ERROR_PARAMETER_MISMATCH +
+            throw new TypeCheckException(Strings.ERROR_PARAMETER_MISMATCH +
                     envFunType.getParam().size() + " got " + actualParams.size());
         }
         for (int i = 0; i < envFunType.getParam().size(); i++) {
@@ -67,7 +67,7 @@ public class StmtFunctionCall extends Stmt {
         this.label = FunStEntry.GetLabel();
         result.addAll(setFunctionWithParams(e));
         result.addAll(checkParametersSemantics(e));
-        result.addAll(checkFunDeletionsSemantics(e));
+        result.addAll(checkFunDeletionsSemantics());
 
         return result;
     }
@@ -78,12 +78,6 @@ public class StmtFunctionCall extends Stmt {
         StringBuilder result = new StringBuilder();
         result.append(push(FP));
 
-        // TODO: rifattorizza
-//        for (Exp param: actualParams) {
-//            result.append(param.codeGeneration());
-//            result.append(push(ACC));
-//        }
-
         //push all params in inverted order
         for(int i = actualParams.size()-1; i>=0; i--) {
             result.append(actualParams.get(i).codeGeneration());
@@ -92,15 +86,18 @@ public class StmtFunctionCall extends Stmt {
 
         result.append(jal(label));
 
-        // TODO: rifattorizza
-        // get updated value for reference
+        // save updated value for references
         for(int i = actualParams.size()-1; i>=0; i--) {
             if(formalParams.get(i).isReference()){
-                int offset = ((ValueId)actualParams.get(i)).getEntry().getOffset();
+                VarStEntry entry = ((ValueId)actualParams.get(i)).getEntry();
                 result.append(loadW(ACC,String.valueOf(envFunType.getParam().get(i).getOffset()-4),TMP));
-                result.append(loadW(AL, "0", FP));
-                result.append(getVariableForCgen(nl, envFunType.getParam().get(i)));
-                result.append(storeW(ACC, Integer.toString(offset), AL));
+                if (nl==entry.getNestinglevel()) {
+                    result.append(storeW(ACC, Integer.toString(entry.getOffset()), FP));
+                } else {
+                    result.append(loadW(AL, "0", FP));
+                    result.append(getVariableForCgen(nl, entry.getNestinglevel()));
+                    result.append(storeW(ACC, Integer.toString(entry.getOffset()), AL));
+                }
             }
         }
 
@@ -131,7 +128,7 @@ public class StmtFunctionCall extends Stmt {
         return result;
     }
 
-    private List<SemanticError> checkFunDeletionsSemantics(Environment e) {
+    private List<SemanticError> checkFunDeletionsSemantics() {
 
         List<SemanticError> result = new ArrayList<>();
         for (StEntry entry : envFunType.getDeletions()) {

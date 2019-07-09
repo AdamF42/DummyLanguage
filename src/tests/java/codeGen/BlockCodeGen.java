@@ -9,13 +9,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static utils.TestUtil.*;
 
 class BlockCodeGen {
-    @BeforeEach
-    void setUp() {
-    }
-
-    @AfterEach
-    void tearDown() {
-    }
 
     private static final String X_CGEN =
                 "li $a0 1\n" +

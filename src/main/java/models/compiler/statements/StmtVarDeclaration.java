@@ -8,7 +8,7 @@ import models.compiler.stentry.VarStEntry;
 import models.compiler.types.Type;
 import util.SemanticError;
 import util.Strings;
-import util.TypeCheckError;
+import util.TypeCheckException;
 import util.TypeUtils;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,7 +22,7 @@ import static util.Strings.FP;
 
 public class StmtVarDeclaration extends Stmt {
 
-    private static List<Function<StEntry, Boolean>> CHECKS = Collections.singletonList(ALREADY_DECLARED);
+    private static final List<Function<StEntry, Boolean>> CHECKS = Collections.singletonList(ALREADY_DECLARED);
     private final String id;
     private final Type type;
     private final Exp exp;
@@ -36,7 +36,7 @@ public class StmtVarDeclaration extends Stmt {
     }
 
     @Override
-    public Type typeCheck() throws TypeCheckError {
+    public Type typeCheck() throws TypeCheckException {
         if (exp != null){
             TypeUtils.typeCheck(type, exp);
         }

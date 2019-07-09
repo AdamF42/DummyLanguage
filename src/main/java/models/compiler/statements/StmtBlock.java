@@ -3,7 +3,7 @@ package models.compiler.statements;
 import models.compiler.Environment;
 import util.SemanticError;
 import models.compiler.types.Type;
-import util.TypeCheckError;
+import util.TypeCheckException;
 import java.util.ArrayList;
 import java.util.List;
 import static util.Strings.*;
@@ -18,7 +18,7 @@ public class StmtBlock extends Stmt {
 	}
 
 	@Override
-	public Type typeCheck() throws TypeCheckError {
+	public Type typeCheck() throws TypeCheckException {
 		for (Stmt el : children)
 			el.typeCheck();
 		return null;
@@ -40,14 +40,14 @@ public class StmtBlock extends Stmt {
 
 		StringBuilder result = new StringBuilder();
 		result.append(push(FP)); // OLD FP
-		result.append(AllocateVariables()); // LOAD VARIABLES
-		result.append(push(FP)); // OlD FP
+		result.append(handleVariablesAllocation(true)); // LOAD VARIABLES
+		result.append(push(FP)); // FP
 		result.append(move(FP,SP));
 		if (nl==0)
 			result.append(storeW(FP,"0",FP));
 		result.append(codeGenerationForFunDec());
 		result.append(pop());
-		result.append(DeallocateVariables());
+		result.append(handleVariablesAllocation(false));
 		result.append(assignTop(FP));
 		result.append(pop());
 
@@ -77,30 +77,17 @@ public class StmtBlock extends Stmt {
 		return result;
 	}
 
-	private String AllocateVariables(){
+	private String handleVariablesAllocation(boolean isAllocating){
 
-		StringBuilder result = new StringBuilder();
-		int varCounter = 0;
-		for (Stmt var: children) {
-			if (var instanceof StmtVarDeclaration)
-				varCounter++;
-		}
-		if (varCounter>0)
-			result.append(addi(SP,SP,String.valueOf(-varCounter*4)));
-		return result.toString();
+		long varCounter = children.stream().filter(child -> child instanceof StmtVarDeclaration).count();
+
+		if (varCounter < 1)
+			return EMPTY;
+
+		if (isAllocating)
+			return addi(SP, SP, String.valueOf(-varCounter * 4));
+
+		return addi(SP, SP, String.valueOf(varCounter * 4));
 	}
 
-	//TODO: rifattorizza con AllocateVariables
-	private String DeallocateVariables(){
-
-		StringBuilder result = new StringBuilder();
-		int varCounter = 0;
-		for (Stmt var: children) {
-			if (var instanceof StmtVarDeclaration)
-				varCounter++;
-		}
-		if (varCounter>0)
-			result.append(addi(SP,SP,String.valueOf(varCounter*4)));
-		return result.toString();
-	}
 }

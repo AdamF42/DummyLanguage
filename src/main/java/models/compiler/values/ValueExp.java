@@ -4,7 +4,7 @@ import models.compiler.Environment;
 import models.compiler.expressions.Exp;
 import models.compiler.types.Type;
 import util.SemanticError;
-import util.TypeCheckError;
+import util.TypeCheckException;
 import java.util.List;
 
 
@@ -23,7 +23,7 @@ public class ValueExp extends Value {
     }
 
     @Override
-    public Type typeCheck() throws TypeCheckError {
+    public Type typeCheck() throws TypeCheckException {
         return exp.typeCheck();
     }
 
