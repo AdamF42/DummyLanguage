@@ -2,7 +2,7 @@ package models.compiler.expressions;
 
 
 import models.compiler.types.Type;
-import util.TypeCheckError;
+import util.TypeCheckException;
 import util.TypeUtils;
 
 public abstract class Term extends Exp {
@@ -12,7 +12,7 @@ public abstract class Term extends Exp {
     }
 
     @Override
-    public Type typeCheck() throws TypeCheckError {
+    public Type typeCheck() throws TypeCheckException {
         if (getRight() != null){
             TypeUtils.typeCheck(getLeft().typeCheck(),getRight());
         }

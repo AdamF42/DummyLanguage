@@ -15,7 +15,7 @@ import parser.ComplexStaticAnalysisLexer;
 import parser.ComplexStaticAnalysisParser;
 import util.SemanticError;
 import util.Strings;
-import util.TypeCheckError;
+import util.TypeCheckException;
 
 
 public class MainApp {
@@ -88,7 +88,7 @@ public class MainApp {
             String test = mainBlock.codeGeneration();
             System.out.println(test);
 
-        } catch (IOException | TypeCheckError e) {
+        } catch (IOException | TypeCheckException e) {
             e.printStackTrace();
         }
 

@@ -6,7 +6,7 @@ import models.compiler.types.Type;
 import models.compiler.types.TypeBool;
 import util.SemanticError;
 import util.Strings;
-import util.TypeCheckError;
+import util.TypeCheckException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,9 +14,9 @@ import static util.Strings.*;
 
 
 public class StmtIfThenElse extends Stmt {
-    private Exp condition;
-    private StmtBlock thenBranch;
-    private StmtBlock elseBranch;
+    private final Exp condition;
+    private final StmtBlock thenBranch;
+    private final StmtBlock elseBranch;
 
 
     public StmtIfThenElse(Exp condition, StmtBlock ifBranch, StmtBlock thenBranch) {
@@ -27,16 +27,16 @@ public class StmtIfThenElse extends Stmt {
 
 
     @Override
-    public Type typeCheck() throws TypeCheckError {
+    public Type typeCheck() throws TypeCheckException {
 
         Type conditionType = condition.typeCheck();
         if (!(conditionType instanceof TypeBool))
-            throw new TypeCheckError("Not boolean condition, got " + conditionType);
+            throw new TypeCheckException("Not boolean condition, got " + conditionType);
         thenBranch.typeCheck();
         elseBranch.typeCheck();
         if (!thenBranch.getDeletions().isEmpty() || !elseBranch.getDeletions().isEmpty()) {
             if (!thenBranch.getRwAccesses().containsAll(elseBranch.getRwAccesses()) || !thenBranch.getDeletions().containsAll(elseBranch.getDeletions()))
-                throw new TypeCheckError(ERROR_BEHAVIOR_MISMATCH);
+                throw new TypeCheckException(ERROR_BEHAVIOR_MISMATCH);
         }
         return null;
     }

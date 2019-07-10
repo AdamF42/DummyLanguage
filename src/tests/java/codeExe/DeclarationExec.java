@@ -21,10 +21,6 @@ class DeclarationExec {
         label_count = 0;
     }
 
-    @AfterEach
-    void tearDown() {
-    }
-
     @Test
     void DecWithAddOp_ShouldPrint_Expected() {
 

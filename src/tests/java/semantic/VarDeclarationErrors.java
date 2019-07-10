@@ -10,13 +10,6 @@ import static util.Strings.ERROR_VARIABLE_NOT_INITIALIZED;
 import static utils.TestUtil.GetSemanticsErrors;
 
 public class VarDeclarationErrors {
-    @BeforeEach
-    void setUp() {
-    }
-
-    @AfterEach
-    void tearDown() {
-    }
 
 
     @Test

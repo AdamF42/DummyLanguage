@@ -5,7 +5,7 @@ import models.compiler.expressions.Factor;
 
 public abstract class Value extends Factor {
 
-    private String val;
+    private final String val;
 
     public Value(String val) {
         super(null,null);

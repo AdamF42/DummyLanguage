@@ -9,7 +9,7 @@ import models.compiler.types.Parameter;
 import models.compiler.types.Type;
 import models.compiler.types.TypeFunction;
 import util.SemanticError;
-import util.TypeCheckError;
+import util.TypeCheckException;
 import java.util.*;
 import java.util.function.Function;
 import static util.SemanticErrorChecker.*;
@@ -18,7 +18,7 @@ import static util.Strings.*;
 
 public class StmtFunDeclaration extends Stmt {
 
-    private static List<Function<StEntry, Boolean>> CHECKS = Collections.singletonList(ALREADY_DECLARED);
+    private static final List<Function<StEntry, Boolean>> CHECKS = Collections.singletonList(ALREADY_DECLARED);
     private final String funId;
     private final List<Parameter> params;
     private final StmtBlock body;
@@ -33,7 +33,7 @@ public class StmtFunDeclaration extends Stmt {
     }
 
     @Override
-    public Type typeCheck() throws TypeCheckError {
+    public Type typeCheck() throws TypeCheckException {
         return body.typeCheck();
     }
 
@@ -57,11 +57,9 @@ public class StmtFunDeclaration extends Stmt {
         String skipFunDec = GetFreshLabel();
         return  b(skipFunDec) +
                 this.f_label + ":\n" +
-                //// TESTING //// TODO: ragionaci
                 loadW(AL,"0",FP) +
                 loadW(AL,"0",AL) +
-                getVariableForCgen(nl,funEntry) +
-                // END TESTING //
+                getVariableForCgen(nl,funEntry.getNestinglevel()) +
                 push(AL) +
                 move(FP, SP) +
                 push(RA) +

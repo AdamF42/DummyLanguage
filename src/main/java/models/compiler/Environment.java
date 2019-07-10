@@ -9,9 +9,9 @@ import java.util.Objects;
 
 public class Environment {
 
-	private LinkedList<HashMap<String, VarStEntry>> vtable = new LinkedList<>();
-	private LinkedList<HashMap<String, FunStEntry>> ftable = new LinkedList<>();
-	private LinkedList<Integer> offset = new LinkedList<>();
+	private final LinkedList<HashMap<String, VarStEntry>> vtable = new LinkedList<>();
+	private final LinkedList<HashMap<String, FunStEntry>> ftable = new LinkedList<>();
+	private final LinkedList<Integer> offset = new LinkedList<>();
 	private boolean insideFunction = false;
 	private int nestingLevel = -1;
 	private static final int BASE_OFFSET = 0;
@@ -108,11 +108,8 @@ public class Environment {
 		return identifierNL == nestingLevel;
 	}
 
-	public int getOffset() {
-		return offset.getFirst();
-	}
-
-	public int getIncrementOffset() { // TODO: rifattorizza questa funzione che fa sboccare
+	//TODO: riscrivi...
+	public int getIncrementOffset() {
 		int topOffSet = offset.pop();
 		topOffSet  = topOffSet + 4;
 		offset.push(topOffSet);

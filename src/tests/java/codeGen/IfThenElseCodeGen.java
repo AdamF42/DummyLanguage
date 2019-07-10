@@ -26,10 +26,6 @@ class IfThenElseCodeGen {
         label_count = 0;
     }
 
-    @AfterEach
-    void tearDown() {
-    }
-
     @Test
     void ifThenElseWithEqCondition() {
 

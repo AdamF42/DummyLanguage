@@ -23,10 +23,6 @@ class AssignmentExec {
         label_count = 0;
     }
 
-    @AfterEach
-    void tearDown() {
-    }
-
     @Test
     void AssigmentWithAddAndInnerScope_ShouldPrint_Expected() {
 

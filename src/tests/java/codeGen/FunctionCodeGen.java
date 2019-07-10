@@ -3,9 +3,7 @@ package codeGen;
 import mockit.Mock;
 import mockit.MockUp;
 import models.compiler.statements.StmtBlock;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import util.Strings;
 
@@ -14,12 +12,15 @@ import static utils.TestUtil.*;
 
 
 class FunctionCodeGen {
+
     @BeforeEach
     void setUp() {
-    }
-
-    @AfterEach
-    void tearDown() {
+        new MockUp<Strings>() {
+            @Mock
+            public String GetFreshLabel() {
+                return "f_entry";
+            }
+        };
     }
 
     private static final String SET_ACCESS_LINK =
@@ -47,13 +48,6 @@ class FunctionCodeGen {
 
     @Test
     void simpleFunDeclaration() {
-
-        new MockUp<Strings>() {
-            @Mock
-            public String GetFreshLabel() {
-                return "f_entry";
-            }
-        };
 
         StmtBlock mainBlock = GetAST("" +
                     "{" +
@@ -85,13 +79,6 @@ class FunctionCodeGen {
     @Test
     void simpleFunDeclarationAndCall() {
 
-        new MockUp<Strings>() {
-            @Mock
-            public String GetFreshLabel() {
-                return "f_entry";
-            }
-        };
-
         StmtBlock mainBlock = GetAST(
                 "{" +
                     "    f(int x){" +
@@ -113,13 +100,6 @@ class FunctionCodeGen {
 
     @Test
     void funWithOneReferenceParameter_ShouldReturn_ExpectedCode() {
-
-        new MockUp<Strings>() {
-            @Mock
-            public String GetFreshLabel() {
-                return "f_entry";
-            }
-        };
 
         StmtBlock mainBlock = GetAST(
                 "{\n" +

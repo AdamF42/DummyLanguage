@@ -22,14 +22,6 @@ class PrintCodeGen {
             "add $a0 $a0 $t1\n" +
             "pop\n";
 
-    @BeforeEach
-    void setUp() {
-    }
-
-    @AfterEach
-    void tearDown() {
-    }
-
     @Test
     void printVariable() {
         StmtBlock mainBlock = GetAST("{\n int x = 1; print x;\n  }");

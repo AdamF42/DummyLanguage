@@ -17,10 +17,12 @@ class VarDeclarationCodeGen {
 
     @BeforeEach
     void setUp() {
-    }
-
-    @AfterEach
-    void tearDown() {
+        new MockUp<Strings>() {
+            @Mock
+            public String GetFreshLabel() {
+                return "end";
+            }
+        };
     }
 
     @Test
@@ -71,7 +73,7 @@ class VarDeclarationCodeGen {
 
     @Test
     void varDecWithVariableAndNumberAdd() {
-        StmtBlock mainBlock = GetAST("{ int x = 0; x = x + 1; }"); //TODO: se in x ci metto un valore random, che succede??? Impedisci la dichiarazione ricorsiva. "Variable x might not be initialized"
+        StmtBlock mainBlock = GetAST("{ int x = 0; x = x + 1; }");
         String expected =
                 OpenScopeWithVars(1, true) +
                     "li $a0 0\n" +
@@ -109,7 +111,7 @@ class VarDeclarationCodeGen {
 
     @Test
     void varDecWithVariableAndNumberSub() {
-        StmtBlock mainBlock = GetAST("{int x = 0; x = x - 1; }"); //TODO: stesso problema di prima
+        StmtBlock mainBlock = GetAST("{int x = 0; x = x - 1; }");
         String expected =
                 OpenScopeWithVars(1, true) +
                     "li $a0 0\n" +
@@ -129,7 +131,7 @@ class VarDeclarationCodeGen {
 
     @Test
     void varDecWithVariableAndNumberMult() {
-        StmtBlock mainBlock = GetAST("{int x = 0; x = x * 2; }"); //TODO: stesso problema di prima
+        StmtBlock mainBlock = GetAST("{int x = 0; x = x * 2; }");
         String expected =
                 OpenScopeWithVars(1, true) +
                     "li $a0 0\n" +
@@ -221,13 +223,6 @@ class VarDeclarationCodeGen {
     @Test
     void varDecWithBooleanExpressionAnd() {
 
-        new MockUp<Strings>() {
-            @Mock
-            public String GetFreshLabel() {
-                return "end";
-            }
-        };
-
         StmtBlock mainBlock = GetAST("{ bool x = true && false; }");
         String expected =
                 OpenScopeWithVars(1, true) +
@@ -244,13 +239,6 @@ class VarDeclarationCodeGen {
 
     @Test
     void varDecWithBooleanExpressionOr() {
-
-        new MockUp<Strings>() {
-            @Mock
-            public String GetFreshLabel() {
-                return "end";
-            }
-        };
 
         StmtBlock mainBlock = GetAST("{ bool x = true || false; }");
         String expected =
@@ -269,13 +257,6 @@ class VarDeclarationCodeGen {
 
     @Test
     void varDecWithBooleanExpressionComplex() {
-
-        new MockUp<Strings>() {
-            @Mock
-            public String GetFreshLabel() {
-                return "end";
-            }
-        };
 
         StmtBlock mainBlock = GetAST("{ bool x = (false || false) && (true && false) ; }");
         String expected =

@@ -13,9 +13,9 @@ import static util.SemanticErrorChecker.*;
 
 public class StmtDelete extends Stmt {
 
-	private String id;
+	private final String id;
 
-    private static List<Function<StEntry, Boolean>> CHECKS = Arrays.asList(IS_NULL, VAR_IS_DELETED, FUN_IS_DELETED);
+    private static final List<Function<StEntry, Boolean>> CHECKS = Arrays.asList(IS_NULL, VAR_IS_DELETED, FUN_IS_DELETED);
 
 	public StmtDelete(String id) {
 		this.id = id;

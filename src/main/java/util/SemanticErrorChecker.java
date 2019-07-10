@@ -19,7 +19,7 @@ public class SemanticErrorChecker {
 
     private static final Function<String, Function<String, SemanticError>> ERROR_TEMPLATE = base_error -> id -> new SemanticError(base_error + id);
 
-    public static Map<Function<StEntry, Boolean>, Function<String, SemanticError>> VALIDATION_ERRORS;
+    public static final Map<Function<StEntry, Boolean>, Function<String, SemanticError>> VALIDATION_ERRORS;
 
     static {
         VALIDATION_ERRORS = new HashMap<>();

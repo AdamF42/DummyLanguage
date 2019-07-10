@@ -67,10 +67,12 @@ public class ValueId extends Value {
 
     @Override
     public String codeGeneration() {
-        if (nl==entry.getNestinglevel())
-            return loadW(ACC, Integer.toString(entry.getOffset()), FP);
-        return loadW(AL,"0",FP) +
-                getVariableForCgen(nl,entry)+ //TODO: passa due interi invece di intero ed entry
-                loadW(ACC,Integer.toString(entry.getOffset()),AL);
+        if (nl!=entry.getNestinglevel()) {
+            return loadW(AL, "0", FP) +
+                    getVariableForCgen(nl, entry.getNestinglevel()) +
+                    loadW(ACC, Integer.toString(entry.getOffset()), AL);
+        }
+        return loadW(ACC, Integer.toString(entry.getOffset()), FP);
+
     }
 }
