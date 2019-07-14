@@ -67,6 +67,40 @@ class FunctionExec {
     }
 
     @Test
+    void Function_ShouldPrintNegativeExpression_WithTwoParams() {
+
+        List<Integer> actual = GetExecutionPrintsForFile(
+                "{" +
+                        "    f(int x, int y){" +
+                        "       print (-x+y);" + // 0-x+y
+                        "    }" +
+                        "    f(1,43);" +
+                        "}", false);
+
+        List<Integer> expected = new ArrayList<>();
+        expected.add(42);
+
+        assertEquals(expected,actual);
+    }
+
+    @Test
+    void Function_ShouldPrintNegativeExpression_WithTwoParams2() {
+
+        List<Integer> actual = GetExecutionPrintsForFile(
+                "{" +
+                        "    f(int x, int y){" +
+                        "       print ((-x)+y);" + // (0-x)+y 
+                        "    }" +
+                        "    f(1,43);" +
+                        "}", false);
+
+        List<Integer> expected = new ArrayList<>();
+        expected.add(42);
+
+        assertEquals(expected,actual);
+    }
+
+    @Test
     void FunctionOneParamPrint_ShouldPrint1_WithTrueBoolIn() {
 
         List<Integer> actual = GetExecutionPrintsForFile(
