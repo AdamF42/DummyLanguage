@@ -10,6 +10,11 @@ import java.util.*;
 
 public class TypeFunction extends Type {
     private final List<VarStEntry> param;
+
+    public StmtBlock getBody() {
+        return body;
+    }
+
     private final StmtBlock body;
 
     public TypeFunction(List<VarStEntry> param, StmtBlock body) {

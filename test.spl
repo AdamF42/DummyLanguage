@@ -1,3 +1,32 @@
 {
-    int x = 3;
+    fibonacci(int n, var int result){
+        int tmp = 42;
+        if ( n == 0 ) then {
+            result = 0;
+        } else {
+            if ( n == 1 ) then {
+                result = 1;
+            } else {
+                fibonacci(n-1, result);
+                tmp = result;
+                fibonacci(n-2, result);
+                result = result + tmp;
+            }
+        }
+    }
+    int a = 0;
+    fibonacci(6, a);
+    print a;
+    a = 0;
+    fibonacci(7, a);
+    print a;
+    a = 0;
+    fibonacci(8, a);
+    print a;
+    a = 0;
+    fibonacci(9, a);
+    print a;
+    a = 0;
+    fibonacci(10, a);
+    print a;
 }

@@ -12,7 +12,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static utils.TestUtil.GetExecutionPrintsForFile;
 
-class IfThenElseExecution {
+class IfThenElseExecutionTests {
 
     private static int label_count;
     private static final HashMap<Integer, String> labels = new HashMap<>();
@@ -26,7 +26,7 @@ class IfThenElseExecution {
     void setUp() {
         new MockUp<Strings>() {
             @Mock
-            public String GetFreshLabel() {
+            public String getFreshLabel() {
                 label_count++;
                 return labels.get(label_count);
             }

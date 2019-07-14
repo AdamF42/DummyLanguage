@@ -13,7 +13,7 @@ import java.util.HashMap;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static utils.TestUtil.*;
 
-class IfThenElseCodeGen {
+class IfThenElseCodeGenTests {
 
     private static final String X_DECLARATION = "li $a0 1\nsw $a0 4($fp)\n";
     private static final String CGEN_X = "lw $a0 4($fp)\n";
@@ -37,7 +37,7 @@ class IfThenElseCodeGen {
 
         new MockUp<Strings>() {
             @Mock
-            public String GetFreshLabel() {
+            public String getFreshLabel() {
                 label_count ++;
                 return labels.get(label_count);
             }
@@ -84,7 +84,7 @@ class IfThenElseCodeGen {
 
         new MockUp<Strings>() {
             @Mock
-            public String GetFreshLabel() {
+            public String getFreshLabel() {
                 label_count ++;
                 return labels.get(label_count);
             }
@@ -132,7 +132,7 @@ class IfThenElseCodeGen {
 
         new MockUp<Strings>() {
             @Mock
-            public String GetFreshLabel() {
+            public String getFreshLabel() {
                 label_count ++;
                 return labels.get(label_count);
             }
@@ -179,7 +179,7 @@ class IfThenElseCodeGen {
 
         new MockUp<Strings>() {
             @Mock
-            public String GetFreshLabel() {
+            public String getFreshLabel() {
                 label_count ++;
                 return labels.get(label_count);
             }
@@ -226,7 +226,7 @@ class IfThenElseCodeGen {
 
         new MockUp<Strings>() {
             @Mock
-            public String GetFreshLabel() {
+            public String getFreshLabel() {
                 label_count ++;
                 return labels.get(label_count);
             }
@@ -273,7 +273,7 @@ class IfThenElseCodeGen {
 
         new MockUp<Strings>() {
             @Mock
-            public String GetFreshLabel() {
+            public String getFreshLabel() {
                 label_count ++;
                 return labels.get(label_count);
             }

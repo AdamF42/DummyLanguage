@@ -39,9 +39,9 @@ public class StmtBlock extends Stmt {
 	public String codeGeneration() {
 
 		StringBuilder result = new StringBuilder();
-		result.append(push(FP)); // OLD FP
-		result.append(handleVariablesAllocation(true)); // LOAD VARIABLES
-		result.append(push(FP)); // FP
+		result.append(push(FP));
+		result.append(handleVariablesAllocation(true));
+		result.append(push(FP));
 		result.append(move(FP,SP));
 		if (nl==0)
 			result.append(storeW(FP,"0",FP));
@@ -77,7 +77,7 @@ public class StmtBlock extends Stmt {
 		return result;
 	}
 
-	private String handleVariablesAllocation(boolean isAllocating){
+	String handleVariablesAllocation(boolean isAllocating){
 
 		long varCounter = children.stream().filter(child -> child instanceof StmtVarDeclaration).count();
 

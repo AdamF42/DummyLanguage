@@ -12,8 +12,8 @@ public class FactorEq extends Factor {
 
     @Override
     public String codeGeneration() {
-        String equal = GetFreshLabel();
-        String exit = GetFreshLabel();
+        String equal = getFreshLabel();
+        String exit = getFreshLabel();
         return
                 getLeft().codeGeneration() +
                 push(ACC) +

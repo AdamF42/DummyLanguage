@@ -3,7 +3,7 @@ package models.compiler.statements;
 import models.compiler.*;
 import models.compiler.expressions.Exp;
 import models.compiler.types.Type;
-import models.compiler.types.TypeBool;
+import models.compiler.types.Bool;
 import util.SemanticError;
 import util.Strings;
 import util.TypeCheckException;
@@ -30,7 +30,7 @@ public class StmtIfThenElse extends Stmt {
     public Type typeCheck() throws TypeCheckException {
 
         Type conditionType = condition.typeCheck();
-        if (!(conditionType instanceof TypeBool))
+        if (!(conditionType instanceof Bool))
             throw new TypeCheckException("Not boolean condition, got " + conditionType);
         thenBranch.typeCheck();
         elseBranch.typeCheck();
@@ -61,8 +61,8 @@ public class StmtIfThenElse extends Stmt {
 
     @Override
     public String codeGeneration() {
-        String exit = Strings.GetFreshLabel();
-        String elseBranchLabel = Strings.GetFreshLabel();
+        String exit = Strings.getFreshLabel();
+        String elseBranchLabel = Strings.getFreshLabel();
         return
                 condition.codeGeneration() +
                 loadI(TMP,"0") +

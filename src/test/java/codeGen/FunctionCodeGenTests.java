@@ -11,13 +11,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static utils.TestUtil.*;
 
 
-class FunctionCodeGen {
+class FunctionCodeGenTests {
 
     @BeforeEach
     void setUp() {
         new MockUp<Strings>() {
             @Mock
-            public String GetFreshLabel() {
+            public String getFreshLabel() {
                 return "f_entry";
             }
         };

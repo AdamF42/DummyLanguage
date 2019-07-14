@@ -5,10 +5,10 @@ import util.SemanticError;
 
 import java.util.ArrayList;
 
-public class TypeBool extends TypeReferenceable {
+public class Bool extends TypeReferenceable {
 
 
-    public TypeBool() {
+    public Bool() {
     }
 
     @Override

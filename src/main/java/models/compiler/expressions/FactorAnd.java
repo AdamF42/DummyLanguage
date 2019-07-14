@@ -12,7 +12,7 @@ public class FactorAnd extends Factor {
 
     @Override
     public String codeGeneration() {
-        String endLabel = Strings.GetFreshLabel();
+        String endLabel = Strings.getFreshLabel();
         return  getLeft().codeGeneration() +
                 loadI(TMP, "0") +
                 beq(ACC,TMP,endLabel) +

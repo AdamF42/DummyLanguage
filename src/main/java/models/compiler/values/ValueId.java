@@ -45,7 +45,7 @@ public class ValueId extends Value {
     public List<SemanticError> checkSemantics(Environment e) {
 
         ArrayList<SemanticError> res = new ArrayList<>();
-        //TODO rifattorizza i controlli semantici
+
         if(!e.containsVariable(this.getVal())){
             res.add(new SemanticError(Strings.ERROR_VARIABLE_DOESNT_EXIST + this.getVal()));
         } else if (e.getVariableValue(this.getVal()).isDeleted()){
@@ -53,10 +53,10 @@ public class ValueId extends Value {
         } else if (e.isInsideVarDeclaration() ) {
             if (e.getDeclaredVariable().equals(this.getId()))
                 res.add(new SemanticError(ERROR_VARIABLE_NOT_INITIALIZED + this.getVal()));
-                //TODO: not DRY
+
                 this.entry=e.getVariableValue(this.getVal());
         } else {
-            //TODO: not DRY
+
             this.entry=e.getVariableValue(this.getVal());
             this.nl=e.getNestingLevel();
             this.addrwAccess(this.entry);

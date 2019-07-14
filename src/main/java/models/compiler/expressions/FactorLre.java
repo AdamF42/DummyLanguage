@@ -13,8 +13,8 @@ public class FactorLre extends Factor {
 
     @Override
     public String codeGeneration() {
-        String lower = Strings.GetFreshLabel();
-        String exit = GetFreshLabel();
+        String lower = Strings.getFreshLabel();
+        String exit = getFreshLabel();
         return
                 getLeft().codeGeneration() +
                 push(ACC) +

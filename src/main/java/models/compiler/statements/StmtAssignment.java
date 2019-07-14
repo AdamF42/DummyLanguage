@@ -33,7 +33,7 @@ public class StmtAssignment extends Stmt{
     @Override
     public Type typeCheck() throws TypeCheckException {
         TypeUtils.typeCheck(this.idEntry.getType(), exp);
-        return this.idEntry.getType();
+        return null;
     }
 
     @Override
@@ -61,6 +61,7 @@ public class StmtAssignment extends Stmt{
 
         return result.toString();
     }
+
 
     private List<SemanticError>  checkIdSemantics(Environment e) {
 

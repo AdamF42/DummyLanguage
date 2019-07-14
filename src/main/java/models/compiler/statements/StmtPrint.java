@@ -21,7 +21,8 @@ public class StmtPrint extends Stmt{
 
     @Override
     public Type typeCheck() throws TypeCheckException {
-        return exp.typeCheck();
+        exp.typeCheck();
+        return null;
     }
 
     @Override

@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static utils.TestUtil.*;
 
 
-class FunctionExec {
+class FunctionExecTests {
     private static int label_count;
     private static final HashMap<Integer, String> labels = new HashMap<>();
     static {
@@ -40,13 +40,6 @@ class FunctionExec {
 
     void setUp() {
         label_count = 0;
-        new MockUp<Strings>() {
-            @Mock
-            public String GetFreshLabel() {
-                label_count ++;
-                return labels.get(label_count);
-            }
-        };
     }
 
     @Test
@@ -72,7 +65,7 @@ class FunctionExec {
         List<Integer> actual = GetExecutionPrintsForFile(
                 "{" +
                         "    f(int x, int y){" +
-                        "       print (-x+y);" + // 0-x+y
+                        "       print (-x+y);" +
                         "    }" +
                         "    f(1,43);" +
                         "}", false);
@@ -89,13 +82,30 @@ class FunctionExec {
         List<Integer> actual = GetExecutionPrintsForFile(
                 "{" +
                         "    f(int x, int y){" +
-                        "       print ((-x)+y);" + // (0-x)+y 
+                        "       print ((-x)+y);" +
                         "    }" +
                         "    f(1,43);" +
                         "}", false);
 
         List<Integer> expected = new ArrayList<>();
         expected.add(42);
+
+        assertEquals(expected,actual);
+    }
+
+    @Test
+    void Function_ShouldPrintNegativeExpression_WithTwoParams3() {
+
+        List<Integer> actual = GetExecutionPrintsForFile(
+                "{" +
+                        "    f(int x, int y){" +
+                        "       print (-(x+y));" +
+                        "    }" +
+                        "    f(1,93);" +
+                        "}", false);
+
+        List<Integer> expected = new ArrayList<>();
+        expected.add(-94);
 
         assertEquals(expected,actual);
     }
@@ -204,7 +214,7 @@ class FunctionExec {
     void FunctionReferenceParam_ShouldPrintExpected_WithReferenceParameter() {
         new MockUp<Strings>() {
             @Mock
-            public String GetFreshLabel() {
+            public String getFreshLabel() {
                 label_count ++;
                 return "label"+String.valueOf(label_count);
             }
@@ -235,7 +245,7 @@ class FunctionExec {
     void Function_ShouldPrintExpected_WithReferenceParameter() {
         new MockUp<Strings>() {
             @Mock
-            public String GetFreshLabel() {
+            public String getFreshLabel() {
                 label_count ++;
                 return "label"+String.valueOf(label_count);
             }
@@ -243,24 +253,23 @@ class FunctionExec {
 
         List<Integer> actual = GetExecutionPrintsForFile("" +
                 "{" +
-                "   int a = 41;" +
                 "   int w = 90;" +
                 "   f(var int x, int y){" +
                 "       x = x+1;" +
                 "       g(int x, var int y){" +
                 "           y = y+4;" +
                 "       }" +
-                "       print a;" +
                 "       print w;" +
                 "       g(x, w);" +
                 "   }" +
+                "   int a = 41;" +
+                "   print a;" +
                 "   f(a,5);" +
                 "   print a;" +
                 "   print w;" +
                 "}", false);
 
         List<Integer> expected = new ArrayList<>();
-        // TODO: Giustifica nella relazione il perchè non stampa 42..l'update viene fatto dopo il ritorno della funzione...
         expected.add(41);
         expected.add(90);
 
@@ -430,17 +439,64 @@ class FunctionExec {
 
         List<Integer> actual = GetExecutionPrintsForFile(
                 "{\n" +
-                    "    int u = 1 ;\n" +
-                    "    f(var int x, int n){\n" +
-                    "        if (n == 0) then { print(x) ; }\n" +
-                    "        else { int y = x*n ;  f(y,n-1) ; }\n" +
-                    "        delete x ;\n" +
-                    "    }\n" +
-                    "    f(u,6) ;\n" +
-                    "}", false);
+                        "    int u = 1 ;\n" +
+                        "    f(var int x, int n){\n" +
+                        "        if (n == 0) then { print(x) ; }\n" +
+                        "        else { int y = x*n ;  f(y,n-1) ; }\n" +
+                        "        delete x ;\n" +
+                        "    }\n" +
+                        "    f(u,6) ;\n" +
+                        "}", false);
 
         List<Integer> expected = new ArrayList<>();
         expected.add(720);
+
+        assertEquals(expected,actual);
+    }
+
+    @Test
+    void RecursiveFibonocciFunction_ShouldPrintExpected_WithActualCode() {
+
+        List<Integer> actual = GetExecutionPrintsForFile(
+                "{\n" +
+                        "    fibonacci(int n, var int result){\n" +
+                        "        int tmp = 42;\n" +
+                        "        if ( n == 0 ) then {\n" +
+                        "            result = 0;\n" +
+                        "        } else {\n" +
+                        "            if ( n == 1 ) then {\n" +
+                        "                result = 1;\n" +
+                        "            } else {\n" +
+                        "                fibonacci(n-1, result);\n" +
+                        "                tmp = result;\n" +
+                        "                fibonacci(n-2, result);\n" +
+                        "                result = result + tmp;\n" +
+                        "            }\n" +
+                        "        }\n" +
+                        "    }\n" +
+                        "    int a = 0;\n" +
+                        "    fibonacci(6, a);\n" +
+                        "    print a;\n" +
+                        "    a = 0;\n" +
+                        "    fibonacci(7, a);\n" +
+                        "    print a;\n" +
+                        "    a = 0;\n" +
+                        "    fibonacci(8, a);\n" +
+                        "    print a;\n" +
+                        "    a = 0;\n" +
+                        "    fibonacci(9, a);\n" +
+                        "    print a;\n" +
+                        "    a = 0;\n" +
+                        "    fibonacci(10, a);\n" +
+                        "    print a;\n" +
+                        "}", false);
+
+        List<Integer> expected = new ArrayList<>();
+        expected.add(8);
+        expected.add(13);
+        expected.add(21);
+        expected.add(34);
+        expected.add(55);
 
         assertEquals(expected,actual);
     }
