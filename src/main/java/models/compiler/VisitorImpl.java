@@ -73,7 +73,7 @@ public class VisitorImpl extends ComplexStaticAnalysisBaseVisitor<ElementBase> {
     public Parameter visitParameter(ComplexStaticAnalysisParser.ParameterContext ctx) {
 
         TypeReferenceable paramType = visitType(ctx.type());
-        if ( ctx.children.get(0).toString().contains("var")) {
+        if ( ctx.getText().startsWith("var")) {
             paramType.setReference(true);
         }
 
@@ -90,12 +90,12 @@ public class VisitorImpl extends ComplexStaticAnalysisBaseVisitor<ElementBase> {
             ValueInt zero = new ValueInt("0");
             String op = ctx.getChild(2)!=null ? ctx.getChild(2).getText() :null;
             if(op==null || righExp==null)
-                return visitTerm(ctx.left);
+                return new ExpSub(zero, visitTerm(ctx.term()));
             switch (op) {
                 case "+":
-                    return new ExpSub(zero, new ExpAdd(leftTerm,righExp));
+                    return new ExpAdd(new ExpSub(zero, visitTerm(ctx.term())), visitExp(ctx.right));
                 case "-":
-                    return new ExpSub(zero, new ExpSub(leftTerm,righExp));
+                    return new ExpSub(new ExpSub(zero, visitTerm(ctx.term())), visitExp(ctx.right));
                 default:
                     throw new IllegalArgumentException("Invalid operator :" + op);
             }
