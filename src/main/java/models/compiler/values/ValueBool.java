@@ -3,7 +3,7 @@ package models.compiler.values;
 import models.compiler.Environment;
 import util.SemanticError;
 import models.compiler.types.Type;
-import models.compiler.types.TypeBool;
+import models.compiler.types.Bool;
 
 import java.util.*;
 
@@ -32,7 +32,7 @@ public class ValueBool extends Value {
 
     @Override
     public Type typeCheck() {
-        return new TypeBool();
+        return new Bool();
     }
 
     @Override

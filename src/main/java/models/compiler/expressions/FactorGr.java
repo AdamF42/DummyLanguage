@@ -13,8 +13,8 @@ public class FactorGr extends Factor {
 
     @Override
     public String codeGeneration() {
-        String greater = Strings.GetFreshLabel();
-        String exit = GetFreshLabel();
+        String greater = Strings.getFreshLabel();
+        String exit = getFreshLabel();
         return
                 getLeft().codeGeneration() +
                 push(ACC) +

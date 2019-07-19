@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static utils.TestUtil.*;
 
-class PrintCodeGen {
+class PrintCodeGenTests {
 
     private static final String CGEN_X =
             "li $a0 1\n" +

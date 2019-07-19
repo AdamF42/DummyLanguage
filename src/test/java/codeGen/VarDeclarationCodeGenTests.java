@@ -13,13 +13,13 @@ import static org.junit.jupiter.api.Assertions.*;
 import static utils.TestUtil.*;
 
 
-class VarDeclarationCodeGen {
+class VarDeclarationCodeGenTests {
 
     @BeforeEach
     void setUp() {
         new MockUp<Strings>() {
             @Mock
-            public String GetFreshLabel() {
+            public String getFreshLabel() {
                 return "end";
             }
         };

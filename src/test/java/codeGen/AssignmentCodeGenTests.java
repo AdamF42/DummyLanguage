@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static utils.TestUtil.*;
 
-class AssignmentCodeGen {
+class AssignmentCodeGenTests {
 
 
     @Test
@@ -82,11 +82,11 @@ class AssignmentCodeGen {
                         OpenScopeWithVars(0,false) +
                             "lw $al 0($fp)\n" +
                             "lw $al 0($al)\n" +
-                            "lw $a0 4($al)\n" + // cgen(y)
+                            "lw $a0 4($al)\n" +
 
                             "lw $al 0($fp)\n" +
                             "lw $al 0($al)\n" +
-                            "sw $a0 8($al)\n" + // cgen(x=y)
+                            "sw $a0 8($al)\n" +
                         CloseScopeWithVars(0) +
                     CloseScopeWithVars(0) +
                 CloseScopeWithVars(2);

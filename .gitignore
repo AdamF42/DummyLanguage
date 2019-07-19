@@ -2,3 +2,9 @@
 \.idea/
 
 target/
+
+report/\.cache/
+
+report/out/
+
+*.o

@@ -50,6 +50,7 @@ public class StmtDelete extends Stmt {
 		return new ArrayList<>();
 	}
 
+
 	@Override
 	public String codeGeneration() {
 		return Strings.EMPTY;

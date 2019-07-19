@@ -40,7 +40,7 @@ public class StmtVarDeclaration extends Stmt {
         if (exp != null){
             TypeUtils.typeCheck(type, exp);
         }
-        return this.type.typeCheck();
+        return null;
     }
 
     @Override

@@ -108,7 +108,7 @@ public class Environment {
 		return identifierNL == nestingLevel;
 	}
 
-	//TODO: riscrivi...
+
 	public int getIncrementOffset() {
 		int topOffSet = offset.pop();
 		topOffSet  = topOffSet + 4;

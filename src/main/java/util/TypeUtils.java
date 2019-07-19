@@ -18,7 +18,7 @@ public class TypeUtils {
         return exp instanceof ValueId;
     }
 
-    //TODO: refactor
+
     public static void functionParamTypeCheck(Type expectedType, ElementBase actualElement) throws TypeCheckException {
 
         if (expectedType instanceof TypeReferenceable && ((TypeReferenceable) expectedType).isReference()) {
@@ -41,7 +41,7 @@ public class TypeUtils {
 
     public static void typeCheck(Type expectedType, ElementBase actualElement) throws TypeCheckException {
         if (!expectedType.getClass().equals(actualElement.typeCheck().getClass())) {
-            throw new TypeCheckException("ExpectedType " + (expectedType instanceof TypeReferenceable ? "var " : "") + expectedType + ", got " + actualElement.typeCheck());
+            throw new TypeCheckException("ExpectedType " + expectedType + ", got " + actualElement.typeCheck());
         }
     }
 

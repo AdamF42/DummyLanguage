@@ -5,9 +5,9 @@ import util.SemanticError;
 
 import java.util.ArrayList;
 
-public class TypeInt extends TypeReferenceable {
+public class Int extends TypeReferenceable {
 
-    public TypeInt() {
+    public Int() {
     }
 
 

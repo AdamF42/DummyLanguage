@@ -7,6 +7,5 @@
             delete x;
         }
     } // errore perchè i due rami dell'ifThenElse hanno tipo "comportamentale" diverso
-    int x = 1;
-    f(x,1);
+
 }

@@ -3,7 +3,7 @@ package models.compiler.values;
 import models.compiler.Environment;
 import util.SemanticError;
 import models.compiler.types.Type;
-import models.compiler.types.TypeInt;
+import models.compiler.types.Int;
 
 import java.util.ArrayList;
 
@@ -24,7 +24,7 @@ public class ValueInt extends Value {
 
     @Override
     public Type typeCheck() {
-        return new TypeInt();
+        return new Int();
     }
 
     @Override

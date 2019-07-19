@@ -19,10 +19,10 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-// TODO: rewrite all test class in order to accomplish tests conventions
-class MainAppTest {
 
-    private final String baseTestsRoot = "src/tests/samples/";
+class MainAppTests {
+
+    private final String baseTestsRoot = "src/test/samples/";
 
     private StmtBlock getAST(String fileName){
         try {
@@ -170,8 +170,10 @@ class MainAppTest {
         Environment e = new Environment();
         assertNotNull(mainBlock);
         List<SemanticError> errors =  mainBlock.checkSemantics(e);
-        assertEquals(1, errors.size());
-        assertEquals(Strings.ERROR_DANGEROUS_USE_OF_PARAMETER + "x", errors.get(0).toString());
+        assertEquals(2, errors.size());
+        assertEquals(Strings.ERROR_GLOBAL_VAR_AS_PARAMETER + "x", errors.get(0).toString());
+        assertEquals(Strings.ERROR_DANGEROUS_USE_OF_PARAMETER + "x", errors.get(1).toString());
+
     }
 
     @Test
@@ -234,7 +236,7 @@ class MainAppTest {
         List<SemanticError> errors =  mainBlock.checkSemantics(e);
         assertEquals(0, errors.size());
         Throwable exception = assertThrows(TypeCheckException.class, mainBlock::typeCheck);
-        assertEquals("ExpectedType var TypeBool, got TypeInt", exception.getMessage());
+        assertEquals("ExpectedType Bool, got Int", exception.getMessage());
     }
 
     @Test
@@ -245,7 +247,7 @@ class MainAppTest {
         List<SemanticError> errors =  mainBlock.checkSemantics(e);
         assertEquals(0, errors.size());
         Throwable exception = assertThrows(TypeCheckException.class, mainBlock::typeCheck);
-        assertEquals("ExpectedType var TypeInt, got TypeBool", exception.getMessage());
+        assertEquals("ExpectedType Int, got Bool", exception.getMessage());
     }
 
     @Test
@@ -256,7 +258,7 @@ class MainAppTest {
         List<SemanticError> errors =  mainBlock.checkSemantics(e);
         assertEquals(0, errors.size());
         Throwable exception = assertThrows(TypeCheckException.class, mainBlock::typeCheck);
-        assertEquals("ExpectedType var TypeInt, got TypeBool", exception.getMessage());
+        assertEquals("ExpectedType Int, got Bool", exception.getMessage());
     }
 
     @Test
@@ -267,7 +269,7 @@ class MainAppTest {
         List<SemanticError> errors =  mainBlock.checkSemantics(e);
         assertEquals(0, errors.size());
         Throwable exception = assertThrows(TypeCheckException.class, mainBlock::typeCheck);
-        assertEquals("ExpectedType var TypeBool, got TypeInt", exception.getMessage());
+        assertEquals("ExpectedType Bool, got Int", exception.getMessage());
     }
 
     @Test
@@ -319,7 +321,7 @@ class MainAppTest {
         List<SemanticError> errors =  mainBlock.checkSemantics(e);
         assertEquals(0, errors.size());
         Throwable exception = assertThrows(TypeCheckException.class, mainBlock::typeCheck);
-        assertEquals("ExpectedType: var TypeInt, got: right term TypeInt", exception.getMessage());
+        assertEquals("ExpectedType: var Int, got: right term Int", exception.getMessage());
     }
 
     @Test

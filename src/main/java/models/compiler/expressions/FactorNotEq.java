@@ -13,8 +13,8 @@ public class FactorNotEq extends Factor {
 
     @Override
     public String codeGeneration() {
-        String notEqual = Strings.GetFreshLabel();
-        String exit = GetFreshLabel();
+        String notEqual = Strings.getFreshLabel();
+        String exit = getFreshLabel();
         return
                 getLeft().codeGeneration() +
                 push(ACC) +

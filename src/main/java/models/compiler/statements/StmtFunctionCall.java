@@ -51,7 +51,7 @@ public class StmtFunctionCall extends Stmt {
             TypeUtils.functionParamTypeCheck(expectedType, actualType);
         }
 
-        return this.envFunType;
+        return null;
     }
 
     @Override
@@ -65,7 +65,7 @@ public class StmtFunctionCall extends Stmt {
         }
         this.nl=e.getNestingLevel();
         this.label = FunStEntry.GetLabel();
-        result.addAll(setFunctionWithParams(e));
+        setFunctionWithParams(e);
         result.addAll(checkParametersSemantics(e));
         result.addAll(checkFunDeletionsSemantics());
 
@@ -78,7 +78,8 @@ public class StmtFunctionCall extends Stmt {
         StringBuilder result = new StringBuilder();
         result.append(push(FP));
 
-        //push all params in inverted order
+        result.append( envFunType.getBody().handleVariablesAllocation(true));
+
         for(int i = actualParams.size()-1; i>=0; i--) {
             result.append(actualParams.get(i).codeGeneration());
             result.append(push(ACC));
@@ -86,7 +87,7 @@ public class StmtFunctionCall extends Stmt {
 
         result.append(jal(label));
 
-        // save updated value for references
+        // update reference variables value
         for(int i = actualParams.size()-1; i>=0; i--) {
             if(formalParams.get(i).isReference()){
                 VarStEntry entry = ((ValueId)actualParams.get(i)).getEntry();
@@ -109,23 +110,22 @@ public class StmtFunctionCall extends Stmt {
         List<SemanticError> result = new ArrayList<>();
         if (actualParams != null && actualParams.size() == formalParams.size()) {
             for (int i = 0; i < formalParams.size(); i++) {
+
                 Exp actualParam = actualParams.get(i);
                 StEntry formalParam = formalParams.get(i);
                 result.addAll(checkParamSemantics(e, actualParam, formalParam));
             }
-        } else result.add(new SemanticError(Strings.ERROR_PARAMETER_MISMATCH + id));
+        } else result.add(new SemanticError(Strings.ERROR_PARAMETER_MISMATCH + formalParams.size()));
 
         return result;
     }
 
-    private List<SemanticError> setFunctionWithParams(Environment e) {
+    private void setFunctionWithParams(Environment e) {
 
-        List<SemanticError> result = new ArrayList<>();
         Type actualFunctionType = e.getFunctionValue(id).getType();
         this.envFunType = (TypeFunction) actualFunctionType;
         this.formalParams = envFunType.getParam();
 
-        return result;
     }
 
     private List<SemanticError> checkFunDeletionsSemantics() {
@@ -150,11 +150,18 @@ public class StmtFunctionCall extends Stmt {
         List<SemanticError> result = new ArrayList<>(actualParam.checkSemantics(e));
         if (formalParam == null) return result;
         // Handle EXAMPLE 1
-        if (formalParam.isReference() &&
-                e.containsVariable(actualParamId) &&
-                isExpValueId(actualParam) &&
-                (formalParam.isDeleted() || formalParam.isToBeDeletedOnFunCall())) {
+        if (formalParam.isReference() && e.containsVariable(actualParamId) && isExpValueId(actualParam) && (formalParam.isDeleted() || formalParam.isToBeDeletedOnFunCall())) {
             e.getVariableValue(actualParamId).setDeleted(true);
+        }
+        // avoid using global params by reference
+        if (formalParam.isReference() && isExpValueId(actualParam)){
+            StEntry actuamParamVariable = e.getVariableValue(((ValueId)actualParam).getId());
+            FunStEntry funEntry = e.getFunctionValue(id);
+            if (actuamParamVariable.getNestinglevel() <= funEntry.getNestinglevel() &&
+                    funEntry.getRwAccesses().contains(actuamParamVariable) ||
+                    funEntry.getDeletions().contains(actuamParamVariable)){
+                result.add(new SemanticError(Strings.ERROR_GLOBAL_VAR_AS_PARAMETER + actualParamId));
+            }
         }
 
         if (!this.envFunType.getDeletions().isEmpty()) {

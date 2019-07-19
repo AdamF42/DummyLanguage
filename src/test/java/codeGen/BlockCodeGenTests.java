@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static utils.TestUtil.*;
 
-class BlockCodeGen {
+class BlockCodeGenTests {
 
     private static final String X_CGEN =
                 "li $a0 1\n" +

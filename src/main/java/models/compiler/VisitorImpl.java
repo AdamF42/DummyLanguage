@@ -2,12 +2,9 @@ package models.compiler;
 
 
 import models.compiler.expressions.*;
-import models.compiler.types.Parameter;
+import models.compiler.types.*;
 import models.compiler.statements.*;
-import models.compiler.types.Type;
-import models.compiler.types.TypeBool;
-import models.compiler.types.TypeInt;
-import models.compiler.types.TypeReferenceable;
+import models.compiler.types.Bool;
 import models.compiler.values.*;
 import parser.ComplexStaticAnalysisBaseVisitor;
 import parser.ComplexStaticAnalysisParser;
@@ -20,6 +17,9 @@ public class VisitorImpl extends ComplexStaticAnalysisBaseVisitor<ElementBase> {
     @Override
     public StmtBlock visitBlock(ComplexStaticAnalysisParser.BlockContext ctx) {
 
+        if (ctx==null)
+            return null;
+
         List<Stmt> children = new ArrayList<>();
         for (ComplexStaticAnalysisParser.StatementContext stmtCtx : ctx.statement())
             children.add((Stmt) visit(stmtCtx));
@@ -29,6 +29,10 @@ public class VisitorImpl extends ComplexStaticAnalysisBaseVisitor<ElementBase> {
 
     @Override
     public ElementBase visitStatement(ComplexStaticAnalysisParser.StatementContext ctx) {
+
+        if (ctx==null || ctx.children==null)
+            return null;
+
         return visit(ctx.getChild(0));
     }
 
@@ -49,6 +53,9 @@ public class VisitorImpl extends ComplexStaticAnalysisBaseVisitor<ElementBase> {
     @Override
     public StmtVarDeclaration visitVarDec(ComplexStaticAnalysisParser.VarDecContext ctx) {
 
+        if (ctx == null || ctx.ID() == null)
+            return null;
+
         Type type = visitType(ctx.type());
         String id = ctx.ID().getText();
         Exp exp = visitExp(ctx.exp());
@@ -59,13 +66,15 @@ public class VisitorImpl extends ComplexStaticAnalysisBaseVisitor<ElementBase> {
 
     @Override
     public TypeReferenceable visitType(ComplexStaticAnalysisParser.TypeContext ctx) {
+
         String type = ctx.getText();
         TypeReferenceable typeNode;
         if (type.equals("int")) {
-            typeNode = new TypeInt();
+            typeNode = new Int();
         } else if (type.equals("bool")) {
-            typeNode = new TypeBool();
+            typeNode = new Bool();
         } else throw new IllegalArgumentException("Unsupported type: " + type);
+
         return typeNode;
     }
 
@@ -82,6 +91,9 @@ public class VisitorImpl extends ComplexStaticAnalysisBaseVisitor<ElementBase> {
 
     @Override
     public Exp visitExp(ComplexStaticAnalysisParser.ExpContext ctx) {
+
+        if (ctx==null || ctx.left==null)
+            return null;
 
         Term leftTerm = (Term) visit(ctx.left);
         Exp righExp = ctx.right != null ? (Exp) visit(ctx.right) : null;
@@ -117,6 +129,9 @@ public class VisitorImpl extends ComplexStaticAnalysisBaseVisitor<ElementBase> {
     @Override
     public Term visitTerm(ComplexStaticAnalysisParser.TermContext ctx) {
 
+        if(ctx==null || ctx.left ==null)
+            return null;
+
         Factor leftTerm = visitFactor(ctx.left);
         Term righExp = ctx.right != null ? visitTerm(ctx.right) : null;
         String op = ctx.getChild(1)!=null ? ctx.getChild(1).getText() :null;
@@ -135,6 +150,9 @@ public class VisitorImpl extends ComplexStaticAnalysisBaseVisitor<ElementBase> {
 
     @Override
     public Factor visitFactor(ComplexStaticAnalysisParser.FactorContext ctx) {
+
+        if(ctx==null || ctx.left ==null)
+            return null;
 
         Exp leftTerm =  (Exp) visit(ctx.left);
         Exp righExp = ctx.right != null ? (Exp) visit(ctx.right) : null;

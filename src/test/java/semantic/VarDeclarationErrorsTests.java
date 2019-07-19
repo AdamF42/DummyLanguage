@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static util.Strings.ERROR_VARIABLE_NOT_INITIALIZED;
 import static utils.TestUtil.GetSemanticsErrors;
 
-public class VarDeclarationErrors {
+public class VarDeclarationErrorsTests {
 
 
     @Test

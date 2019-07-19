@@ -14,7 +14,7 @@ import static util.Strings.IP;
 public class ExecuteVM {
 
     static final int CODE_SIZE = 1000;
-    private static final int MEM_SIZE = 100;
+    private static final int MEM_SIZE = 10000;
 
     private final int[] code;
     private final int[] memory = new int[MEM_SIZE];
@@ -107,6 +107,7 @@ public class ExecuteVM {
                     SET_REGISTER_VALUE.get(r1).apply(this,memory[v1 + offset]);
                     break;
                 case CVMParser.PRINT:
+//                    System.out.println(a0);
                     printedResults.add(a0);
                     break;
                 case CVMParser.MOVE:
@@ -159,11 +160,6 @@ public class ExecuteVM {
        int v2 = GET_REGISTER_VALUE.get(INT_TO_STRING_REGISTER.get(code[ip++])).apply(this);
        int result = DO_OPERATION.get(operator).apply(v2,v1);
        SET_REGISTER_VALUE.get(r1).apply(this,result);
-    }
-
-    private void printRegisterValue(){
-
-        System.out.println("$a0: "+ this.a0 +"$al: "+ this.al +"$ip: "+this.ip+"$fp: " +this.fp+ "$sp: "+this.sp+ "$t1: " +this.t1+ "$ra: "+this.ra);
     }
 
     private void pop() {
@@ -240,5 +236,6 @@ public class ExecuteVM {
         this.ip = ip;
         return ip;
     }
+
 }
 

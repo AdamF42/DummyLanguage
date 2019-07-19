@@ -5,7 +5,6 @@ import models.compiler.stentry.StEntry;
 
 import java.util.*;
 
-
 public abstract class Stmt extends ElementBase {
 
     private final Set<StEntry> deletions = new HashSet<>();

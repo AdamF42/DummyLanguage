@@ -11,14 +11,13 @@ import models.compiler.types.TypeFunction;
 import util.SemanticError;
 import util.TypeCheckException;
 import java.util.*;
-import java.util.function.Function;
+
 import static util.SemanticErrorChecker.*;
 import static util.Strings.*;
 
 
 public class StmtFunDeclaration extends Stmt {
 
-    private static final List<Function<StEntry, Boolean>> CHECKS = Collections.singletonList(ALREADY_DECLARED);
     private final String funId;
     private final List<Parameter> params;
     private final StmtBlock body;
@@ -34,27 +33,31 @@ public class StmtFunDeclaration extends Stmt {
 
     @Override
     public Type typeCheck() throws TypeCheckException {
-        return body.typeCheck();
+        body.typeCheck();
+        return null;
     }
 
     @Override
     public List<SemanticError> checkSemantics(Environment e) {
 
         List<SemanticError> result = new ArrayList<>(checkFunIdSemantics(e));
-        e.openScope();
-        e.setInsideFunctionDeclaration(true);
-        result.addAll(checkParamsSemantics(e));
-        result.addAll(checkBodySemantics(e));
-        e.setInsideFunctionDeclaration(false);
-        this.nl=e.getNestingLevel();
-        e.closeScope();
-
+        if(result.isEmpty()) {
+            e.openScope();
+            e.setInsideFunctionDeclaration(true);
+            result.addAll(checkParamsSemantics(e));
+            result.addAll(checkBodySemantics(e));
+            e.setInsideFunctionDeclaration(false);
+            this.nl = e.getNestingLevel();
+            this.funEntry.addAllrwAccesses(this.getRwAccesses());
+            this.funEntry.addAllDeletions(this.getDeletions());
+            e.closeScope();
+        }
         return result;
     }
 
     @Override
     public String codeGeneration() {
-        String skipFunDec = GetFreshLabel();
+        String skipFunDec = getFreshLabel();
         return  b(skipFunDec) +
                 this.f_label + ":\n" +
                 loadW(AL,"0",FP) +
@@ -69,6 +72,7 @@ public class StmtFunDeclaration extends Stmt {
                 pop() +
                 move(TMP,SP) +
                 addi(SP, SP, String.valueOf(params.size() * 4)) +
+                body.handleVariablesAllocation(false) +
                 assignTop(FP) +
                 pop() +
                 jr(RA) +
@@ -78,13 +82,11 @@ public class StmtFunDeclaration extends Stmt {
     private List<SemanticError> checkFunIdSemantics(Environment e) {
 
         StEntry idEntry = Optional.ofNullable((StEntry)e.getVariableValue(funId)).orElse(e.getFunctionValue(funId));
-        for (Function<StEntry, Boolean> check: CHECKS) {
-            if (check.apply(idEntry))
-                return Lists.newArrayList(VALIDATION_ERRORS.get(check).apply(funId));
-        }
+        if (ALREADY_DECLARED.apply(idEntry))
+            return Lists.newArrayList(VALIDATION_ERRORS.get(ALREADY_DECLARED).apply(funId));
 
         TypeFunction type = new TypeFunction(new ArrayList<>(), body);
-        String label = GetFreshLabel();
+        String label = getFreshLabel();
         this.f_label=label;
         e.addFunction(funId, new FunStEntry(e.getNestingLevel(), type, funId, label));
         this.funEntry = e.getFunctionValue(funId);
@@ -104,6 +106,7 @@ public class StmtFunDeclaration extends Stmt {
 
         return result;
     }
+
 
     private List<SemanticError> checkBodySemantics(Environment e) {
 
