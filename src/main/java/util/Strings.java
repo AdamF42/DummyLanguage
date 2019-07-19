@@ -1,22 +1,26 @@
 package util;
 
-import models.stentry.StEntry;
-
-import java.util.UUID;
+import org.apache.commons.lang3.RandomStringUtils;
+import java.io.*;
+import static java.lang.System.exit;
 
 
 public class Strings {
 
 	public static final String ERROR_IDENTIFIER_DOESNT_EXIST = "Identifier doesn't exist. Identifier name: ";
 	public static final String ERROR_VARIABLE_DOESNT_EXIST = "Variable doesn't exist. Variable name: ";
+	public static final String ERROR_VARIABLE_NOT_INITIALIZED = "Variable might not be initialized: ";
 	public static final String ERROR_VARIABLE_HAS_BEEN_DELETED = "Variable has been deleted. Variable name: ";
 	public static final String ERROR_FUNCTION_HAS_BEEN_DELETED = "Function has been deleted. Function name: ";
 	public static final String ERROR_ALREADY_DECLARED_IDENTIFIER = "Identifier already declared. Identifier name: ";
 	public static final String ERROR_PARAMETER_MISMATCH = "Parameters count doesn't match. Expected ";
 	public static final String ERROR_DANGEROUS_USE_OF_PARAMETER = "Potentially deleted parameter inside function. Name: ";
-	public static final String ERROR_BEHAVIOR_MISMATCH = "Mismatching behavioural types between If-Then-Else statement branches";
+	public static final String ERROR_GLOBAL_VAR_AS_PARAMETER = "Global variable used as reference parameter. Name: ";
+	public static final String ERROR_BEHAVIOR_MISMATCH = "Mismatching behavioural types between If-Then-Else branches";
+	public static final String ERROR_OUT_OF_MEMORY = "Error: Out of memory";
 
 	public static final String LEXICAL_CHECK = "Check Lexical Errors";
+	public static final String SYNTAX_CHECK = "Check Syntax Errors";
 	public static final String SEMANTIC_CHECK = "Check Semantic Errors";
 	public static final String TYPE_CHECK = "Check Type Errors";
 
@@ -26,6 +30,7 @@ public class Strings {
 	public static final String FP = "$fp";
 	public static final String AL = "$al";
 	public static final String RA = "$ra";
+	public static final String IP = "$ip";
 
 	public static final String EMPTY = "";
 	public static void printCheckingStatus(String status) {
@@ -121,16 +126,35 @@ public class Strings {
 		return "print\n";
 	}
 
-	public static String GetFreshLabel(){
-		return UUID.randomUUID().toString();
+	public static String getFreshLabel(){
+		return RandomStringUtils.randomAlphabetic(10);
 	}
 
-	public static String getVariableForCgen(int nl, StEntry idEntry){
+	public static String getVariableForCgen(int nl, int varNl){
 		StringBuilder result = new StringBuilder();
-		for (int i = 0; i<nl-idEntry.getNestinglevel();i++){
+		for (int i = 1; i < nl-varNl; i++){
 			result.append(loadW(AL, "0", AL));
 		}
 		return result.toString();
 	}
+
+	public static void saveCgenToFile(String fileName, String fileContent)
+	{
+		File tmp = new File(fileName);
+		String objFile = tmp.getAbsolutePath().split("\\.")[0]+".o";
+		tmp = new File(objFile);
+
+		try {
+			BufferedWriter out = new BufferedWriter(
+					new FileWriter(tmp.getAbsoluteFile(), false));
+			out.write(fileContent);
+			out.close();
+		}
+		catch (IOException e) {
+			System.err.println("Exception while saving file" + e);
+			exit(-1);
+		}
+	}
+
 }
 

@@ -1,22 +1,15 @@
 package util;
 
-import models.*;
-import models.expressions.Exp;
-import models.expressions.Factor;
-import models.expressions.Term;
-import models.types.Type;
-import models.types.TypeReferenceable;
-import models.values.Value;
-import models.values.ValueId;
+import models.compiler.*;
+import models.compiler.expressions.Exp;
+import models.compiler.types.Type;
+import models.compiler.types.TypeReferenceable;
+import models.compiler.values.Value;
+import models.compiler.values.ValueId;
 
 public class TypeUtils {
 
     public static String getIdFromExp(Exp exp){
-//        Term term = (Term) exp.getLeft();
-//        Factor factor = (Factor) term.getLeft();
-//        if(exp.getRight() == null && term.getRight()==null &&
-//                factor.getRight()==null && factor.getLeft() instanceof ValueId)
-//            return ((ValueId) factor.getLeft()).getId();
         if(exp instanceof ValueId) return ((ValueId) exp).getId();
         return null;
     }
@@ -25,37 +18,30 @@ public class TypeUtils {
         return exp instanceof ValueId;
     }
 
-    public static void functionParamTypeCheck(Type expectedType, ElementBase actualElement) throws TypeCheckError {
+
+    public static void functionParamTypeCheck(Type expectedType, ElementBase actualElement) throws TypeCheckException {
 
         if (expectedType instanceof TypeReferenceable && ((TypeReferenceable) expectedType).isReference()) {
             ElementBase temp = actualElement;
             ElementBase tmp = null;
             while (temp instanceof Exp) {
                 if (((Exp) temp).getRight() != null) {
-                    throw new TypeCheckError("ExpectedType: var " + expectedType + ", got: right term " + actualElement.typeCheck());
+                    throw new TypeCheckException("ExpectedType: var " + expectedType + ", got: right term " + actualElement.typeCheck());
                 } else {
                     tmp = temp;
                     temp = ((Exp) temp).getLeft();
                 }
             }
             if (tmp instanceof Value && !(tmp instanceof ValueId)) {
-                throw new TypeCheckError("ExpectedType: var " + expectedType + ", got value " + ((Value) tmp).getVal());
+                throw new TypeCheckException("ExpectedType: var " + expectedType + ", got value " + ((Value) tmp).getVal());
             }
         }
         typeCheck(expectedType, actualElement);
     }
 
-//    public static void typeCheck(Type expectedType, ElementBase actualElement) throws TypeCheckError {
-//        if (!expectedType.getClass().equals(actualElement.typeCheck().getClass())) {
-//            throw new TypeCheckError("ExpectedType " + (expectedType instanceof TypeReferenceable ? "var " : "") + expectedType + ", got " + actualElement.typeCheck());
-//        }
-//    }
-
-    public static void typeCheck(Type expectedType, ElementBase actualElement) throws TypeCheckError {
-        String expected = expectedType.getClass().getSimpleName();
-        String actual = actualElement.typeCheck().getClass().getSimpleName();
+    public static void typeCheck(Type expectedType, ElementBase actualElement) throws TypeCheckException {
         if (!expectedType.getClass().equals(actualElement.typeCheck().getClass())) {
-            throw new TypeCheckError("ExpectedType " + (expectedType instanceof TypeReferenceable ? "var " : "") + expectedType + ", got " + actualElement.typeCheck());
+            throw new TypeCheckException("ExpectedType " + expectedType + ", got " + actualElement.typeCheck());
         }
     }
 
