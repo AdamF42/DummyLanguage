@@ -2,5 +2,5 @@ component_depth: 5
 languages:
 - java
 exclude:
-- /DummyLanguage/compiler/src/main/java/parser/.*
-- /DummyLanguage/interpreter/src/main/java/parser/.*
+- /compiler/src/main/java/parser/.*
+- /interpreter/src/main/java/parser/.*
