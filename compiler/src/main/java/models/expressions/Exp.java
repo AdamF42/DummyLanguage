@@ -27,7 +27,7 @@ public abstract class Exp extends ElementBase {
     @Override
     public Type typeCheck() throws TypeCheckException {
         if (right != null){
-            TypeUtils.typeCheck(left.typeCheck(),right);
+            typeCheck(left.typeCheck(),right);
         }
         return this.left.typeCheck();
     }

@@ -9,7 +9,6 @@ import models.stentry.VarStEntry;
 import models.types.Type;
 import exeptions.TypeCheckException;
 import util.SemanticError;
-import util.TypeUtils;
 
 import java.util.*;
 import java.util.function.Function;
@@ -33,7 +32,7 @@ public class StmtAssignment extends Stmt{
 
     @Override
     public Type typeCheck() throws TypeCheckException {
-        TypeUtils.typeCheck(this.idEntry.getType(), exp);
+        typeCheck(this.idEntry.getType(), exp);
         return null;
     }
 

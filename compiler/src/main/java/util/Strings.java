@@ -33,6 +33,7 @@ public class Strings {
 	public static final String IP = "$ip";
 
 	public static final String EMPTY = "";
+
 	public static void printCheckingStatus(String status) {
 		System.out.println("#");
 		System.out.println("## " + status);

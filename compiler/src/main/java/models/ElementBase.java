@@ -19,4 +19,11 @@ public abstract class ElementBase {
     public String toString() {
         return getClass().getSimpleName();
     }
+
+    public void typeCheck(Type expectedType, ElementBase actualElement) throws TypeCheckException {
+        if (!expectedType.getClass().equals(actualElement.typeCheck().getClass())) {
+            throw new TypeCheckException("ExpectedType " + expectedType + ", got " + actualElement.typeCheck());
+        }
+    }
+
 }

@@ -1,38 +1,12 @@
 package codeExe;
 
-import mockit.Mock;
-import mockit.MockUp;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import util.Strings;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import static codeExe.TestUtil.GetExecutionPrintsForFile;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class IfThenElseExecutionTests {
-
-    private static int label_count;
-    private static final HashMap<Integer, String> labels = new HashMap<>();
-    static {
-        labels.put(1, "IfThenElseEnd");
-        labels.put(2, "ElseBranch");
-        labels.put(3, "Equal");
-        labels.put(4, "ConditionEnd");
-    }
-    @BeforeEach
-    void setUp() {
-        new MockUp<Strings>() {
-            @Mock
-            public String getFreshLabel() {
-                label_count++;
-                return labels.get(label_count);
-            }
-        };
-        label_count = 0;
-    }
-
 
     @Test
     void ifThenElseEqCondition_ShouldExecuteThenBranch_WithTrueCondition() {

@@ -9,7 +9,7 @@ import models.types.Type;
 import util.SemanticError;
 import util.Strings;
 import exeptions.TypeCheckException;
-import util.TypeUtils;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -38,7 +38,7 @@ public class StmtVarDeclaration extends Stmt {
     @Override
     public Type typeCheck() throws TypeCheckException {
         if (exp != null){
-            TypeUtils.typeCheck(type, exp);
+            typeCheck(type, exp);
         }
         return null;
     }

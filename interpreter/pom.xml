@@ -17,7 +17,6 @@
     <version>1.0</version>
 
     <dependencies>
-
         <dependency>
             <groupId>org.antlr</groupId>
             <artifactId>antlr4-runtime</artifactId>
@@ -55,11 +54,9 @@
             <groupId>it.unibo.compiler</groupId>
             <artifactId>compiler</artifactId>
             <version>1.0</version>
-<!--            <systemPath>${project.basedir}/compiler-1.0-jar-with-dependencies.jar/</systemPath>-->
-<!--            <scope>system</scope>-->
-            <scope>test</scope>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/../compiler/target/compiler-1.0.jar</systemPath>
         </dependency>
-
     </dependencies>
 
     <build>

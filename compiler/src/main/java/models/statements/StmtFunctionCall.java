@@ -9,20 +9,18 @@ import models.stentry.StEntry;
 import models.stentry.VarStEntry;
 import models.types.Type;
 import models.types.TypeFunction;
+import models.types.TypeReferenceable;
+import models.values.Value;
 import models.values.ValueId;
 import util.SemanticError;
 import util.Strings;
 import exeptions.TypeCheckException;
-import util.TypeUtils;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 import static util.SemanticErrorChecker.*;
 import static util.Strings.*;
-import static util.TypeUtils.getIdFromExp;
-import static util.TypeUtils.isExpValueId;
 
 public class StmtFunctionCall extends Stmt {
 
@@ -50,7 +48,7 @@ public class StmtFunctionCall extends Stmt {
         for (int i = 0; i < envFunType.getParam().size(); i++) {
             Type expectedType = envFunType.getParam().get(i).getType();
             ElementBase actualType = actualParams.get(i);
-            TypeUtils.functionParamTypeCheck(expectedType, actualType);
+            functionParamTypeCheck(expectedType, actualType);
         }
 
         return null;
@@ -152,11 +150,11 @@ public class StmtFunctionCall extends Stmt {
         List<SemanticError> result = new ArrayList<>(actualParam.checkSemantics(e));
         if (formalParam == null) return result;
         // Handle EXAMPLE 1
-        if (formalParam.isReference() && e.containsVariable(actualParamId) && isExpValueId(actualParam) && (formalParam.isDeleted() || formalParam.isToBeDeletedOnFunCall())) {
+        if (formalParam.isReference() && e.containsVariable(actualParamId) && actualParam instanceof ValueId && (formalParam.isDeleted() || formalParam.isToBeDeletedOnFunCall())) {
             e.getVariableValue(actualParamId).setDeleted(true);
         }
         // avoid using global params by reference
-        if (formalParam.isReference() && isExpValueId(actualParam)){
+        if (formalParam.isReference() && actualParam instanceof ValueId ){
             StEntry actuamParamVariable = e.getVariableValue(((ValueId)actualParam).getId());
             FunStEntry funEntry = e.getFunctionValue(id);
             if (actuamParamVariable.getNestinglevel() <= funEntry.getNestinglevel() &&
@@ -178,4 +176,31 @@ public class StmtFunctionCall extends Stmt {
 
         return result;
     }
+
+    //TODO: refactor
+    private void functionParamTypeCheck(Type expectedType, ElementBase actualElement) throws TypeCheckException {
+
+        if (expectedType instanceof TypeReferenceable && ((TypeReferenceable) expectedType).isReference()) {
+            ElementBase temp = actualElement;
+            ElementBase tmp = null;
+            while (temp instanceof Exp) {
+                if (((Exp) temp).getRight() != null) {
+                    throw new TypeCheckException("ExpectedType: var " + expectedType + ", got: right term " + actualElement.typeCheck());
+                } else {
+                    tmp = temp;
+                    temp = ((Exp) temp).getLeft();
+                }
+            }
+            if (tmp instanceof Value && !(tmp instanceof ValueId)) {
+                throw new TypeCheckException("ExpectedType: var " + expectedType + ", got value " + ((Value) tmp).getVal());
+            }
+        }
+        expectedType.typeCheck(expectedType, actualElement);
+    }
+
+    private String getIdFromExp(Exp exp){
+        if(exp instanceof ValueId) return ((ValueId) exp).getId();
+        return null;
+    }
+
 }

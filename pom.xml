@@ -12,6 +12,7 @@
     <!-- sub modules -->
     <modules>
         <module>compiler</module>
+<!--        <module>compiler-models</module>-->
         <module>interpreter</module>
     </modules>
 
