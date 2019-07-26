@@ -1,0 +1,5 @@
+component_depth: 5
+languages:
+- java
+exclude:
+- /src/main/java/parser/.*
